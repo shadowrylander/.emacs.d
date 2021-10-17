@@ -434,3 +434,6 @@
 [submodule "zoxide"]
         path = lib/zoxide
         url = https://gitlab.com/Vonfry/zoxide.el.git
+[submodule "settings"]
+	path = settings
+	url = https://github.com/shadowrylander/settings.git

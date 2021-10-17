@@ -123,7 +123,6 @@ subinit: init
 
 |-git -C $(mkfileDir) add .gitmodules
 |-git -C $(mkfileDir) rm -rf --cached lib
-|-git -C $(mkfileDir) rm -rf --cached profiles
 |git -C $(mkfileDir) submodule sync --recursive
 
 # Adapted From:
@@ -134,7 +133,6 @@ subinit: init
 |git -C $(mkfileDir) submodule sync --recursive
 |-git -C $(mkfileDir) add .gitmodules
 |-git -C $(mkfileDir) rm -rf --cached lib
-|-git -C $(mkfileDir) rm -rf --cached profiles
 
 # |git -C $(mkfileDir) submodule foreach 'git -C $$toplevel config submodule.$$name.ignore all'
 
@@ -198,29 +196,29 @@ delete: clean
 |rm -rf $(mkfileDir)/profiles/$(profile)/.local
 
 test: pre-test
-|emacs --profile $(profile)
+|emacs
 
 nw-test: pre-test
-|emacs -nw --profile $(profile)
+|emacs -nw
 
 test-and-kill: test-and-kill-pre
-|$(test) --profile $(profile)
+|$(test)
 |$(killTest)
 
 test-nw-and-kill: test-and-kill-pre
-|$(test) -nw --profile $(profile)
+|$(test) -nw
 |$(killTest)
 
 test-update-and-kill: test-and-kill-pre
-|$(test) --update --profile $(profile)
+|$(test) --update
 |$(killTest)
 
 test-nw-update-and-kill: test-and-kill-pre
-|$(test) -nw --update --profile $(profile)
+|$(test) -nw --update
 |$(killTest)
 
 bootstrap: test-and-kill-pre
-|$(test) --profile bootstrap
+|$(test) --bootstrap
 |$(killTest)
 
 emacs: test
