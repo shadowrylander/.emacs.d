@@ -1,0 +1,20 @@
+[subtree "settings"]
+	url = https://github.com/shadowrylander/settings.git
+	path = settings
+	branch = main
+[subtree "siluam/emacsql"]
+	url = https://github.com/skeeto/emacsql.git
+	path = siluam/emacsql
+	branch = master
+[subtree "siluam/borg"]
+	url = https://github.com/emacscollective/borg.git
+	path = siluam/borg
+	branch = master
+[subtree "siluam/closql"]
+	url = https://github.com/emacscollective/closql.git
+	path = siluam/closql
+	branch = master
+[subtree "siluam/epkg"]
+	url = https://github.com/emacscollective/epkg.git
+	path = siluam/epkg
+	branch = master

@@ -3,7 +3,7 @@
 
 * init.el
 :PROPERTIES:
-:header-args:emacs-lisp+: :noweb-ref init.el
+:header-args:emacs-lisp+: :noweb-ref init.el :tangle no
 :END:
 
 The ~noweb-ref~ headers, such as the one below, are adapted from [[https://emacs.stackexchange.com/users/388/melioratus][Melioratus's]] answer [[https://emacs.stackexchange.com/a/38935/31428][here]].
@@ -59,7 +59,7 @@ Load the ~fringe~ package and
 [[https://github.com/lujun9972/el-dmenu/blob/e8cc9b27c79d3ecc252267c082ab8e9c82eab264/dmenu.el][dmenu]]:
 
 #+begin_src emacs-lisp
-    :upsnd-preconfig (dmenu) (fringe :config
+    :upnsd-preconfig (dmenu) (fringe :config
                         ;; (fringe-mode (quote (1 . 1)) nil (fringe))
                         ;; (fringe-mode '(3 . 0))
                         ;; (fringe-mode 'none)
@@ -204,7 +204,7 @@ And finally: no tiling:
         (init (meq/ued "init.org"))
         (early-aiern-init (meq/ued "early-init.aiern.org"))
         (aiern-init (meq/ued "init.aiern.org")))
-    (if meq/var/last-dab
+    (if (bound-and-true-p meq/var/last-dab)
         (pcase meq/var/last-dab
             ("--fTest" (setq initial-buffer-choice testing))
             ("--fRest" (setq initial-buffer-choice resting))

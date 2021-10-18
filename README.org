@@ -1,9 +1,10 @@
 #+setupfile: ./settings/TANGLE.org
 #+include: ./settings/README.org
+# #+property: header-args:emacs-lisp+ :tangle no
 
 * early-init.el
 :PROPERTIES:
-:header-args:emacs-lisp+: :noweb-ref early-init.el
+:header-args:emacs-lisp+: :noweb-ref early-init.el :tangle no
 :END:
 
 The ~noweb-ref~ headers, such as the one below, are adapted from [[https://emacs.stackexchange.com/users/388/melioratus][Melioratus's]] answer [[https://emacs.stackexchange.com/a/38935/31428][here]].
@@ -28,6 +29,12 @@ Start off by specifying the ~user-emacs-directory~:
 (defvar user-emacs-directory (file-name-directory (or load-file-name buffer-file-name)))
 #+end_src
 
+For some reason ~state~ is undefined:
+
+#+begin_src emacs-lisp
+(setq state nil)
+#+end_src
+
 Disable [[https://www.emacswiki.org/emacs/InstallingPackages][~package.el~]] on startup: 
 
 #+begin_src emacs-lisp
@@ -36,10 +43,10 @@ Disable [[https://www.emacswiki.org/emacs/InstallingPackages][~package.el~]] on 
 
 Old methods of package management, including [[https://www.emacswiki.org/emacs/InstallingPackages][~package.el~]], [[https://github.com/raxod502/straight.el][~straight.el~]] by [[https://github.com/raxod502][Radon Rosborough]], and [[https://github.com/quelpa/quelpa][~quelpa~]]:
 
-#+begin_src emacs-lisp
-;; (load (concat user-emacs-directory "siluam/package-config.el"))
-;; (load (concat user-emacs-directory "siluam/straight-config.el"))
-;; (load (concat user-emacs-directory "siluam/quelpa.el"))
+#+begin_src emacs-lisp :noweb-ref no
+(load (concat user-emacs-directory "siluam/package-config.el"))
+(load (concat user-emacs-directory "siluam/straight-config.el"))
+(load (concat user-emacs-directory "siluam/quelpa.el"))
 #+end_src
 
 This sets up various system-related variables, all fairly descriptive on their own:
@@ -50,6 +57,13 @@ This sets up various system-related variables, all fairly descriptive on their o
 (defvar meq/var/phone (ignore-errors (string-match-p (regexp-quote "Android") (shell-command-to-string "uname -a"))))
 (defvar meq/var/wsl (ignore-errors (string-match-p (regexp-quote "microsoft-standard-WSL") (shell-command-to-string "uname -a"))))
 (defvar meq/var/nixos (ignore-errors (string-match-p (regexp-quote "nixos") (shell-command-to-string "uname -a"))))
+#+end_src
+
+Set the borg package directory:
+
+#+begin_src emacs-lisp
+(setq borg-drones-directory-prefix (concat "lib" meq/var/slash))
+(setq borg-drones-directory (concat user-emacs-directory borg-drones-directory-prefix))
 #+end_src
 
 [[https://github.com/emacscollective/borg][We Are Borg.]]
@@ -127,13 +141,18 @@ When assimilating packages, return packages which have not been assimilated yet;
               (path* (cl-getf (cdr pkg*) 'path))
               (path (cond ((listp path*) (car path*))
                           ((stringp path*) path*)))
-              (exists (file-exists-p (borg-worktree pkg))))
-        (and (not (string-match-p (regexp-quote "\\") pkg))
-            (not (string-match-p (regexp-quote "/") pkg))
-            (xor assimilating exists)
-            (string=
-                  (string-remove-suffix pkg path)
-                  (string-remove-prefix borg-user-emacs-directory borg-drones-directory)))))
+              (exists (file-exists-p (borg-worktree pkg)))
+              (no-back-slash (not (string-match-p (regexp-quote "\\") pkg)))
+              (no-forward-slash (not (string-match-p (regexp-quote "/") pkg)))
+              (xane (xor assimilating exists)
+                    ;; (or
+                    ;;     (and assimilating (not exists))
+                    ;;     (and exists (not assimilating)))
+                    )
+              (same-borg-prefix (string= (string-remove-suffix pkg path)
+                                    (string-remove-prefix borg-user-emacs-directory borg-drones-directory)))
+              (result (and no-back-slash no-forward-slash xane same-borg-prefix)))
+            result))
       (funcall func barg))))
 (advice-add #'borg-drones :around #'meq/borg-drones-advice)
 #+end_src
@@ -197,10 +216,9 @@ Set up startup optimization packages, including [[https://github.com/emacscollec
 #+begin_src emacs-lisp
 (mapc #'(lambda (pkg*) (interactive)
   (let* ((pkg (symbol-name pkg*)))
-    (if (file-exists-p (concat user-emacs-directory "lib" meq/var/slash pkg))
-        (borg-activate pkg)
-        (borg-assimilate pkg (borg-get pkg "url")))
-    (require pkg*))) '(packed auto-compile no-littering gcmh))
+    (ignore-errors (borg-activate pkg))
+    (unless (require pkg* nil t)
+        (borg-assimilate pkg (borg-get pkg "url"))))) '(packed auto-compile no-littering gcmh))
 (auto-compile-on-load-mode)
 (auto-compile-on-save-mode)
 (gcmh-mode 1)
@@ -223,8 +241,8 @@ Don't notify us about auto-reversion, from [[https://stackoverflow.com/a/5436950
 We Are ~Org~:
 
 #+begin_src emacs-lisp
-(if (file-exists-p (concat user-emacs-directory "lib/org"))
-  (if (file-exists-p (concat user-emacs-directory "lib/org/lisp/org-loaddefs.el"))
+(if (file-exists-p (concat user-emacs-directory "lib" meq/var/slash "org"))
+  (if (file-exists-p (concat user-emacs-directory "lib" meq/var/slash "org" meq/var/slash "lisp" meq/var/slash "org-loaddefs.el"))
     (borg-activate "org")
     (borg-build "org" t))
   (borg-assimilate "org" (borg-get "org" "url")))
@@ -419,6 +437,27 @@ and [[https://www.emacswiki.org/emacs/LoadPath#h5o-2][from this section of the E
     (normal-top-level-add-subdirs-to-load-path))
 #+end_src
 
+** Native Comp
+
+These are two settings I like for ~native compilation~, adapted from [[https://github.com/daviwil/dotfiles/blob/master/Emacs.org#native-compilation][here]]:
+
+#+begin_quote
+Silence compiler warnings as they can be pretty disruptive
+#+end_quote
+
+#+begin_src emacs-lisp
+(ignore-errors
+    (setq native-comp-async-report-warnings-errors nil)
+#+end_src
+
+#+begin_quote
+Set the right directory to store the native comp cache
+#+end_quote
+
+#+begin_src emacs-lisp
+    (add-to-list 'native-comp-eln-load-path (meq/ued-local "eln-cache/")))
+#+end_src
+
 ** We are Borg.
 
 Assimilate the packages from my ~.gitmodules~ file:
@@ -455,6 +494,26 @@ Wake up the borg:
 #+begin_src emacs-lisp
 (require 'meq)
 #+end_src
+
+** Custom
+
+As adapted from [[https://emacs.stackexchange.com/users/2731/ebpa][ebpa's]] answer [[https://emacs.stackexchange.com/a/18682/31428][here]]:
+
+#+begin_src emacs-lisp
+(setq custom-file (meq/ued "custom.el"))
+(meq/cl custom-file)
+(setq auto-save-list-file-prefix user-emacs-directory)
+#+end_src
+
+** Themes
+
+#+begin_src emacs-lisp
+(byte-recompile-directory (meq/ued "themes") nil)
+(add-to-list 'custom-theme-load-path (meq/ued "themes"))
+(setq custom-safe-themes t)
+#+end_src
+
+By the way, I get most of my themes from [[themer.dev][https://themer.dev/]].
 
 ** Packages
 *** use-package
@@ -553,7 +612,7 @@ Note that I assume that [[https://github.com/jwiegley/use-package#use-package-ch
 And in my experience... Not a good idea; much too confusing. Use [[https://www.reddit.com/r/emacs/comments/j2xezg/usepackage_best_practices/][the arguments here]] to decide whether to use this or ~:defer <n>~ instead.
 
 #+begin_src emacs-lisp
-(with-eval-after-load 'use-package (setq use-package-always-defer (meq/item-in-cla "--always-defer"))
+(setq use-package-always-defer (meq/item-in-cla "--always-defer"))
 #+end_src
 
 **** extras
@@ -716,7 +775,7 @@ Meet the [[https://gitlab.com/shadowrylander/cosmoem][cosmoem]] named [[https://
 #+begin_src emacs-lisp
     :config (with-eval-after-load 'prime
                 (prime ", m" map-of-infinity/body "map-of-infinity")
-                (meq/which-key-change-ryo "," meq/var/profile-name))
+                (meq/which-key-change-ryo "," "damascus"))
 #+end_src
 
 This ~deino~ leads to a bunch of other useful ~deinos~, as well as a few useful functions:
@@ -1015,7 +1074,7 @@ This hook and function combo would allow me to save files without query, taken f
 Load the latest help package, and set a few self-describing variables:
 
 #+begin_src emacs-lisp
-    :load-emacs-file-postconfig ("help+20")
+    :load-siluam-file-postconfig ("help+20")
     :gsetq
         (indent-tabs-mode nil
             confirm-kill-emacs nil
@@ -1773,7 +1832,7 @@ For [[https://github.com/hylang/hy-mode][hy]], plus [[https://github.com/brantou
 For [[https://jblevins.org/projects/markdown-mode/][markdown]]:
 
 #+begin_src emacs-lisp
-(use-package markdown-mode :mode (meq/titan-append-modes markdown "\\.md\\'"))
+`(use-package markdown-mode :mode ,(meq/titan-append-modes "markdown" "\\.md\\'"))
 #+end_src
 
 **** nix-mode
@@ -1858,7 +1917,6 @@ Set up documentation super major-mode [[https://github.com/shadowrylander/doc][d
 (use-package doc
     :commands (meq/dired-create-doc-markdown meq/dired-create-and-open-doc-markdown)
     :gsetq (meq/var/doc-snippets-dir (meq/ued-lib "doc" "snippets"))
-    :mode meq/var/doc-exts
     :uru (doc-org-mode nil deino-doc-org (:color blue :inherit (deino-org-usually/heads)) "t d o"
             ("d" (meq/insert-snippet "org titan template") "template")))
 #+end_src
@@ -1871,7 +1929,6 @@ Set up novel's super major-mode [[https://github.com/shadowrylander/fell][fell]]
 (use-package fell
     :commands (meq/dired-create-fell-markdown meq/dired-create-and-open-fell-markdown)
     :gsetq (meq/var/fell-snippets-dir (meq/ued-lib "fell" "snippets"))
-    :mode meq/var/fell-exts
     :uru (fell-org-mode nil deino-fell-org (:color blue :inherit (deino-org-usually/heads)) "t f o"
             ("f" (meq/insert-snippet "org titan template") "template")))
 #+end_src
@@ -1883,14 +1940,14 @@ The one and only [[https://orgmode.org/][org-mode]], with [[https://orgmode.org/
 - Here's the [[https://git.sr.ht/~bzg/org-contrib][contrib repo]]
 
 #+begin_src emacs-lisp
-(use-package org
+`(use-package org
 #+end_src
 
 ~org-mode~ will activate when any files using the [[https://github.com/shadowrylander/titan][~titan-org~]] super major-mode,
 or with the extension ~.org~, are opened:
 
 #+begin_src emacs-lisp
-    :mode (meq/titan-append-modes org ("\\.org\\'" . org-mode))
+    :mode ,(meq/titan-append-modes "org" '("\\.org\\'" . org-mode))
 #+end_src
 
 I use [[https://www.reddit.com/r/emacs/comments/6klewl/comment/djniygy/?utm_source=share&utm_medium=web2x&context=3][this]] to skip over expanding any sub-headers:
@@ -1983,6 +2040,7 @@ Set up [[https://github.com/joaotavora/yasnippet][yasnippet]] by [[https://githu
 
 #+begin_src emacs-lisp
     :config (load (meq/ued-settings "org-tangle-functions"))
+        ;; (setq auto-mode-alist (append auto-mode-alist (meq/titan-append-modes org ("\\.org\\'" . org-mode))))
     :demon (
         ;; (naked "backtab") 'evil-close-fold
         (alloy-chord "bb") 'org-toggle-link-display)
@@ -2033,43 +2091,10 @@ Upon exiting ~org-src-mode~ I don't want any indentation added to my code blocks
         (org-edit-src-content-indentation 0))
 #+end_src
 
-** Native Comp
+** Load Init
 
-These are two settings I like for ~native compilation~, adapted from [[https://github.com/daviwil/dotfiles/blob/master/Emacs.org#native-compilation][here]]:
-
-#+begin_quote
-Silence compiler warnings as they can be pretty disruptive
-#+end_quote
+And finally, load init file:
 
 #+begin_src emacs-lisp
-(ignore-errors
-    (setq native-comp-async-report-warnings-errors nil)
+(load (meq/ued "init.el"))
 #+end_src
-
-#+begin_quote
-Set the right directory to store the native comp cache
-#+end_quote
-
-#+begin_src emacs-lisp
-    (add-to-list 'native-comp-eln-load-path (meq/ued-local "eln-cache/")))
-#+end_src
-
-** Custom
-
-As adapted from [[https://emacs.stackexchange.com/users/2731/ebpa][ebpa's]] answer [[https://emacs.stackexchange.com/a/18682/31428][here]]:
-
-#+begin_src emacs-lisp
-(setq custom-file (meq/ued "custom.el"))
-(meq/cl custom-file)
-(setq auto-save-list-file-prefix user-emacs-directory)
-#+end_src
-
-** Themes
-
-#+begin_src emacs-lisp
-(byte-recompile-directory (meq/ued "themes") nil)
-(add-to-list 'custom-theme-load-path (meq/ued "themes"))
-(setq custom-safe-themes t)
-#+end_src
-
-By the way, I get most of my themes from [[themer.dev][https://themer.dev/]].

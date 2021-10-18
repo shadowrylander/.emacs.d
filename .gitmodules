@@ -368,6 +368,12 @@
 [submodule "transient"]
         path = lib/transient
         url = https://github.com/magit/transient.git
+[submodule "undo-fu"]
+        path = lib/undo-fu
+        url = https://gitlab.com/ideasman42/emacs-undo-fu.git
+[submodule "undo-fu-session"]
+        path = lib/undo-fu-session
+        url = https://gitlab.com/ideasman42/emacs-undo-fu-session.git
 [submodule "undo-tree"]
         path = lib/undo-tree
         url = https://gitlab.com/tsc25/undo-tree.git
@@ -434,3 +440,12 @@
 [submodule "zoxide"]
         path = lib/zoxide
         url = https://gitlab.com/Vonfry/zoxide.el.git
+[submodule "dired-details"]
+	path = lib/dired-details
+	url = https://github.com/emacsmirror/dired-details.git
+[submodule "dired-details+"]
+	path = lib/dired-details+
+	url = https://github.com/emacsmirror/dired-details-plus.git
+[submodule "dired+"]
+	path = lib/dired+
+	url = https://github.com/emacsmirror/dired-plus.git
