@@ -121,18 +121,10 @@ subinit: init
 |-git clone --depth 1 https://github.com/emacsmirror/epkgs.git $(mkfileDir)/epkgs
 |-git clone --depth 1 https://github.com/emacsmirror/epkgs.git $(mkfileDir)/var/epkgs
 
-|-git -C $(mkfileDir) add .gitmodules
-|-git -C $(mkfileDir) rm -rf --cached lib
-|git -C $(mkfileDir) submodule sync --recursive
-
 # Adapted From:
 # Answer: https://stackoverflow.com/a/56621295/10827766
 # User: https://stackoverflow.com/users/1600536/alim-giray-aytar
 |git -C $(mkfileDir) submodule update --force --init --depth 1 --recursive --remote
-
-|git -C $(mkfileDir) submodule sync --recursive
-|-git -C $(mkfileDir) add .gitmodules
-|-git -C $(mkfileDir) rm -rf --cached lib
 
 # |git -C $(mkfileDir) submodule foreach 'git -C $$toplevel config submodule.$$name.ignore all'
 
