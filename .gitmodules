@@ -67,6 +67,15 @@
 [submodule "deino"]
         path = lib/deino
         url = https://github.com/shadowrylander/deino.git
+[submodule "dired+"]
+        path = lib/dired+
+        url = https://github.com/emacsmirror/dired-plus.git
+[submodule "dired-details"]
+        path = lib/dired-details
+        url = https://github.com/emacsmirror/dired-details.git
+[submodule "dired-details+"]
+        path = lib/dired-details+
+        url = https://github.com/emacsmirror/dired-details-plus.git
 [submodule "dired-hacks"]
         path = lib/dired-hacks
         url = https://github.com/Fuco1/dired-hacks.git
@@ -426,26 +435,17 @@
         path = lib/with-editor
         url = https://github.com/magit/with-editor.git
 [submodule "xah-fly-keys"]
-        path = lib/xah-fly-keys
-        url = https://github.com/xahlee/xah-fly-keys.git
+	path = lib/xah-fly-keys
+	url = https://github.com/xahlee/xah-fly-keys.git
 [submodule "xelb"]
-        path = lib/xelb
-        url = https://github.com/ch11ng/xelb.git
+	path = lib/xelb
+	url = https://github.com/ch11ng/xelb.git
 [submodule "xonsh-mode"]
-        path = lib/xonsh-mode
-        url = https://github.com/seanfarley/xonsh-mode.git
+	path = lib/xonsh-mode
+	url = https://github.com/seanfarley/xonsh-mode.git
 [submodule "yasnippet"]
-        path = lib/yasnippet
-        url = https://github.com/joaotavora/yasnippet.git
+	path = lib/yasnippet
+	url = https://github.com/joaotavora/yasnippet.git
 [submodule "zoxide"]
-        path = lib/zoxide
-        url = https://gitlab.com/Vonfry/zoxide.el.git
-[submodule "dired-details"]
-	path = lib/dired-details
-	url = https://github.com/emacsmirror/dired-details.git
-[submodule "dired-details+"]
-	path = lib/dired-details+
-	url = https://github.com/emacsmirror/dired-details-plus.git
-[submodule "dired+"]
-	path = lib/dired+
-	url = https://github.com/emacsmirror/dired-plus.git
+	path = lib/zoxide
+	url = https://gitlab.com/Vonfry/zoxide.el.git

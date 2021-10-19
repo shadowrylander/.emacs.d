@@ -1,0 +1,5 @@
+(require 'package)
+(add-to-list 'package-archives (cons "melpa" "https://melpa.org/packages/") t)
+(setq package-selected-packages '(borg))
+(when (require 'borg nil t) (package-install 'borg) (require 'borg))
+(if (require 'borg-elpa nil t) (borg-elpa-initialize) (package-initialize))
