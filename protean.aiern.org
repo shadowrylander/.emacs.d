@@ -38,7 +38,7 @@ Finally, create the function to [re]load the primary init in this file and load 
 * EXWM
 
 This sets up and requires the [[https://github.com/ch11ng/exwm][Emacs X Window Manager]] by
-[[https://github.com/ch11ng][Chris Feng]] for all profiles:
+[[https://github.com/ch11ng][Chris Feng]]:
 
 #+begin_src emacs-lisp
 (meq/up exwm
@@ -212,8 +212,6 @@ And finally: no tiling:
             ("--fAEarly" (setq initial-buffer-choice early-aiern-init))
             ("--fInit" (setq initial-buffer-choice init))
             ("--fAInit" (setq initial-buffer-choice aiern-init))
-            ("--fPEarly" (setq initial-buffer-choice profile-early-init))
-            ("--fPInit" (setq initial-buffer-choice profile-init))
             (t (setq initial-buffer-choice (f-full meq/var/last-dab))))
         (setq initial-buffer-choice testing))
     (eval `(add-hook 'kill-emacs-hook #'(lambda nil (interactive)

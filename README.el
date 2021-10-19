@@ -1588,7 +1588,6 @@
 
 
 ;; [[file:README.org::*vterm][vterm:1]]
-(setq vterm-always-compile-module t)
 (meq/up vterm :use-package-postconfig (multi-vterm)
     :if (not (member system-type '(windows-nt ms-dos)))
     :demon ((alloy-chord "vv") 'meq/shell)
@@ -1596,6 +1595,7 @@
         ;; From: https://www.reddit.com/r/emacs/comments/pjtm91/vterm_a_little_bit_slow/hbz40xb?utm_medium=android_app&utm_source=share&context=3
         (vterm-timer-delay 0.01)
 
+        (vterm-always-compile-module t)
         (vterm-shell (meq/ued "vterm-start.sh"))
         (vterm-kill-buffer-on-exit t))
 ;; vterm:1 ends here

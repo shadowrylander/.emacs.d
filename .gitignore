@@ -1,6 +1,7 @@
 **/**/*.elc
-**/**/.local
-**/**/epkgs
-**/**/var
-**/**/elpa
-**/**/quelpa
+/.local
+/epkgs
+/var
+/elpa
+/quelpa
+/etc

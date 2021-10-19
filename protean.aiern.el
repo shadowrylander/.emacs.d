@@ -1,7 +1,7 @@
 ;; EXWM
 
 ;; This sets up and requires the [[https://github.com/ch11ng/exwm][Emacs X Window Manager]] by
-;; [[https://github.com/ch11ng][Chris Feng]] for all profiles:
+;; [[https://github.com/ch11ng][Chris Feng]]:
 
 
 ;; [[file:protean.aiern.org::*EXWM][EXWM:1]]
@@ -210,8 +210,6 @@
             ("--fAEarly" (setq initial-buffer-choice early-aiern-init))
             ("--fInit" (setq initial-buffer-choice init))
             ("--fAInit" (setq initial-buffer-choice aiern-init))
-            ("--fPEarly" (setq initial-buffer-choice profile-early-init))
-            ("--fPInit" (setq initial-buffer-choice profile-init))
             (t (setq initial-buffer-choice (f-full meq/var/last-dab))))
         (setq initial-buffer-choice testing))
     (eval `(add-hook 'kill-emacs-hook #'(lambda nil (interactive)

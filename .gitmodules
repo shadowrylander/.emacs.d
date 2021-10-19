@@ -133,8 +133,8 @@
         path = lib/f
         url = https://github.com/rejeep/f.el.git
 [submodule "fasd"]
-        path = lib/fasd
-        url = https://framagit.org/steckerhalter/emacs-fasd.git
+	path = lib/fasd
+	url = https://framagit.org/steckerhalter/emacs-fasd.git
 [submodule "fell"]
         path = lib/fell
         url = https://github.com/shadowrylander/fell.git
@@ -271,8 +271,8 @@
         path = lib/oneonone
         url = https://github.com/emacsmirror/oneonone.git
 [submodule "org"]
-        path = lib/org
-        url = https://git.savannah.gnu.org/git/emacs/org-mode.git
+	path = lib/org
+	url = https://git.savannah.gnu.org/git/emacs/org-mode.git
         build-step = make
         build-step = make autoloads
         build-step = borg-update-autoloads
@@ -280,8 +280,8 @@
         build-step = borg-makeinfo
         load-path = lisp
 [submodule "org-contrib"]
-        path = lib/org-contrib
-        url = https://git.sr.ht/~bzg/org-contrib
+	path = lib/org-contrib
+	url = https://git.sr.ht/~bzg/org-contrib
 [submodule "ox-gfm"]
         path = lib/ox-gfm
         url = https://github.com/larstvei/ox-gfm.git
