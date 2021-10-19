@@ -32,7 +32,7 @@ subinit: init
 # Adapted From:
 # Answer: https://stackoverflow.com/a/56621295/10827766
 # User: https://stackoverflow.com/users/1600536/alim-giray-aytar
-|git -C $(mkfileDir) submodule update --force --init --depth 1 --recursive --remote
+|-git -C $(mkfileDir) submodule update --force --init --depth 1 --recursive
 
 # |git -C $(mkfileDir) submodule foreach 'git -C $$toplevel config submodule.$$name.ignore all'
 

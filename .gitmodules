@@ -29,8 +29,8 @@
         path = lib/async
         url = https://github.com/jwiegley/emacs-async.git
 [submodule "auto-compile"]
-        path = lib/auto-compile
-        url = https://github.com/emacscollective/auto-compile.git
+	path = lib/auto-compile
+	url = https://github.com/emacscollective/auto-compile.git
 [submodule "auto-package-update"]
         path = lib/auto-package-update
         url = https://github.com/rranelli/auto-package-update.el.git
@@ -150,8 +150,8 @@
         path = lib/flycheck
         url = https://github.com/flycheck/flycheck.git
 [submodule "gcmh"]
-        path = lib/gcmh
-        url = https://gitlab.com/koral/gcmh.git
+	path = lib/gcmh
+	url = https://gitlab.com/koral/gcmh.git
 [submodule "god-mode"]
         path = lib/god-mode
         url = https://github.com/emacsorphanage/god-mode.git
@@ -253,8 +253,8 @@
         path = lib/nix-mode
         url = https://github.com/NixOS/nix-mode.git
 [submodule "no-littering"]
-        path = lib/no-littering
-        url = https://github.com/emacscollective/no-littering.git
+	path = lib/no-littering
+	url = https://github.com/emacscollective/no-littering.git
 [submodule "ob-hy"]
         path = lib/ob-hy
         url = https://github.com/brantou/ob-hy.git
@@ -289,8 +289,8 @@
         path = lib/ox-pandoc
         url = https://github.com/kawabata/ox-pandoc.git
 [submodule "packed"]
-        path = lib/packed
-        url = https://github.com/emacscollective/packed.git
+	path = lib/packed
+	url = https://github.com/emacscollective/packed.git
 [submodule "persp-mode"]
         path = lib/persp-mode
         url = https://github.com/Bad-ptr/persp-mode.el.git
