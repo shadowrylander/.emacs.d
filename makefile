@@ -29,8 +29,7 @@ subinit: export GIT_SSL_NO_VERIFY = 1
 subinit: init
 |-git clone --depth 1 https://github.com/emacsmirror/epkgs.git $(mkfileDir)/epkgs
 |-git clone --depth 1 https://github.com/emacsmirror/epkgs.git $(mkfileDir)/var/epkgs
-|git -C $(mkfileDir) submodule foreach 'git -C $$toplevel add .'
-|git -C $(mkfileDir) submodule foreach 'git -C $$toplevel commit --allow-empty-message -am ""'
+|git -C $(mkfileDir) submodule foreach 'git -C $$toplevel/$$sm_path add . && git -C $$toplevel/$$sm_path commit --allow-empty-message -am "" || :'
 
 # Adapted From:
 # Answer: https://stackoverflow.com/a/56621295/10827766

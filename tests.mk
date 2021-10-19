@@ -32,9 +32,6 @@ pre-clean:
 clean: pre-clean
 |fd . $(mkfileDir)/profiles/$(profile) -HIe elc -x rm
 
-delete: clean
-|rm -rf $(mkfileDir)/profiles/$(profile)/.local
-
 test: pre-test
 |emacs
 
@@ -63,5 +60,3 @@ bootstrap: test-and-kill-pre
 
 emacs: test
 emacs-nw: nw-test
-remacs: delete emacs
-remacs-nw: delete emacs-nw

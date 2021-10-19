@@ -8,6 +8,9 @@
 ;; Startup:1 ends here
 
 ;; Optimizations
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 ;; Startup optimizations from [[https://github.com/hlissner][Henrik Lissner's]] [[https://github.com/hlissner/doom-emacs/blob/develop/early-init.el][Doom Emacs' ~early-init.el~]]:
 
@@ -142,6 +145,9 @@
 ;; Optimizations:8 ends here
 
 ;; Libraries
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 ;; Byte-compile the library directories and add them to the load-path now; the following bits are adapted from [[https://emacs.stackexchange.com/users/14825/nickd][NickD's]] answer [[https://emacs.stackexchange.com/a/55415/31428][here]],
 ;; and [[https://www.emacswiki.org/emacs/LoadPath#h5o-2][from this section of the Emacs Wiki]].
@@ -154,6 +160,9 @@
 ;; Libraries:1 ends here
 
 ;; Native Comp
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 ;; These are two settings I like for ~native compilation~, adapted from [[https://github.com/daviwil/dotfiles/blob/master/Emacs.org#native-compilation][here]]:
 
@@ -179,6 +188,9 @@
 ;; Native Comp:2 ends here
 
 ;; We are Borg.
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 ;; Assimilate the packages from my ~.gitmodules~ file:
 
@@ -223,6 +235,9 @@
 ;; We are Borg.:3 ends here
 
 ;; Custom
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 ;; As adapted from [[https://emacs.stackexchange.com/users/2731/ebpa][ebpa's]] answer [[https://emacs.stackexchange.com/a/18682/31428][here]]:
 
@@ -234,6 +249,9 @@
 ;; Custom:1 ends here
 
 ;; Themes
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 
 ;; [[file:README.org::*Themes][Themes:1]]
@@ -243,6 +261,9 @@
 ;; Themes:1 ends here
 
 ;; use-package
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 ;; [[https://github.com/jwiegley/use-package][use-package]] with [[https://github.com/jwiegley][John Wiegley]]:
 
@@ -368,6 +389,9 @@
 ;; extras:2 ends here
 
 ;; hydra
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 ;; This sets up [[https://github.com/abo-abo/hydra][hydra]] by [[https://github.com/abo-abo][Oleh Krehel]], as well as its ~use-package~ keywords:
 
@@ -394,6 +418,9 @@
 ;; hydra:2 ends here
 
 ;; alloy
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 ;; Here is the configuration for [[https://github.com/shadowrylander/alloy][alloy]], forked from [[https://github.com/noctuid/general.el][general.el]] by [[https://github.com/noctuid][Fox Kiester]]:
 
@@ -453,6 +480,9 @@
 ;; alloy:6 ends here
 
 ;; uru
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 ;; This sets up my package [[https://github.com/shadowrylander/uru][uru]], which activates ~deinos~ based on the current major-mode, as mentioned in [[https://codeberg.org/dr.ops/medusa/src/branch/main/medusa.org#headline-4][magic medusa hydra]], by [[https://codeberg.org/dr.ops][Andy Drop]]:
 
@@ -463,6 +493,9 @@
 ;; uru:1 ends here
 
 ;; which-key
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 ;; The incredible [[https://github.com/justbur/emacs-which-key][emacs-which-key]] by the incredible [[https://github.com/justbur][Justin Burkett]]:
 
@@ -501,6 +534,9 @@
 ;; which-key:1 ends here
 
 ;; cosmoem
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 ;; [[https://bulbapedia.bulbagarden.net/wiki/Nebby][Nebby]]
 ;; [[./nebby.webp]]
@@ -563,6 +599,9 @@
 ;; cosmoem:6 ends here
 
 ;; sorrow
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 ;; Finally, [[https://github.com/shadowrylander/sorrow][sorrow]], forked from [[https://github.com/Kungsgeten/ryo-modal][ryo-modal]] by [[https://github.com/Kungsgeten][Erik Sjöstrand]]:
 
@@ -575,6 +614,9 @@
 ;; sorrow:1 ends here
 
 ;; exec-path-from-shell
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 ;; Unless I'm on Windows or a DOS-based OS, I'll need to make sure every executable available on my ~$PATH~ can be found by Emacs as well, using
 ;; [[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]] by [[https://github.com/purcell][Steve Purcell]]:
@@ -592,6 +634,9 @@
 ;; exec-path-from-shell:1 ends here
 
 ;; undo-fu
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 ;; Set up [[https://github.com/emacsmirror/undo-fu][undo-fu]] and [[https://github.com/emacsmirror/undo-fu-session][undo-fu-session]]:
 
@@ -612,6 +657,9 @@
 ;; undo-fu:1 ends here
 
 ;; lode
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 ;; Set up [[https://github.com/shadowrylander/lode][lode]] by yours truely:
 
@@ -621,6 +669,9 @@
 ;; lode:1 ends here
 
 ;; meta
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 ;; Set up [[https://github.com/shadowrylander/lode][meta]] by yours truely:
 
@@ -630,6 +681,9 @@
 ;; meta:1 ends here
 
 ;; prime
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 ;; Set up [[https://github.com/shadowrylander/lode][prime]] by yours truely:
 
@@ -639,6 +693,9 @@
 ;; prime:1 ends here
 
 ;; aiern
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 ;; [[https://github.com/shadowrylander/aiern][aiern]] is my version of [[https://github.com/emacs-evil/evil][evil]]; this first bit of config will enable ~aiern~ on initialization and add it to the list of ignored modal-modes,
 ;; such that it isn't disabled by ~meq/disable-all-modal-modes~:
@@ -733,6 +790,9 @@
 ;; aiern:6 ends here
 
 ;; all-the-icons
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 ;; I use [[https://connary.com/cartograph.html][Cartograph]] by [[https://connary.com/index.html][Connary Fagen, Inc.]], but I got it cheaper [[https://www.fontspring.com/fonts/connary-fagen-type-design/cartograph-cf][here]]; the second site often has sales on fonts.
 
@@ -746,6 +806,9 @@
 ;; all-the-icons:1 ends here
 
 ;; buffer
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 ;; This binds ~ctrl-tab~ and ~ctrl-shift-tab~ to buffer-cycling motions:
 
@@ -781,6 +844,9 @@
 ;; buffer:2 ends here
 
 ;; counsel
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 ;; From the [[https://github.com/abo-abo/swiper][swiper]] package by [[https://github.com/abo-abo][Oleh Krehel]]:
 
@@ -812,6 +878,9 @@
 ;; counsel:1 ends here
 
 ;; damascus
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 ;; Set up the base of this config, including the [[https://github.com/emacsmirror/rainbow-mode][rainbow-mode]] package:
 
@@ -957,6 +1026,9 @@
 ;; damascus:16 ends here
 
 ;; dired-sidebar
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 ;; Set up [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Dired.html][dired]] and its [[https://github.com/jojojames/dired-sidebar][sidebar]], by [[https://github.com/jojojames][James]]:
 
@@ -1012,6 +1084,9 @@
 ;; dired-sidebar:5 ends here
 
 ;; doom-aiern-modeline
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 ;; This sets up [[https://github.com/shadowrylander/doom-aiern-modeline][my fork]] of [[https://github.com/seagle0128/doom-modeline][doom-modeline]] by [[https://github.com/seagle0128][Vincent Zhang]] upon initialization:
 
@@ -1204,6 +1279,9 @@
 ;; doom-aiern-modeline:3 ends here
 
 ;; evil
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 ;; As mentioned before, both [[https://github.com/emacs-evil/evil][~evil~]] and [[https://github.com/shadowrylander/aiern][~aiern~]] require [[https://github.com/justbur/emacs-bind-map][emacs-bind-map]], by [[https://github.com/justbur][Justin Burkett]]:
 
@@ -1285,6 +1363,9 @@
 ;; evil:5 ends here
 
 ;; olivetti
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 ;; Zen-mode with [[https://github.com/rnkn/olivetti][olivetti]], by [[https://github.com/rnkn][Paul W. Rankin]]:
 
@@ -1294,6 +1375,9 @@
 ;; olivetti:1 ends here
 
 ;; rainbow-identifiers
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 ;; Colorful words with [[https://github.com/Fanael/rainbow-identifiers][rainbow-identifiers]], by [[https://github.com/Fanael][Fanael Linithien]]:
 
@@ -1310,6 +1394,9 @@
 ;; rainbow-identifiers:1 ends here
 
 ;; vlf
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 ;; View Large Files with [[https://github.com/m00natic/vlfi][vlfi]], by [[https://github.com/m00natic][Andrey Kotlarski]]
 
@@ -1319,6 +1406,9 @@
 ;; vlf:1 ends here
 
 ;; doom-themes
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 
 ;; [[file:README.org::*doom-themes][doom-themes:1]]
@@ -1382,6 +1472,9 @@
 ;; doom-themes:1 ends here
 
 ;; windmove
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 
 ;; [[file:README.org::*windmove][windmove:1]]
@@ -1427,6 +1520,9 @@
 ;; windmove:2 ends here
 
 ;; ace-window
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 
 ;; [[file:README.org::*ace-window][ace-window:1]]
@@ -1443,6 +1539,9 @@
 ;; ace-window:1 ends here
 
 ;; alamode
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 
 ;; [[file:README.org::*alamode][alamode:1]]
@@ -1450,6 +1549,9 @@
 ;; alamode:1 ends here
 
 ;; cosmog
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 
 ;; [[file:README.org::*cosmog][cosmog:1]]
@@ -1457,6 +1559,9 @@
 ;; cosmog:1 ends here
 
 ;; helm
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 
 ;; [[file:README.org::*helm][helm:1]]
@@ -1474,25 +1579,10 @@
         (helm-ido-like))
 ;; helm:1 ends here
 
-;; magit
-
-;; Adapted From: https://github.com/asok/.emacs.d/blob/master/inits/init-hydra.el#L62
-
-
-;; [[file:README.org::*magit][magit:1]]
-(meq/up magit :deino (deino-magit (:color blue :columns 8) "g"
-  "It's just like magit!"
-  ("s" magit-status "status")
-  ("c" magit-checkout "checkout")
-  ("b" magit-branch-manager "branch manager")
-  ("m" magit-merge "merge")
-  ("l" magit-log "log")
-  ("c" magit-git-command "command")
-  ("p" magit-process "process")
-  ("`" nil "cancel")))
-;; magit:1 ends here
-
 ;; modalka
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 
 ;; [[file:README.org::*modalka][modalka:1]]
@@ -1500,6 +1590,9 @@
 ;; modalka:1 ends here
 
 ;; objed
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 
 ;; [[file:README.org::*objed][objed:1]]
@@ -1507,6 +1600,9 @@
 ;; objed:1 ends here
 
 ;; projectile
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 ;; Adapted From: https://sam217pa.github.io/2016/09/23/keybindings-strategies-in-emacs/
 
@@ -1561,6 +1657,9 @@
 ;; projectile:1 ends here
 
 ;; restart-emacs
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 ;; Cool [[https://github.com/iqbalansari/restart-emacs][package]] by
 ;; [[https://github.com/iqbalansari][Iqbal Ansari]]!
@@ -1576,6 +1675,9 @@
 ;; restart-emacs:1 ends here
 
 ;; ryo modal
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 
 ;; [[file:README.org::*ryo modal][ryo modal:1]]
@@ -1585,6 +1687,9 @@
 ;; ryo modal:1 ends here
 
 ;; vterm
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 
 ;; [[file:README.org::*vterm][vterm:1]]
@@ -1601,6 +1706,9 @@
 ;; vterm:1 ends here
 
 ;; xah-fly-keys
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 
 ;; [[file:README.org::*xah-fly-keys][xah-fly-keys:1]]
@@ -1936,12 +2044,3 @@
 ;; [[file:README.org::*org-mode][org-mode:11]]
 (org-edit-src-content-indentation 0))
 ;; org-mode:11 ends here
-
-;; Load Init
-
-;; And finally, load init file:
-
-
-;; [[file:README.org::*Load Init][Load Init:1]]
-(load (meq/ued "init.el"))
-;; Load Init:1 ends here

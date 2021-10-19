@@ -1,16 +1,16 @@
 #+setupfile: ./settings/TANGLE.org
 #+include: ./settings/README.org
-# #+property: header-args:emacs-lisp+ :tangle no
 
 * early-init.el
 :PROPERTIES:
 :header-args:emacs-lisp+: :noweb-ref early-init.el :tangle no
+:header-args:org+: :tangle no
 :END:
 
 The ~noweb-ref~ headers, such as the one below, are adapted from [[https://emacs.stackexchange.com/users/388/melioratus][Melioratus's]] answer [[https://emacs.stackexchange.com/a/38935/31428][here]].
 This way, I can maintain some semblance of a literate config.
 
-#+begin_src org :tangle no
+#+begin_src org
 ,#+begin_src emacs-lisp :noweb-ref no :tangle (meq/tangle-path)
 #+end_src
 
@@ -18,7 +18,7 @@ This way, I can maintain some semblance of a literate config.
 <<early-init.el>>
 #+end_src
 
-#+begin_src org :tangle no
+#+begin_src org
 ,#+end_src
 #+end_src
 
@@ -312,6 +312,9 @@ Remove ~--~ from scripts:
 #+end_src
 
 ** Optimizations
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 Startup optimizations from [[https://github.com/hlissner][Henrik Lissner's]] [[https://github.com/hlissner/doom-emacs/blob/develop/early-init.el][Doom Emacs' ~early-init.el~]]:
 
@@ -427,6 +430,9 @@ The default gc-cons-threshold is 400000 bytes, not 800000. ...
 #+end_src
 
 ** Libraries
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 Byte-compile the library directories and add them to the load-path now; the following bits are adapted from [[https://emacs.stackexchange.com/users/14825/nickd][NickD's]] answer [[https://emacs.stackexchange.com/a/55415/31428][here]],
 and [[https://www.emacswiki.org/emacs/LoadPath#h5o-2][from this section of the Emacs Wiki]].
@@ -438,6 +444,9 @@ and [[https://www.emacswiki.org/emacs/LoadPath#h5o-2][from this section of the E
 #+end_src
 
 ** Native Comp
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 These are two settings I like for ~native compilation~, adapted from [[https://github.com/daviwil/dotfiles/blob/master/Emacs.org#native-compilation][here]]:
 
@@ -459,6 +468,9 @@ Set the right directory to store the native comp cache
 #+end_src
 
 ** We are Borg.
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 Assimilate the packages from my ~.gitmodules~ file:
 
@@ -496,6 +508,9 @@ Wake up the borg:
 #+end_src
 
 ** Custom
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 As adapted from [[https://emacs.stackexchange.com/users/2731/ebpa][ebpa's]] answer [[https://emacs.stackexchange.com/a/18682/31428][here]]:
 
@@ -506,6 +521,9 @@ As adapted from [[https://emacs.stackexchange.com/users/2731/ebpa][ebpa's]] answ
 #+end_src
 
 ** Themes
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 #+begin_src emacs-lisp
 (byte-recompile-directory (meq/ued "themes") nil)
@@ -516,7 +534,14 @@ As adapted from [[https://emacs.stackexchange.com/users/2731/ebpa][ebpa's]] answ
 By the way, I get most of my themes from [[themer.dev][https://themer.dev/]].
 
 ** Packages
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
+
 *** use-package
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 [[https://github.com/jwiegley/use-package][use-package]] with [[https://github.com/jwiegley][John Wiegley]]:
 
@@ -633,6 +658,9 @@ And then [[https://github.com/shadowrylander/use-package-extras][use-package-ext
 #+end_src
 
 *** hydra
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 This sets up [[https://github.com/abo-abo/hydra][hydra]] by [[https://github.com/abo-abo][Oleh Krehel]], as well as its ~use-package~ keywords:
 
@@ -655,6 +683,9 @@ This bit sets up the following:
 #+end_src
 
 *** alloy
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 Here is the configuration for [[https://github.com/shadowrylander/alloy][alloy]], forked from [[https://github.com/noctuid/general.el][general.el]] by [[https://github.com/noctuid][Fox Kiester]]:
 
@@ -716,6 +747,9 @@ And finally, this allows ~alloy~ to assume ~kbd~ is being used, or in this case,
 #+end_src
 
 *** uru
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 This sets up my package [[https://github.com/shadowrylander/uru][uru]], which activates ~deinos~ based on the current major-mode, as mentioned in [[https://codeberg.org/dr.ops/medusa/src/branch/main/medusa.org#headline-4][magic medusa hydra]], by [[https://codeberg.org/dr.ops][Andy Drop]]:
 
@@ -725,6 +759,9 @@ This sets up my package [[https://github.com/shadowrylander/uru][uru]], which ac
 #+end_src
 
 *** which-key
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 The incredible [[https://github.com/justbur/emacs-which-key][emacs-which-key]] by the incredible [[https://github.com/justbur][Justin Burkett]]:
 
@@ -762,6 +799,9 @@ The incredible [[https://github.com/justbur/emacs-which-key][emacs-which-key]] b
 #+end_src
 
 *** cosmoem
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 [[https://bulbapedia.bulbagarden.net/wiki/Nebby][Nebby]]
 [[./nebby.webp]]
@@ -811,6 +851,9 @@ A ~deino~ for all my modal-mode keymaps:
 #+end_src
 
 *** sorrow
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 Finally, [[https://github.com/shadowrylander/sorrow][sorrow]], forked from [[https://github.com/Kungsgeten/ryo-modal][ryo-modal]] by [[https://github.com/Kungsgeten][Erik Sjöstrand]]:
 
@@ -822,6 +865,9 @@ Finally, [[https://github.com/shadowrylander/sorrow][sorrow]], forked from [[htt
 #+end_src
 
 *** exec-path-from-shell
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 Unless I'm on Windows or a DOS-based OS, I'll need to make sure every executable available on my ~$PATH~ can be found by Emacs as well, using
 [[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]] by [[https://github.com/purcell][Steve Purcell]]:
@@ -838,6 +884,9 @@ Unless I'm on Windows or a DOS-based OS, I'll need to make sure every executable
 #+end_src
 
 *** undo-fu
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 Set up [[https://github.com/emacsmirror/undo-fu][undo-fu]] and [[https://github.com/emacsmirror/undo-fu-session][undo-fu-session]]:
 
@@ -857,6 +906,9 @@ Set up [[https://github.com/emacsmirror/undo-fu][undo-fu]] and [[https://github.
 #+end_src
 
 *** lode
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 Set up [[https://github.com/shadowrylander/lode][lode]] by yours truely:
 
@@ -865,6 +917,9 @@ Set up [[https://github.com/shadowrylander/lode][lode]] by yours truely:
 #+end_src
 
 *** meta
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 Set up [[https://github.com/shadowrylander/lode][meta]] by yours truely:
 
@@ -873,6 +928,9 @@ Set up [[https://github.com/shadowrylander/lode][meta]] by yours truely:
 #+end_src
 
 *** prime
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 Set up [[https://github.com/shadowrylander/lode][prime]] by yours truely:
 
@@ -881,6 +939,9 @@ Set up [[https://github.com/shadowrylander/lode][prime]] by yours truely:
 #+end_src
 
 *** aiern
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 [[https://github.com/shadowrylander/aiern][aiern]] is my version of [[https://github.com/emacs-evil/evil][evil]]; this first bit of config will enable ~aiern~ on initialization and add it to the list of ignored modal-modes,
 such that it isn't disabled by ~meq/disable-all-modal-modes~:
@@ -962,6 +1023,9 @@ And here are the ~aiern~ bindings set in the ~sorrow~ modal-mode:
 #+end_src
 
 *** all-the-icons
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 I use [[https://connary.com/cartograph.html][Cartograph]] by [[https://connary.com/index.html][Connary Fagen, Inc.]], but I got it cheaper [[https://www.fontspring.com/fonts/connary-fagen-type-design/cartograph-cf][here]]; the second site often has sales on fonts.
 
@@ -974,6 +1038,9 @@ I use [[https://connary.com/cartograph.html][Cartograph]] by [[https://connary.c
 #+end_src
 
 *** buffer
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 This binds ~ctrl-tab~ and ~ctrl-shift-tab~ to buffer-cycling motions:
 
@@ -1005,6 +1072,9 @@ And this is mostly adapted from [[https://sam217pa.github.io/2016/09/23/keybindi
 #+end_src
 
 *** counsel
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 From the [[https://github.com/abo-abo/swiper][swiper]] package by [[https://github.com/abo-abo][Oleh Krehel]]:
 
@@ -1035,6 +1105,9 @@ From the [[https://github.com/abo-abo/swiper][swiper]] package by [[https://gith
 #+end_src
 
 *** damascus
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 Set up the base of this config, including the [[https://github.com/emacsmirror/rainbow-mode][rainbow-mode]] package:
 
@@ -1191,6 +1264,9 @@ And finally, make emacs fullscreen, from [[https://emacs.stackexchange.com/users
 #+end_src
 
 *** dired-sidebar
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 Set up [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Dired.html][dired]] and its [[https://github.com/jojojames/dired-sidebar][sidebar]], by [[https://github.com/jojojames][James]]:
 
@@ -1233,6 +1309,9 @@ Zettelkasten files for my novel and documentation:
 #+end_src
 
 *** doom-aiern-modeline
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 This sets up [[https://github.com/shadowrylander/doom-aiern-modeline][my fork]] of [[https://github.com/seagle0128/doom-modeline][doom-modeline]] by [[https://github.com/seagle0128][Vincent Zhang]] upon initialization:
 
@@ -1418,6 +1497,9 @@ Most of the following is adapted from [[https://github.com/seagle0128/doom-aiern
 #+end_src
 
 *** evil
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 As mentioned before, both [[https://github.com/emacs-evil/evil][~evil~]] and [[https://github.com/shadowrylander/aiern][~aiern~]] require [[https://github.com/justbur/emacs-bind-map][emacs-bind-map]], by [[https://github.com/justbur][Justin Burkett]]:
 
@@ -1489,6 +1571,9 @@ This allows me to disable ~evil-insert-state~:
 #+end_src
 
 *** olivetti
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 Zen-mode with [[https://github.com/rnkn/olivetti][olivetti]], by [[https://github.com/rnkn][Paul W. Rankin]]:
 
@@ -1497,6 +1582,9 @@ Zen-mode with [[https://github.com/rnkn/olivetti][olivetti]], by [[https://githu
 #+end_src
 
 *** rainbow-identifiers
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 Colorful words with [[https://github.com/Fanael/rainbow-identifiers][rainbow-identifiers]], by [[https://github.com/Fanael][Fanael Linithien]]:
 
@@ -1512,6 +1600,9 @@ Colorful words with [[https://github.com/Fanael/rainbow-identifiers][rainbow-ide
 #+end_src
 
 *** vlf
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 View Large Files with [[https://github.com/m00natic/vlfi][vlfi]], by [[https://github.com/m00natic][Andrey Kotlarski]]
 
@@ -1522,6 +1613,9 @@ View Large Files with [[https://github.com/m00natic/vlfi][vlfi]], by [[https://g
 # TODO
 
 *** doom-themes
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 #+begin_src emacs-lisp
 (meq/up doom-themes
@@ -1584,6 +1678,9 @@ View Large Files with [[https://github.com/m00natic/vlfi][vlfi]], by [[https://g
 #+end_src
 
 *** windmove
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 #+begin_src emacs-lisp
 (meq/up windmove
@@ -1625,6 +1722,9 @@ The ~sorrow~ config below is adapted from
 #+end_src
 
 *** ace-window
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 #+begin_src emacs-lisp
 (meq/up ace-window
@@ -1640,18 +1740,27 @@ The ~sorrow~ config below is adapted from
 #+end_src
 
 *** alamode
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 #+begin_src emacs-lisp
 (meq/upnsd alamode)
 #+end_src
 
 *** cosmog
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 #+begin_src emacs-lisp
 (meq/upnsd cosmog :prime ("c" deino-cosmog/body "cosmog"))
 #+end_src
 
 *** helm
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 #+begin_src emacs-lisp
 (meq/up helm
@@ -1669,6 +1778,9 @@ The ~sorrow~ config below is adapted from
 #+end_src
 
 *** magit
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle no
+:END:
 
 Adapted From: https://github.com/asok/.emacs.d/blob/master/inits/init-hydra.el#L62
 
@@ -1686,18 +1798,27 @@ Adapted From: https://github.com/asok/.emacs.d/blob/master/inits/init-hydra.el#L
 #+end_src
 
 *** modalka
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 #+begin_src emacs-lisp
 (meq/up modalka)
 #+end_src
 
 *** objed
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 #+begin_src emacs-lisp
 (meq/up objed)
 #+end_src
 
 *** projectile
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 Adapted From: https://sam217pa.github.io/2016/09/23/keybindings-strategies-in-emacs/
 
@@ -1751,6 +1872,9 @@ Adapted From: https://sam217pa.github.io/2016/09/23/keybindings-strategies-in-em
 #+end_src
 
 *** restart-emacs
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 Cool [[https://github.com/iqbalansari/restart-emacs][package]] by
 [[https://github.com/iqbalansari][Iqbal Ansari]]!
@@ -1765,6 +1889,9 @@ Cool [[https://github.com/iqbalansari/restart-emacs][package]] by
 #+end_src
 
 *** ryo modal
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 #+begin_src emacs-lisp
 (meq/up ryo-modal :demon ((alloy-chord "KK") 'meq/ryo-execute-with-current-bindings)
@@ -1773,6 +1900,9 @@ Cool [[https://github.com/iqbalansari/restart-emacs][package]] by
 #+end_src
 
 *** vterm
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 #+begin_src emacs-lisp
 (meq/up vterm :use-package-postconfig (multi-vterm)
@@ -1788,6 +1918,9 @@ Cool [[https://github.com/iqbalansari/restart-emacs][package]] by
 #+end_src
 
 *** xah-fly-keys
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 #+begin_src emacs-lisp
 (meq/up xah-fly-keys
@@ -1800,6 +1933,10 @@ Cool [[https://github.com/iqbalansari/restart-emacs][package]] by
 #+end_src
 
 *** Major Modes
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
+
 **** titan
 
 Set up my super major-mode [[https://github.com/shadowrylander/titan][titan]]:
@@ -2091,10 +2228,10 @@ Upon exiting ~org-src-mode~ I don't want any indentation added to my code blocks
         (org-edit-src-content-indentation 0))
 #+end_src
 
-** Load Init
+# ** Load Init
 
-And finally, load init file:
+# And finally, load init file:
 
-#+begin_src emacs-lisp
-(load (meq/ued "init.el"))
-#+end_src
+# #+begin_src emacs-lisp
+# ;; (load (meq/ued "init.el"))
+# #+end_src

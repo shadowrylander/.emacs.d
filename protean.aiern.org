@@ -4,12 +4,13 @@
 * init.el
 :PROPERTIES:
 :header-args:emacs-lisp+: :noweb-ref init.el :tangle no
+:header-args:org+: :tangle no
 :END:
 
 The ~noweb-ref~ headers, such as the one below, are adapted from [[https://emacs.stackexchange.com/users/388/melioratus][Melioratus's]] answer [[https://emacs.stackexchange.com/a/38935/31428][here]].
 This way, I can maintain some semblance of a literate config.
 
-#+begin_src org :tangle no
+#+begin_src org
 ,#+begin_src emacs-lisp :noweb-ref no :tangle (meq/tangle-path)
 #+end_src
 
@@ -17,7 +18,7 @@ This way, I can maintain some semblance of a literate config.
 <<init.el>>
 #+end_src
 
-#+begin_src org :tangle no
+#+begin_src org
 ,#+end_src
 #+end_src
 
