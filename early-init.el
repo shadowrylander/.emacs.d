@@ -1,7 +1,7 @@
 ;; [[file:README.org::*early-init.el][early-init.el:2]]
 ;;; $EMACSDIR/early-init.el -*- lexical-binding: t; -*-
 (defvar user-emacs-directory (file-name-directory (or load-file-name buffer-file-name)))
-(unless (boundp 'state) (defvar state nil))
+(defvar state nil)
 (setq package-enable-at-startup nil)
 (defvar meq/var/windows (member system-type '(windows-nt ms-dos)))
 (defvar meq/var/slash (if meq/var/windows "\\" "/"))

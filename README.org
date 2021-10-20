@@ -1788,9 +1788,11 @@ The ~sorrow~ config below is adapted from
         (helm-ido-like))
 #+end_src
 
+# TODO: This seems to preventing the GUI from starting
+
 *** magit
 :PROPERTIES:
-:header-args:emacs-lisp+: :tangle no
+:header-args:emacs-lisp+: :tangle yes
 :END:
 
 Adapted From: https://github.com/asok/.emacs.d/blob/master/inits/init-hydra.el#L62
@@ -2238,11 +2240,3 @@ Upon exiting ~org-src-mode~ I don't want any indentation added to my code blocks
 #+begin_src emacs-lisp
         (org-edit-src-content-indentation 0))
 #+end_src
-
-# ** Load Init
-
-# And finally, load init file:
-
-# #+begin_src emacs-lisp
-# ;; (load (meq/ued "init.el"))
-# #+end_src

@@ -4,7 +4,7 @@
 ;; :END:
 
 ;; This sets up and requires the [[https://github.com/ch11ng/exwm][Emacs X Window Manager]] by
-;; [[https://github.com/ch11ng][Chris Feng]]:
+;; [[https://github.com/ch11ng][Chris Feng]], if necessary, with help from [[https://emacs.stackexchange.com/a/60455/31428][this answer]] by [[https://emacs.stackexchange.com/users/418/gregoryg][gregoryg]]:
 
 
 ;; [[file:protean.aiern.org::*EXWM][EXWM:1]]
@@ -20,8 +20,7 @@
   (when (and (get-buffer "*window-manager-error*")
              (eq window-system 'x))
     ;; exwm startup goes here
-    (setq meq/var/exwm t)
-   )
+    (setq meq/var/exwm t))
 (meq/up exwm :if meq/var/exwm
 ;; EXWM:1 ends here
 

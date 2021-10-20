@@ -1591,6 +1591,27 @@
         (helm-ido-like))
 ;; helm:1 ends here
 
+;; magit
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
+
+;; Adapted From: https://github.com/asok/.emacs.d/blob/master/inits/init-hydra.el#L62
+
+
+;; [[file:README.org::*magit][magit:1]]
+(meq/up magit :deino (deino-magit (:color blue :columns 8) "g"
+  "It's just like magit!"
+  ("s" magit-status "status")
+  ("c" magit-checkout "checkout")
+  ("b" magit-branch-manager "branch manager")
+  ("m" magit-merge "merge")
+  ("l" magit-log "log")
+  ("c" magit-git-command "command")
+  ("p" magit-process "process")
+  ("`" nil "cancel")))
+;; magit:1 ends here
+
 ;; modalka
 ;; :PROPERTIES:
 ;; :header-args:emacs-lisp+: :tangle yes
