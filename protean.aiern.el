@@ -1,11 +1,28 @@
 ;; EXWM
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 ;; This sets up and requires the [[https://github.com/ch11ng/exwm][Emacs X Window Manager]] by
 ;; [[https://github.com/ch11ng][Chris Feng]]:
 
 
 ;; [[file:protean.aiern.org::*EXWM][EXWM:1]]
-(meq/up exwm
+(defvar meq/var/exwm nil)
+(when (get-buffer "*window-manager*")
+  (kill-buffer "*window-manager*"))
+(when (get-buffer "*window-manager-error*")
+  (kill-buffer "*window-manager-error*"))
+(when (executable-find "wmctrl")
+  (shell-command "wmctrl -m ; echo $?" "*window-manager*" "*window-manager-error*"))
+
+  ;; if there was an error detecting the window manager, initialize EXWM
+  (when (and (get-buffer "*window-manager-error*")
+             (eq window-system 'x))
+    ;; exwm startup goes here
+    (setq meq/var/exwm t)
+   )
+(meq/up exwm :if meq/var/exwm
 ;; EXWM:1 ends here
 
 
@@ -190,6 +207,9 @@
 ;; EXWM:14 ends here
 
 ;; Startup
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
 
 
 ;; [[file:protean.aiern.org::*Startup][Startup:1]]

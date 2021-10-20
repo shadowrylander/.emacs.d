@@ -37,12 +37,28 @@ Finally, create the function to [re]load the primary init in this file and load 
 #+end_src
 
 * EXWM
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 This sets up and requires the [[https://github.com/ch11ng/exwm][Emacs X Window Manager]] by
-[[https://github.com/ch11ng][Chris Feng]]:
+[[https://github.com/ch11ng][Chris Feng]], if necessary, with help from [[https://emacs.stackexchange.com/a/60455/31428][this answer]] by [[https://emacs.stackexchange.com/users/418/gregoryg][gregoryg]]:
 
 #+begin_src emacs-lisp
-(meq/up exwm
+(defvar meq/var/exwm nil)
+(when (get-buffer "*window-manager*")
+  (kill-buffer "*window-manager*"))
+(when (get-buffer "*window-manager-error*")
+  (kill-buffer "*window-manager-error*"))
+(when (executable-find "wmctrl")
+  (shell-command "wmctrl -m ; echo $?" "*window-manager*" "*window-manager-error*"))
+
+  ;; if there was an error detecting the window manager, initialize EXWM
+  (when (and (get-buffer "*window-manager-error*")
+             (eq window-system 'x))
+    ;; exwm startup goes here
+    (setq meq/var/exwm t))
+(meq/up exwm :if meq/var/exwm
 #+end_src
 
 I want to run the following applications on ~EXWM~ startup:
@@ -194,6 +210,9 @@ And finally: no tiling:
 #+end_src
 
 * Startup
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 #+begin_src emacs-lisp
 (when (> (length command-line-args) 1) (let* ((last-dab (car (last command-line-args))))

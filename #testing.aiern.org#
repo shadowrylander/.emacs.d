@@ -1,8 +1,7 @@
 #+setupfile: ./README.org
 #+include: ./README.org
-
-(meq/load-theme 'dracula-purple-dark)
-
+(get-buffer-window "*Warnings*")
+(buffer-name)
 # ##################################################################################################
 
 # Adapted From: https://writequit.org/denver-emacs/presentations/files/example.org.html

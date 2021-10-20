@@ -4,7 +4,13 @@ test := emacs --bg-daemon=test
 killTest := emacsclient -s test -e "(kill-emacs)"
 profile = $(shell cat $(mkfileDir)/default.aiern.org)
 
-pre-test: subinit
+clean-all:
+|fd . $(mkfileDir) -HIe elc -x rm
+
+clean:
+|fd . $(mkfileDir) -HId 1 -e elc -x rm
+
+pre-test: clean-all subinit
 
 pest: pre-test
 |emacs -p
@@ -22,15 +28,6 @@ test-new-and-kill: test-and-kill-pre
 test-new-nw-and-kill: test-and-kill-pre
 |$(test) -Q -nw
 |$(killTest)
-
-clean-all:
-|fd . $(mkfileDir) -HIe elc -x rm
-
-pre-clean:
-|fd . $(mkfileDir) -HId 1 -e elc -x rm
-
-clean: pre-clean
-|fd . $(mkfileDir)/profiles/$(profile) -HIe elc -x rm
 
 test: pre-test
 |emacs

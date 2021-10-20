@@ -29,8 +29,8 @@
         path = lib/async
         url = https://github.com/jwiegley/emacs-async.git
 [submodule "auto-compile"]
-	path = lib/auto-compile
-	url = https://github.com/emacscollective/auto-compile.git
+        path = lib/auto-compile
+        url = https://github.com/emacscollective/auto-compile.git
 [submodule "auto-package-update"]
         path = lib/auto-package-update
         url = https://github.com/rranelli/auto-package-update.el.git
@@ -133,8 +133,8 @@
         path = lib/f
         url = https://github.com/rejeep/f.el.git
 [submodule "fasd"]
-	path = lib/fasd
-	url = https://framagit.org/steckerhalter/emacs-fasd.git
+        path = lib/fasd
+        url = https://framagit.org/steckerhalter/emacs-fasd.git
 [submodule "fell"]
         path = lib/fell
         url = https://github.com/shadowrylander/fell.git
@@ -150,8 +150,8 @@
         path = lib/flycheck
         url = https://github.com/flycheck/flycheck.git
 [submodule "gcmh"]
-	path = lib/gcmh
-	url = https://gitlab.com/koral/gcmh.git
+        path = lib/gcmh
+        url = https://gitlab.com/koral/gcmh.git
 [submodule "god-mode"]
         path = lib/god-mode
         url = https://github.com/emacsorphanage/god-mode.git
@@ -253,8 +253,8 @@
         path = lib/nix-mode
         url = https://github.com/NixOS/nix-mode.git
 [submodule "no-littering"]
-	path = lib/no-littering
-	url = https://github.com/emacscollective/no-littering.git
+        path = lib/no-littering
+        url = https://github.com/emacscollective/no-littering.git
 [submodule "ob-hy"]
         path = lib/ob-hy
         url = https://github.com/brantou/ob-hy.git
@@ -271,8 +271,8 @@
         path = lib/oneonone
         url = https://github.com/emacsmirror/oneonone.git
 [submodule "org"]
-	path = lib/org
-	url = https://git.savannah.gnu.org/git/emacs/org-mode.git
+        path = lib/org
+        url = https://git.savannah.gnu.org/git/emacs/org-mode.git
         build-step = make
         build-step = make autoloads
         build-step = borg-update-autoloads
@@ -280,8 +280,8 @@
         build-step = borg-makeinfo
         load-path = lisp
 [submodule "org-contrib"]
-	path = lib/org-contrib
-	url = https://git.sr.ht/~bzg/org-contrib
+        path = lib/org-contrib
+        url = https://git.sr.ht/~bzg/org-contrib
 [submodule "ox-gfm"]
         path = lib/ox-gfm
         url = https://github.com/larstvei/ox-gfm.git
@@ -289,8 +289,8 @@
         path = lib/ox-pandoc
         url = https://github.com/kawabata/ox-pandoc.git
 [submodule "packed"]
-	path = lib/packed
-	url = https://github.com/emacscollective/packed.git
+        path = lib/packed
+        url = https://github.com/emacscollective/packed.git
 [submodule "persp-mode"]
         path = lib/persp-mode
         url = https://github.com/Bad-ptr/persp-mode.el.git
@@ -435,17 +435,17 @@
         path = lib/with-editor
         url = https://github.com/magit/with-editor.git
 [submodule "xah-fly-keys"]
-	path = lib/xah-fly-keys
-	url = https://github.com/xahlee/xah-fly-keys.git
+        path = lib/xah-fly-keys
+        url = https://github.com/xahlee/xah-fly-keys.git
 [submodule "xelb"]
-	path = lib/xelb
-	url = https://github.com/ch11ng/xelb.git
+        path = lib/xelb
+        url = https://github.com/ch11ng/xelb.git
 [submodule "xonsh-mode"]
-	path = lib/xonsh-mode
-	url = https://github.com/seanfarley/xonsh-mode.git
+        path = lib/xonsh-mode
+        url = https://github.com/seanfarley/xonsh-mode.git
 [submodule "yasnippet"]
-	path = lib/yasnippet
-	url = https://github.com/joaotavora/yasnippet.git
+        path = lib/yasnippet
+        url = https://github.com/joaotavora/yasnippet.git
 [submodule "zoxide"]
-	path = lib/zoxide
-	url = https://gitlab.com/Vonfry/zoxide.el.git
+        path = lib/zoxide
+        url = https://gitlab.com/Vonfry/zoxide.el.git

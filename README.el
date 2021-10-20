@@ -843,6 +843,22 @@
   ("s" deino-window/body "window" :color blue)))
 ;; buffer:2 ends here
 
+;; ivy
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
+
+;; From the [[https://github.com/abo-abo/swiper][swiper]] package by [[https://github.com/abo-abo][Oleh Krehel]]:
+
+
+;; [[file:README.org::*ivy][ivy:1]]
+(meq/up ivy :sorrow ("x" :deino '(deino-execute (:color blue) "x" "A deino for launching stuff!"
+        ("`" nil "cancel")
+        ("e" execute-extended-command "M-x")) :name "execute order 65")
+    :use-package-preconfig (smex)
+    :gsetq (ivy-use-virtual-buffers t))
+;; ivy:1 ends here
+
 ;; counsel
 ;; :PROPERTIES:
 ;; :header-args:emacs-lisp+: :tangle yes
@@ -852,11 +868,7 @@
 
 
 ;; [[file:README.org::*counsel][counsel:1]]
-(meq/up counsel :use-package-preconfig (smex)
-        (ivy :sorrow ("x" :deino '(deino-execute (:color blue) "x" "A deino for launching stuff!"
-                ("`" nil "cancel")
-                ("e" execute-extended-command "M-x")) :name "execute order 65")
-            :gsetq (ivy-use-virtual-buffers t))
+(meq/up counsel
     :use-package-postconfig (prescient) (ivy-prescient)
     :hook (after-init . (lambda nil (interactive)
                             (ivy-mode 1)

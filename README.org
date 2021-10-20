@@ -32,7 +32,7 @@ Start off by specifying the ~user-emacs-directory~:
 For some reason ~state~ is undefined:
 
 #+begin_src emacs-lisp
-(setq state nil)
+(defvar state nil)
 #+end_src
 
 Disable [[https://www.emacswiki.org/emacs/InstallingPackages][~package.el~]] on startup: 
@@ -1071,6 +1071,21 @@ And this is mostly adapted from [[https://sam217pa.github.io/2016/09/23/keybindi
   ("s" deino-window/body "window" :color blue)))
 #+end_src
 
+*** ivy
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
+
+From the [[https://github.com/abo-abo/swiper][swiper]] package by [[https://github.com/abo-abo][Oleh Krehel]]:
+
+#+begin_src emacs-lisp
+(meq/up ivy :sorrow ("x" :deino '(deino-execute (:color blue) "x" "A deino for launching stuff!"
+        ("`" nil "cancel")
+        ("e" execute-extended-command "M-x")) :name "execute order 65")
+    :use-package-preconfig (smex)
+    :gsetq (ivy-use-virtual-buffers t))
+#+end_src
+
 *** counsel
 :PROPERTIES:
 :header-args:emacs-lisp+: :tangle yes
@@ -1079,11 +1094,7 @@ And this is mostly adapted from [[https://sam217pa.github.io/2016/09/23/keybindi
 From the [[https://github.com/abo-abo/swiper][swiper]] package by [[https://github.com/abo-abo][Oleh Krehel]]:
 
 #+begin_src emacs-lisp
-(meq/up counsel :use-package-preconfig (smex)
-        (ivy :sorrow ("x" :deino '(deino-execute (:color blue) "x" "A deino for launching stuff!"
-                ("`" nil "cancel")
-                ("e" execute-extended-command "M-x")) :name "execute order 65")
-            :gsetq (ivy-use-virtual-buffers t))
+(meq/up counsel
     :use-package-postconfig (prescient) (ivy-prescient)
     :hook (after-init . (lambda nil (interactive)
                             (ivy-mode 1)
@@ -1136,12 +1147,12 @@ These are keys primarily accessible for me on Android:
 This hook and function combo would allow me to save files without query, taken from [[https://emacs.stackexchange.com/a/51829][this answer]] by [[https://emacs.stackexchange.com/users/2370/tobias][Tobias]]:
 
 #+begin_src emacs-lisp :tangle no
-:config/defun*
-    (meq/set-buffer-save-without-query nil
-        "Set `buffer-save-without-query' to t."
-        (unless (variable-binding-locus 'buffer-save-without-query)
-            (setq buffer-save-without-query t)))
-:hook (find-file . meq/set-buffer-save-without-query)
+    :config/defun*
+        (meq/set-buffer-save-without-query nil
+            "Set `buffer-save-without-query' to t."
+            (unless (variable-binding-locus 'buffer-save-without-query)
+                (setq buffer-save-without-query t)))
+    :hook (find-file . meq/set-buffer-save-without-query)
 #+end_src
 
 Load the latest help package, and set a few self-describing variables:
