@@ -1,9 +1,8 @@
 #+setupfile: ./README.org
 #+include: ./README.org
-(get-buffer-window "*Warnings*")
-(buffer-name)
-# ##################################################################################################
 
+# ##################################################################################################
+i
 # Adapted From: https://writequit.org/denver-emacs/presentations/files/example.org.html
 
 This is the example org-mode file used for the Denver Emacs org-mode
