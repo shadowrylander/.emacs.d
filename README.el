@@ -702,9 +702,10 @@
 
 
 ;; [[file:README.org::*aiern][aiern:1]]
-(use-package aiern
+(meq/up aiern
     :gsetq (aiern-undo-system 'undo-fu)
     :hook (after-init . (lambda nil (interactive)
+        (setq state (list aiern-default-state))
         (aiern-mode 1)
         (push 'aiern-mode meq/var/ignored-modal-modes)
         (push "aiern" meq/var/ignored-modal-prefixes)))
@@ -1718,25 +1719,6 @@
     :config ;; From: https://github.com/Kungsgeten/ryo-modal#which-key-integration
         (push '((nil . "ryo:.*:") . (nil . "")) which-key-replacement-alist))
 ;; ryo modal:1 ends here
-
-;; vterm
-;; :PROPERTIES:
-;; :header-args:emacs-lisp+: :tangle yes
-;; :END:
-
-
-;; [[file:README.org::*vterm][vterm:1]]
-(meq/up vterm :use-package-postconfig (multi-vterm)
-    :if (not (member system-type '(windows-nt ms-dos)))
-    :demon ((alloy-chord "vv") 'meq/shell)
-    :gsetq
-        ;; From: https://www.reddit.com/r/emacs/comments/pjtm91/vterm_a_little_bit_slow/hbz40xb?utm_medium=android_app&utm_source=share&context=3
-        (vterm-timer-delay 0.01)
-
-        (vterm-always-compile-module t)
-        (vterm-shell (meq/ued "vterm-start.sh"))
-        (vterm-kill-buffer-on-exit t))
-;; vterm:1 ends here
 
 ;; xah-fly-keys
 ;; :PROPERTIES:

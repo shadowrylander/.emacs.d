@@ -29,12 +29,6 @@ Start off by specifying the ~user-emacs-directory~:
 (defvar user-emacs-directory (file-name-directory (or load-file-name buffer-file-name)))
 #+end_src
 
-For some reason ~state~ is undefined:
-
-#+begin_src emacs-lisp
-(defvar state nil)
-#+end_src
-
 Disable [[https://www.emacswiki.org/emacs/InstallingPackages][~package.el~]] on startup: 
 
 #+begin_src emacs-lisp
@@ -947,9 +941,10 @@ Set up [[https://github.com/shadowrylander/lode][prime]] by yours truely:
 such that it isn't disabled by ~meq/disable-all-modal-modes~:
 
 #+begin_src emacs-lisp
-(use-package aiern
+(meq/up aiern
     :gsetq (aiern-undo-system 'undo-fu)
     :hook (after-init . (lambda nil (interactive)
+        (setq state (list aiern-default-state))
         (aiern-mode 1)
         (push 'aiern-mode meq/var/ignored-modal-modes)
         (push "aiern" meq/var/ignored-modal-prefixes)))
@@ -1914,7 +1909,7 @@ Cool [[https://github.com/iqbalansari/restart-emacs][package]] by
 
 *** vterm
 :PROPERTIES:
-:header-args:emacs-lisp+: :tangle yes
+:header-args:emacs-lisp+: :tangle no
 :END:
 
 #+begin_src emacs-lisp

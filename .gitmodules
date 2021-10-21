@@ -422,9 +422,6 @@
 [submodule "vlfi"]
         path = lib/vlfi
         url = https://github.com/m00natic/vlfi.git
-[submodule "vterm"]
-        path = lib/vterm
-        url = https://github.com/akermu/emacs-libvterm.git
 [submodule "web-mode"]
         path = lib/web-mode
         url = https://github.com/fxbois/web-mode.git
