@@ -2,7 +2,6 @@
 .DEFAULT_GOAL := emacs
 test := emacs --bg-daemon=test
 killTest := emacsclient -s test -e "(kill-emacs)"
-profile = $(shell cat $(mkfileDir)/default.aiern.org)
 
 clean-all:
 |fd . $(mkfileDir) -HIe elc -x rm
@@ -12,14 +11,19 @@ clean:
 
 pre-test: clean-all subinit
 
-pest: pre-test
-|emacs -p
-
-no-config-test:
+no-config-test: pre-test
 |emacs -Q
 
 test-and-kill-pre: pre-test
 |-emacsclient -s test -e "(kill-emacs)"
+
+bootstrap: test-and-kill-pre
+|$(test) --bootstrap
+|$(killTest)
+
+force-bootstrap: test-and-kill-pre
+|$(test) --force-bootstrap
+|$(killTest)
 
 test-new-and-kill: test-and-kill-pre
 |$(test) -Q
