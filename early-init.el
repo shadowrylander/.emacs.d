@@ -1,6 +1,8 @@
 ;; [[file:README.org::*early-init.el][early-init.el:2]]
 ;;; $EMACSDIR/early-init.el -*- lexical-binding: t; -*-
 (defvar user-emacs-directory (file-name-directory (or load-file-name buffer-file-name)))
+(defvar meq/var/bootstrap (member "--bootstrap" command-line-args)) (delete "--bootstrap" command-line-args)
+(defvar meq/var/force-bootstrap (member "--force-bootstrap" command-line-args)) (delete "--force-bootstrap" command-line-args)
 (setq package-enable-at-startup nil)
 (defvar meq/var/windows (member system-type '(windows-nt ms-dos)))
 (defvar meq/var/slash (if meq/var/windows "\\" "/"))
@@ -20,16 +22,25 @@
 ;;           ;; meq/var/windows
 ;;           ) (meq/require-and-load "epkg"))
 ;; (meq/require-and-load "borg")
+;; (defun meq/borg--call-git-advice (pkg &rest args)
+;;   (let ((process-connection-type nil)
+;;         (buffer (generate-new-buffer
+;;                  (concat " *Borg Git" (and pkg (concat " " pkg)) "*"))))
+;;     (if (eq (apply #'call-process "git" nil buffer nil args) 0)
+;;         (kill-buffer buffer)
+;;       (with-current-buffer buffer
+;;         (special-mode))
+;;       (pop-to-buffer buffer)
+;;       (error "Borg Git: %s %s:\n\n%s" pkg args (buffer-string)))))
 (defun meq/borg--call-git-advice (pkg &rest args)
   (let ((process-connection-type nil)
         (buffer (generate-new-buffer
                  (concat " *Borg Git" (and pkg (concat " " pkg)) "*"))))
-    (if (eq (apply #'call-process "git" nil buffer nil args) 0)
-        (kill-buffer buffer)
-      (with-current-buffer buffer
-        (special-mode))
-      (pop-to-buffer buffer)
-      (error "Borg Git: %s %s:\n\n%s" pkg args (buffer-string)))))
+    (with-current-buffer buffer
+        (pop-to-buffer buffer)
+        (if (eq (apply #'call-process "git" nil buffer nil args) 0)
+            (unwind-protect (format "\n\n%s\n\n" (buffer-string)) (kill-buffer buffer))
+            (error "Borg Git: %s %s:\n\n%s" pkg args (buffer-string))))))
 (advice-add #'borg--call-git :override #'meq/borg--call-git-advice)
 (advice-add #'borg--maybe-confirm-unsafe-action :override #'ignore)
 (advice-add #'borg--maybe-reuse-gitdir :override #'ignore)
@@ -124,12 +135,11 @@ auto-revert-use-notify nil)
 (defun meq/call (program buffer-name &rest args)
   (let ((process-connection-type nil)
         (buffer (generate-new-buffer buffer-name)))
-    (if (eq (apply #'call-process program nil buffer nil args) 0)
-        (kill-buffer buffer)
-      (with-current-buffer buffer
-        (special-mode))
-      (pop-to-buffer buffer)
-      (error "%s: %s:\n\n%s" program args (buffer-string)))))
+    (with-current-buffer buffer
+        (pop-to-buffer buffer)
+        (if (eq (apply #'call-process program nil buffer nil args) 0)
+            (unwind-protect (format "\n\n%s\n\n" (buffer-string)) (kill-buffer buffer))
+            (error "%s: %s:\n\n%s" program args (buffer-string))))))
 (defun meq/call-tangle (file) (meq/call (concat user-emacs-directory "settings" meq/var/slash "org-tangle.sh") "*literally-configuring*" file))
 (defun meq/org-babel-load-file-advice (file &optional compile)
   "Load Emacs Lisp source code blocks in the Org FILE.

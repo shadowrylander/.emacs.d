@@ -29,6 +29,13 @@ Start off by specifying the ~user-emacs-directory~:
 (defvar user-emacs-directory (file-name-directory (or load-file-name buffer-file-name)))
 #+end_src
 
+Check if we're bootstrapping the system, and whether we want reinstall the packages:
+
+#+begin_src emacs-lisp
+(defvar meq/var/bootstrap (member "--bootstrap" command-line-args)) (delete "--bootstrap" command-line-args)
+(defvar meq/var/force-bootstrap (member "--force-bootstrap" command-line-args)) (delete "--force-bootstrap" command-line-args)
+#+end_src
+
 Disable [[https://www.emacswiki.org/emacs/InstallingPackages][~package.el~]] on startup: 
 
 #+begin_src emacs-lisp
@@ -80,16 +87,25 @@ Set the borg package directory:
 Make the ~borg~ git command buffer and any potential errors more descriptive:
 
 #+begin_src emacs-lisp
+;; (defun meq/borg--call-git-advice (pkg &rest args)
+;;   (let ((process-connection-type nil)
+;;         (buffer (generate-new-buffer
+;;                  (concat " *Borg Git" (and pkg (concat " " pkg)) "*"))))
+;;     (if (eq (apply #'call-process "git" nil buffer nil args) 0)
+;;         (kill-buffer buffer)
+;;       (with-current-buffer buffer
+;;         (special-mode))
+;;       (pop-to-buffer buffer)
+;;       (error "Borg Git: %s %s:\n\n%s" pkg args (buffer-string)))))
 (defun meq/borg--call-git-advice (pkg &rest args)
   (let ((process-connection-type nil)
         (buffer (generate-new-buffer
                  (concat " *Borg Git" (and pkg (concat " " pkg)) "*"))))
-    (if (eq (apply #'call-process "git" nil buffer nil args) 0)
-        (kill-buffer buffer)
-      (with-current-buffer buffer
-        (special-mode))
-      (pop-to-buffer buffer)
-      (error "Borg Git: %s %s:\n\n%s" pkg args (buffer-string)))))
+    (with-current-buffer buffer
+        (pop-to-buffer buffer)
+        (if (eq (apply #'call-process "git" nil buffer nil args) 0)
+            (unwind-protect (format "\n\n%s\n\n" (buffer-string)) (kill-buffer buffer))
+            (error "Borg Git: %s %s:\n\n%s" pkg args (buffer-string))))))
 (advice-add #'borg--call-git :override #'meq/borg--call-git-advice)
 #+end_src
 
@@ -249,12 +265,11 @@ Create a version of [[https://github.com/emacscollective/borg/blob/master/borg.e
 (defun meq/call (program buffer-name &rest args)
   (let ((process-connection-type nil)
         (buffer (generate-new-buffer buffer-name)))
-    (if (eq (apply #'call-process program nil buffer nil args) 0)
-        (kill-buffer buffer)
-      (with-current-buffer buffer
-        (special-mode))
-      (pop-to-buffer buffer)
-      (error "%s: %s:\n\n%s" program args (buffer-string)))))
+    (with-current-buffer buffer
+        (pop-to-buffer buffer)
+        (if (eq (apply #'call-process program nil buffer nil args) 0)
+            (unwind-protect (format "\n\n%s\n\n" (buffer-string)) (kill-buffer buffer))
+            (error "%s: %s:\n\n%s" program args (buffer-string))))))
 #+end_src
 
 Then create a shell tangle function based on the above:
