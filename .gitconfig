@@ -16,3 +16,6 @@
 	fetch = +refs/heads/master:refs/remotes/origin/master
 [alias]
     push-settings = git subtree --squash --prefix settings push
+    cnm = git commit --allow-empty-message -am ""
+[protocol "keybase"]
+	allow = always
