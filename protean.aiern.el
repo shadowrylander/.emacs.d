@@ -294,8 +294,7 @@
         :base (-flatten-n 1 (list '(autojump assh autossh
                                     bat bc byobu
                                     cascadia-code coreutils ctop curl
-                                    ;; (ddar ignore-this)
-                                    ddar diskus dos2unix duf
+                                    (ddar ignore-this) diskus dos2unix duf
                                     elvish entr exa
                                     fasd fd fff ffmpeg figlet filet fzf
                                     gcc git gitoxide git-crypt git-fire git-lfs glances gotop
