@@ -55,9 +55,5 @@ test-nw-update-and-kill: test-and-kill-pre
 |$(test) -nw --update
 |$(killTest)
 
-bootstrap: test-and-kill-pre
-|$(test) --bootstrap
-|$(killTest)
-
 emacs: test
 emacs-nw: nw-test
