@@ -283,7 +283,7 @@ This is taken from [[https://functor.tokyo/blog/2018-02-20-show-packages-install
                             (list (list :pipx (meq/get-pipx-packages)))))
         :pipx (list :apps '(black black-macchiato
                             (jupyterlab jupyter-lab)
-                            poetry ;; pyls-black
+                            ;; poetry ;; pyls-black
                             )
                     :libs (list :xonsh '(
                         ("https://github.com/vlasovskikh/funcparserlib/archive/refs/tags/1.0.0a0.tar.gz" funcparserlib)
@@ -291,6 +291,8 @@ This is taken from [[https://functor.tokyo/blog/2018-02-20-show-packages-install
                             :hy '(
                         ("https://github.com/vlasovskikh/funcparserlib/archive/refs/tags/1.0.0a0.tar.gz" funcparserlib)
                         ("https://github.com/hylang/hy/releases/download/1.0a3/hy-1.0a3.tar.gz" hy))))
+        :pkg '(gitea libffi libzmq llvm python)
+        :pip '(pipx)
         :base (-flatten-n 1 (list '(autojump assh autossh
                                     bat bc byobu
                                     cascadia-code coreutils ctop curl
@@ -442,25 +444,10 @@ This is taken from [[https://functor.tokyo/blog/2018-02-20-show-packages-install
 (cond (meq/var/phone (let* ((pm* "pkg")
                             (install (meq/pm-details pm* :install))
                             (pm (meq/pm-details pm* :manager)))
-                        (meq/wrapped-call "Adding unstable repo" pm install "unstable-repo")
-                        (meq/wrapped-call "Adding root repo" ,pm ,install "root-repo")
-                        (meq/wrapped-call "Updating pkgs" ,pm "update" "-y")
-                        (mapc #'(lambda (pkg) (interactive)
-                            (meq/install-package pkg pm)) '(;; clang
-                                                                ;; fftw
-                                                                ;; freetype
-                                                                gitea
-                                                                ;; libcrypt
-                                                                libffi
-                                                                ;; libpng
-                                                                libzmq
-                                                                llvm
-                                                                ;; pkg-config
-                                                                python
-                                                                ;; rust
-                                                                ))
-                        (mapc #'(lambda (pkg) (interactive)
-                            (meq/install-package pkg "pip")) '(pipx))))
+                        (meq/wrapped-call "Adding root repo" pm install "root-repo")
+                        (meq/wrapped-call "Updating pkgs" pm "update" "-y")
+                        (mapc #'(lambda (pkg) (interactive) (meq/install-package pkg pm)) (meq/gfp :pkg))
+                        (mapc #'(lambda (pkg) (interactive) (meq/install-package pkg "pip")) (meq/gfp :pip))))
     (meq/var/wsl (mapc #'meq/install-package (meq/gfp :base)))
     (t (progn
             (mapc #'meq/install-package (-flatten-n 1 (list
