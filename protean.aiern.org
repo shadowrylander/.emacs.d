@@ -426,17 +426,37 @@ This is taken from [[https://functor.tokyo/blog/2018-02-20-show-packages-install
                 (message "Not %s; ignored" buffer-name)
                 (message buffer-name)
                 (let* ((install (meq/pm-details pm :install)))
-                    (apply #'meq/call (meq/pm-details pm :manager) buffer-name (append
-                                                        (if (listp install) install (list install))
-                                                        (list pkg (when (string= pm "nix-env") "--show-trace")))))
+                    (apply #'meq/call (meq/pm-details pm :manager) buffer-name (append (meq/rl install)
+                                                        (remove nil (list pkg (when (string= pm "nix-env") "--show-trace"))))))
                 (message "%s...done" buffer-name)))))
 #+end_src
 
+#+begin_src emacs-lisp
+(defmacro meq/wrapped-call (buffer-name &rest args)
+    (message buffer-name)
+    (apply #'meq/call (meq/rs (pop args)) (format "*%s*" buffer-name) (map #'meq/rs args))
+    (message "%s...done" buffer-name))
+#+end_src
 
 #+begin_src emacs-lisp
 (cond (meq/var/phone (progn
+                        (meq/wrapped-call "Adding unstable repo" pkg install unstable-repo -y)
+                        (meq/wrapped-call "Adding root repo" pkg install root-repo -y)
+                        (meq/wrapped-call "Updating pkgs" pkg update -y)
                         (mapc #'(lambda (pkg) (interactive)
-                            (meq/install-package pkg "pkg")) nil)
+                            (meq/install-package pkg "pkg")) '(;; clang
+                                                                ;; fftw
+                                                                ;; freetype
+                                                                gitea
+                                                                ;; libcrypt
+                                                                libffi
+                                                                ;; libpng
+                                                                libzmq
+                                                                ;; llvm
+                                                                ;; pkg-config
+                                                                python
+                                                                ;; rust
+                                                                ))
                         (mapc #'(lambda (pkg) (interactive)
                             (meq/install-package pkg "pip")) '(pipx))))
     (meq/var/wsl (mapc #'meq/install-package (meq/gfp :base)))
