@@ -439,12 +439,14 @@ This is taken from [[https://functor.tokyo/blog/2018-02-20-show-packages-install
 #+end_src
 
 #+begin_src emacs-lisp
-(cond (meq/var/phone (progn
-                        (meq/wrapped-call "Adding unstable repo" pkg install unstable-repo -y)
-                        (meq/wrapped-call "Adding root repo" pkg install root-repo -y)
+(cond (meq/var/phone (let ((pm* "pkg")
+                            (install (meq/pm-details pm* :install))
+                            (pm (meq/pm-details pm* :manager)))
+                        (eval `(meq/wrapped-call "Adding unstable repo" ,pm ,install unstable-repo))
+                        (eval `(meq/wrapped-call "Adding root repo" ,pm ,install root-repo))
                         (meq/wrapped-call "Updating pkgs" pkg update -y)
                         (mapc #'(lambda (pkg) (interactive)
-                            (meq/install-package pkg "pkg")) '(;; clang
+                            (meq/install-package pkg pm)) '(;; clang
                                                                 ;; fftw
                                                                 ;; freetype
                                                                 gitea
