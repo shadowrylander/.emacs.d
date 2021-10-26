@@ -234,7 +234,7 @@ And finally: no tiling:
     `(("pkg" . (:manager "pkg" :install "install" :query "list-installed" :separator "/"))
         ("nix-env" . (:manager "nix-env" :install ("--install" "--attr") :query "--query" :separator "-" :channel ,meq/var/nix-env-channel))
         ("pip" . (:manager "pip" :install "install" :query "list --pre" :separator " "))))
-(defvar meq/var/default-package-manager "nix-env")
+(defvar meq/var/default-package-manager (if meq/var/phone "pkg" "nix-env"))
 (defun meq/pm-details (pm detail) (cl-getf (cdr (assoc pm meq/var/package-managers)) detail))
 #+end_src
 
@@ -282,16 +282,11 @@ This is taken from [[https://functor.tokyo/blog/2018-02-20-show-packages-install
                                 (mapcar #'car meq/var/package-managers))
                             (list (list :pipx (meq/get-pipx-packages)))))
         :pipx (list :apps '(black black-macchiato
-                            (jupyterlab jupyter-lab)
-                            ;; poetry ;; pyls-black
-                            )
-                    :libs (list :xonsh '(
-                        ("https://github.com/vlasovskikh/funcparserlib/archive/refs/tags/1.0.0a0.tar.gz" funcparserlib)
-                        ("https://github.com/hylang/hy/releases/download/1.0a3/hy-1.0a3.tar.gz" hy))
-                            :hy '(
-                        ("https://github.com/vlasovskikh/funcparserlib/archive/refs/tags/1.0.0a0.tar.gz" funcparserlib)
-                        ("https://github.com/hylang/hy/releases/download/1.0a3/hy-1.0a3.tar.gz" hy))))
-        :pkg '(gitea libffi libzmq llvm python)
+                            poetry ;; pyls-black
+                            (jupyterlab jupyter-lab))
+                    :libs (let* ((hy '(("https://github.com/hylang/hy/archive/master/hy.tar.gz" hy))))
+                            (list :xonsh (-flatten-n 1 (list hy)) :hy (-flatten-n 1 (list hy)))))
+        :pkg '(gitea libffi libzmq llvm python rust)
         :pip '(pipx)
         :base (-flatten-n 1 (list '(autojump assh autossh
                                     bat bc byobu
@@ -446,7 +441,7 @@ This is taken from [[https://functor.tokyo/blog/2018-02-20-show-packages-install
                             (pm (meq/pm-details pm* :manager)))
                         (meq/wrapped-call "Adding root repo" pm install "root-repo")
                         (meq/wrapped-call "Updating pkgs" pm "update" "-y")
-                        (mapc #'(lambda (pkg) (interactive) (meq/install-package pkg pm)) (meq/gfp :pkg))
+                        (mapc #'meq/install-package (meq/gfp :pkg))
                         (mapc #'(lambda (pkg) (interactive) (meq/install-package pkg "pip")) (meq/gfp :pip))))
     (meq/var/wsl (mapc #'meq/install-package (meq/gfp :base)))
     (t (progn
