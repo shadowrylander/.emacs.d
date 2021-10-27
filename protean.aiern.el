@@ -231,7 +231,7 @@
     `(("pkg" . (:manager "pkg" :install "install" :query "list-installed" :separator "/"))
         ("nix-env" . (:manager "nix-env" :install ("--install" "--attr") :query "--query" :separator "-" :channel ,meq/var/nix-env-channel))
         ("pip" . (:manager "pip" :install "install" :query "list --pre" :separator " "))))
-(defvar meq/var/default-package-manager "nix-env")
+(defvar meq/var/default-package-manager (if meq/var/phone "pkg" "nix-env"))
 (defun meq/pm-details (pm detail) (cl-getf (cdr (assoc pm meq/var/package-managers)) detail))
 ;; Bootstrap:3 ends here
 
@@ -282,15 +282,12 @@
                                 (mapcar #'car meq/var/package-managers))
                             (list (list :pipx (meq/get-pipx-packages)))))
         :pipx (list :apps '(black black-macchiato
-                            (jupyterlab jupyter-lab)
                             poetry ;; pyls-black
-                            )
-                    :libs (list :xonsh '(
-                        ("https://github.com/vlasovskikh/funcparserlib/archive/refs/tags/1.0.0a0.tar.gz" funcparserlib)
-                        ("https://github.com/hylang/hy/releases/download/1.0a3/hy-1.0a3.tar.gz" hy))
-                            :hy '(
-                        ("https://github.com/vlasovskikh/funcparserlib/archive/refs/tags/1.0.0a0.tar.gz" funcparserlib)
-                        ("https://github.com/hylang/hy/releases/download/1.0a3/hy-1.0a3.tar.gz" hy))))
+                            (jupyterlab jupyter-lab))
+                    :libs (let* ((hy '(("https://github.com/hylang/hy/archive/master/hy.tar.gz" hy))))
+                            (list :xonsh (-flatten-n 1 (list hy)) :hy (-flatten-n 1 (list hy)))))
+        :pkg '(gitea libffi libzmq llvm python rust)
+        :pip '(pipx)
         :base (-flatten-n 1 (list '(autojump assh autossh
                                     bat bc byobu
                                     cascadia-code coreutils ctop curl
@@ -429,18 +426,26 @@
                 (message "Not %s; ignored" buffer-name)
                 (message buffer-name)
                 (let* ((install (meq/pm-details pm :install)))
-                    (apply #'meq/call (meq/pm-details pm :manager) buffer-name (append
-                                                        (if (listp install) install (list install))
-                                                        (list pkg (when (string= pm "nix-env") "--show-trace")))))
+                    (apply #'meq/call (meq/pm-details pm :manager) buffer-name (append (meq/rl install)
+                                                        (remove nil (list pkg (when (string= pm "nix-env") "--show-trace"))))))
                 (message "%s...done" buffer-name)))))
 ;; Bootstrap:7 ends here
 
 ;; [[file:protean.aiern.org::*Bootstrap][Bootstrap:8]]
-(cond (meq/var/phone (progn
-                        (mapc #'(lambda (pkg) (interactive)
-                            (meq/install-package pkg "pkg")) nil)
-                        (mapc #'(lambda (pkg) (interactive)
-                            (meq/install-package pkg "pip")) '(pipx))))
+(defun meq/wrapped-call (buffer-name &rest args)
+    (message buffer-name)
+    (apply #'meq/call (pop args) (format "*%s*" buffer-name) args)
+    (message "%s...done" buffer-name))
+;; Bootstrap:8 ends here
+
+;; [[file:protean.aiern.org::*Bootstrap][Bootstrap:9]]
+(cond (meq/var/phone (let* ((pm* "pkg")
+                            (install (meq/pm-details pm* :install))
+                            (pm (meq/pm-details pm* :manager)))
+                        (meq/wrapped-call "Adding root repo" pm install "root-repo")
+                        (meq/wrapped-call "Updating pkgs" pm "update" "-y")
+                        (mapc #'meq/install-package (meq/gfp :pkg))
+                        (mapc #'(lambda (pkg) (interactive) (meq/install-package pkg "pip")) (meq/gfp :pip))))
     (meq/var/wsl (mapc #'meq/install-package (meq/gfp :base)))
     (t (progn
             (mapc #'meq/install-package (-flatten-n 1 (list
@@ -457,7 +462,7 @@
         (mapc #'(lambda (lib) (interactive)
             (meq/install-pipx-package
                 lib (meq/keyword-to-symbol-name lib*))) (cl-getf libs lib*))) (map-keys libs))))
-;; Bootstrap:8 ends here
+;; Bootstrap:9 ends here
 
 ;; Startup
 ;; :PROPERTIES:

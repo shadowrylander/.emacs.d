@@ -1,7 +1,7 @@
 .RECIPEPREFIX := |
 .DEFAULT_GOAL := emacs
-test := emacs --bg-daemon=test
-killTest := emacsclient -s test -e "(kill-emacs)"
+test := -emacs --bg-daemon=test
+killTest := -emacsclient -s test -e "(kill-emacs)"
 
 clean-all:
 |fd . $(mkfileDir) -HIe elc -x rm
@@ -15,7 +15,7 @@ no-config-test: pre-test
 |emacs -Q
 
 test-and-kill-pre: pre-test
-|-emacsclient -s test -e "(kill-emacs)"
+|$(killTest)
 
 bootstrap: test-and-kill-pre
 |$(test) --bootstrap
