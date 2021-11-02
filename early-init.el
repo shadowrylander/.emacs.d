@@ -12,7 +12,7 @@
 (setq borg-drones-directory-prefix (concat "lib" meq/var/slash))
 (setq borg-drones-directory (concat user-emacs-directory borg-drones-directory-prefix))
 (defun meq/require-and-load (pkg)
-    (add-to-list 'load-path (concat user-emacs-directory "siluam" meq/var/slash pkg) t)
+    (add-to-list 'load-path (concat user-emacs-directory "lib" meq/var/slash pkg) t)
     (require (intern pkg)))
 (mapc 'meq/require-and-load '("emacsql" "emacsql-sqlite" "closql"
                               "epkg" "borg"

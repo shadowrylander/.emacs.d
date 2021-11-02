@@ -67,25 +67,6 @@
 * .gitconfig
 
 #+begin_src conf :tangle (meq/tangle-path)
-[remote "settings"]
-	url = https://github.com/<<username>>/settings.git
-	fetch = +refs/heads/main:refs/remotes/origin/main
-	pushurl = git@github.com:<<username>>/settings.git
-[remote "borg"]
-	url = https://github.com/emacscollective/borg.git
-	fetch = +refs/heads/master:refs/remotes/origin/master
-[remote "epkg"]
-	url = https://github.com/emacscollective/epkg.git
-	fetch = +refs/heads/master:refs/remotes/origin/master
-[remote "closql"]
-	url = https://github.com/emacscollective/closql.git
-	fetch = +refs/heads/master:refs/remotes/origin/master
-[remote "emacsql"]
-	url = https://github.com/skeeto/emacsql.git
-	fetch = +refs/heads/master:refs/remotes/origin/master
-[alias]
-    push-settings = git subtree --squash --prefix settings push
-    cnm = git commit --allow-empty-message -am ""
 #+end_src
 
 * makefile
@@ -98,11 +79,8 @@
 mkfilePath := $(abspath $(lastword $(MAKEFILE_LIST)))
 mkfileDir := $(dir $(mkfilePath))
 
-init: pre-init tangle
-
-pre-init:
+init:
 |-fd . $(mkfileDir) -HIt d -t e -x rm -rf
-|-git -C $(mkfileDir) config include.path "$(mkfileDir)/.gitconfig"
 
 tangle-setup:
 |cp $(mkfileDir)/settings/org-tangle.sh $(mkfileDir)/settings/backup-tangle.sh
@@ -121,6 +99,7 @@ tangle: tangle-setup
 subinit: init
 |-git clone --depth 1 https://github.com/emacsmirror/epkgs.git $(mkfileDir)/epkgs
 |-git clone --depth 1 https://github.com/emacsmirror/epkgs.git $(mkfileDir)/var/epkgs
+|git -C $(mkfileDir) submodule sync --recursive
 # |git -C $(mkfileDir) submodule foreach 'git -C $$toplevel config submodule.$$name.ignore all'
 
 pull: subinit

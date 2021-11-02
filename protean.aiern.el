@@ -288,19 +288,19 @@
                             (list :xonsh (-flatten-n 1 (list hy)) :hy (-flatten-n 1 (list hy)))))
         :pkg '(gitea libffi libzmq llvm python rust)
         :pip '(pipx)
-        :base (-flatten-n 1 (list '(autojump assh autossh
+        :base (-flatten-n 1 (list '(asdf-vm assh autojump autossh
                                     bat bc byobu
                                     cascadia-code coreutils ctop curl
-                                    (ddar ignore-this) diskus dos2unix duf
+                                    (ddar ignore-this) direnv diskus dos2unix duf
                                     elvish entr exa
-                                    fasd fd fff ffmpeg figlet filet fzf
+                                    fasd fd fff ffmpeg figlet filet fish fzf
                                     gcc git gitoxide git-crypt git-fire git-lfs glances gotop
                                     inetutils
                                     (jupyter jupyter-notebook)
                                     libffi lolcat lorri
                                     micro mkpasswd monkeysphere mosh mtr
                                     neo-cowsay neovim niv nix-direnv nnn nodePackages.prettier nox
-                                    pandoc par2cmdline peru pfetch python39Packages.pipx
+                                    pandoc par2cmdline peru pfetch python39Packages.pipx pypy python310
                                     ranger (ripgrep rg) rsync
                                     sd shellcheck (silver-searcher ag) spacevim starship sysstat
                                     thefuck tmux tmuxp tree
@@ -308,7 +308,7 @@
                                     vim
                                     wget wtf
                                     xfce.thunar xz
-                                    zenith)
+                                    zenith zsh)
                                 (mapcar #'(lambda (pkg) (interactive)
                                             (meq/concat-pkg "gitAndTools." pkg))
                                     '(git-extras git-hub gitflow gh hub lab))))

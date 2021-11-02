@@ -446,3 +446,18 @@
 [submodule "zoxide"]
         path = lib/zoxide
         url = https://gitlab.com/Vonfry/zoxide.el.git
+[submodule "settings"]
+	path = settings
+	url = https://github.com/shadowrylander/settings.git
+[submodule "lib/borg"]
+	path = lib/borg
+	url = https://github.com/emacscollective/borg.git
+[submodule "lib/epkg"]
+	path = lib/epkg
+	url = https://github.com/emacscollective/epkg.git
+[submodule "lib/closql"]
+	path = lib/closql
+	url = https://github.com/emacscollective/closql.git
+[submodule "lib/emacsql"]
+	path = lib/emacsql
+	url = https://github.com/skeeto/emacsql.git

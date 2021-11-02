@@ -1,2 +1,0 @@
-#+setupfile: ./README.org
-#+property: header-args:emacs-lisp+ :tangle yes
