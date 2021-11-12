@@ -109,24 +109,6 @@ Make the ~borg~ git command buffer and any potential errors more descriptive:
 (advice-add #'borg--call-git :override #'meq/borg--call-git-advice)
 #+end_src
 
-I know that the packages I'm installing are safe:
-
-#+begin_src emacs-lisp
-(advice-add #'borg--maybe-confirm-unsafe-action :override #'ignore)
-#+end_src
-
-Always delete the package's git directory and ~submodule add~ it again:
-
-#+begin_src emacs-lisp
-(advice-add #'borg--maybe-reuse-gitdir :override #'ignore)
-#+end_src
-
-Always absorb foreign git directories:
-
-#+begin_src emacs-lisp
-(advice-add #'borg--maybe-absorb-gitdir :override #'ignore)
-#+end_src
-
 Always execute the build-steps of a package outlined in the ~.gitmodules~ file:
 
 #+begin_src emacs-lisp
@@ -181,7 +163,6 @@ build and activate the drone."
   (interactive
    (nconc (borg-read-package "Assimilate package: " current-prefix-arg)
           (list (< (prefix-numeric-value current-prefix-arg) 0))))
-  (borg--maybe-confirm-unsafe-action "assimilate" package url)
   (message "Assimilating %s..." package)
   (unless (equal (borg-get package "s8472") "true")
       (borg--maybe-reuse-gitdir package)
@@ -1968,9 +1949,17 @@ Set up my super major-mode [[https://github.com/shadowrylander/titan][titan]]:
 (meq/up titan :gsetq (meq/var/titan-snippets-dir (meq/ued-lib "titan" "snippets")))
 #+end_src
 
+**** caddyfile-mode
+
+For [[https://github.com/Schnouki/caddyfile-mode][caddyfiles]]:
+
+#+begin_src emacs-lisp
+(use-package caddyfile-mode :mode ("\\caddyfile\\'"))
+#+end_src
+
 **** dockerfile-mode
 
-For [[https://github.com/spotify/dockerfile-mode][dockerfile]]:
+For [[https://github.com/spotify/dockerfile-mode][dockerfiles]]:
 
 #+begin_src emacs-lisp
 (use-package dockerfile-mode :mode ("\\Dockerfile\\'"))

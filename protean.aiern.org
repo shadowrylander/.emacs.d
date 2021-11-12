@@ -271,8 +271,14 @@ This is taken from [[https://functor.tokyo/blog/2018-02-20-show-packages-install
     (let* ((pkg-is-list (listp pkg*)) (pkg (meq/rs pkg* t)))
         (if pkg-is-list `(,(concat attr pkg) ,@pkg*) (concat attr pkg))))
 
+(defun meq/fl (&rest args) (-flatten-n (if (integerp (car args)) (pop args) 1) (list args)))
+
+(defvar meq/var/pipx-libs
+    '(("https://github.com/hylang/hy/archive/master/hy.tar.gz" hy)
+        addict gitpython fuckit))
+
 (defvar meq/var/packages
-    (list :installed (-flatten-n 2 (list (mapcar #'(lambda (pm) (interactive)
+    (list :installed (meq/fl 2 (mapcar #'(lambda (pm) (interactive)
                                                         (let* ((pkgs (meq/get-packages pm)))
                                                             (list
                                                                 (meq/inconcat ":" pm)
@@ -280,19 +286,21 @@ This is taken from [[https://functor.tokyo/blog/2018-02-20-show-packages-install
                                                                     (nthcdr 2 pkgs)
                                                                     pkgs))))
                                 (mapcar #'car meq/var/package-managers))
-                            (list (list :pipx (meq/get-pipx-packages)))))
-        :pipx (list :apps '(black black-macchiato
+                            (list (list :pipx (meq/get-pipx-packages))))
+        :pipx (list :apps '(black black-macchiato borgmatic
+                            legit
                             poetry ;; pyls-black
                             (jupyterlab jupyter-lab))
-                    :libs (let* ((hy '(("https://github.com/hylang/hy/archive/master/hy.tar.gz" hy))))
-                            (list :xonsh (-flatten-n 1 (list hy)) :hy (-flatten-n 1 (list hy)))))
-        :pkg '(gitea libffi libzmq llvm python rust)
+                    :libs (list
+                            :xonsh (meq/fl meq/var/pipx-libs)
+                            :hy (meq/fl meq/var/pipx-libs)))
+        :pkg '(borgbackup et libffi libzmq llvm python rust)
         :pip '(pipx)
-        :base (-flatten-n 1 (list '(asdf-vm assh autojump autossh
-                                    bat bc byobu
+        :base (meq/fl '(asdf-vm assh autojump autossh
+                                    bat bc borgbackup byobu
                                     cascadia-code coreutils ctop curl
                                     (ddar ignore-this) direnv diskus dos2unix duf
-                                    elvish entr exa
+                                    elvish entr eternal-terminal exa
                                     fasd fd fff ffmpeg figlet filet fish fzf
                                     gcc git gitoxide git-crypt git-fire git-lfs glances gotop
                                     inetutils
@@ -311,7 +319,7 @@ This is taken from [[https://functor.tokyo/blog/2018-02-20-show-packages-install
                                     zenith zsh)
                                 (mapcar #'(lambda (pkg) (interactive)
                                             (meq/concat-pkg "gitAndTools." pkg))
-                                    '(git-extras git-hub gitflow gh hub lab))))
+                                    '(git-extras git-hub gitflow gh hub lab)))
         :extras '(acpilight
                     btrfs-progs ;; bcachefs-tools
                     copyq
@@ -339,12 +347,12 @@ This is taken from [[https://functor.tokyo/blog/2018-02-20-show-packages-install
                             ;; woeusb
                             xclip
                             yubikey-manager-qt yubikey-personalization-gui)
-        :not-minimal (-flatten-n 1 (list '(extra-container
+        :not-minimal (meq/fl '(extra-container
                                             ;; haskellPackages.hocker
                                             refind)
                                         (mapcar #'(lambda (pkg) (interactive)
                                                     (meq/concat-pkg "nix-prefetch-" pkg))
-                                            '(github docker scripts))))
+                                            '(github docker scripts)))
         :neither '(gnome3.gnome-boxes gnome3.gnome-tweaks
                     google-chrome google-chrome-beta google-chrome-dev
                     vivaldi vivaldi-ffmpeg-codecs vivaldi-widevine

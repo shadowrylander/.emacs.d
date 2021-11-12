@@ -43,6 +43,9 @@
 [submodule "bootstrap"]
         path = profiles/bootstrap
         url = https://github.com/shadowrylander/bootstrap.git
+[submodule "caddyfile-mode"]
+        path = lib/caddyfile-mode
+        url = https://github.com/schnouki/caddyfile-mode.git
 [submodule "command-log-mode"]
         path = lib/command-log-mode
         url = https://github.com/lewang/command-log-mode.git
