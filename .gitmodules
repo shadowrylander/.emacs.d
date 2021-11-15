@@ -488,8 +488,8 @@
         url = https://github.com/emacsorphanage/sr-speedbar.git
 [submodule "system-packages"]
         branch = master
-        path = lib/system-packages
-        url = https://gitlab.com/jabranham/system-packages.git
+        path = lib/oreo
+        url = https://gitlab.com/shadowrylander/oreo.git
 [submodule "titan"]
         branch = main
         path = lib/titan
