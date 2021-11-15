@@ -550,6 +550,10 @@
         branch = master
         path = lib/use-package-hydra
         url = https://gitlab.com/to1ne/use-package-hydra.git
+[submodule "use-package-oreo"]
+        branch = master
+        path = lib/use-package-oreo
+        url = https://github.com/shadowrylander/use-package-oreo.git
 [submodule "vimrc-mode"]
         branch = master
         path = lib/vimrc-mode
