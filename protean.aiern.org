@@ -298,11 +298,11 @@ This is taken from [[https://functor.tokyo/blog/2018-02-20-show-packages-install
         :pip '(pipx)
         :base (meq/fl '(asdf-vm assh autojump autossh
                                     bat bc borgbackup byobu
-                                    cascadia-code coreutils ctop curl
+                                    cascadia-code coreutils ctop
                                     (ddar ignore-this) direnv diskus dos2unix duf
                                     elvish entr eternal-terminal exa
-                                    fasd fd fff ffmpeg figlet filet fish fzf
-                                    gcc git gitoxide git-crypt git-fire git-lfs glances gotop
+                                    fasd fff ffmpeg figlet filet fish fzf
+                                    gitoxide git-crypt git-fire git-lfs glances gotop
                                     inetutils
                                     (jupyter jupyter-notebook)
                                     libffi lolcat lorri
@@ -316,7 +316,7 @@ This is taken from [[https://functor.tokyo/blog/2018-02-20-show-packages-install
                                     vim
                                     wget wtf
                                     xfce.thunar xz
-                                    zenith zsh)
+                                    zenith)
                                 (mapcar #'(lambda (pkg) (interactive)
                                             (meq/concat-pkg "gitAndTools." pkg))
                                     '(git-extras git-hub gitflow gh hub lab)))
