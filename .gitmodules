@@ -353,6 +353,16 @@
         branch = master
         path = lib/epkg
         url = https://github.com/emacscollective/epkg.git
+[submodule "epkgs"]
+        shallow = true
+        branch = master
+        path = epkgs
+        url = https://github.com/emacscollective/epkgs.git
+[submodule "var/epkg"]
+        shallow = true
+        branch = master
+        path = var/epkgs
+        url = https://github.com/emacscollective/epkgs.git
 [submodule "lispy"]
         shallow = true
         branch = master
