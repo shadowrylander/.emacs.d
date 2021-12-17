@@ -594,7 +594,7 @@
         branch = master
         path = lib/sr-speedbar
         url = https://github.com/emacsorphanage/sr-speedbar.git
-[submodule "system-packages"]
+[submodule "oreo"]
         shallow = true
         branch = master
         path = lib/oreo
