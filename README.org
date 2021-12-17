@@ -25,10 +25,9 @@ This way, I can maintain some semblance of a literate config.
 Start off by specifying the ~user-emacs-directory~, then cleaning it:
 
 #+begin_src emacs-lisp
-;;; $EMACSDIR/early-init.el -*- lexical-binding: t; -*-
+;;; $EMACSDIR/early-init.el -*- lexical-binding: t; -*- no-byte-compile: t -*-
 (defvar user-emacs-directory (file-name-directory (or load-file-name buffer-file-name)))
-(setq load-prefer-newer t)
-;; (shell-command (format "fd . %s -HIe elc -x rm" user-emacs-directory))
+(shell-command (format "fd . %s -HIe elc -x rm" user-emacs-directory))
 #+end_src
 
 Check if we're bootstrapping the system, and whether we want reinstall the packages:
