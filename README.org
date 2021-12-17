@@ -22,11 +22,12 @@ This way, I can maintain some semblance of a literate config.
 ,#+end_src
 #+end_src
 
-Start off by specifying the ~user-emacs-directory~:
+Start off by specifying the ~user-emacs-directory~, then cleaning it:
 
 #+begin_src emacs-lisp
 ;;; $EMACSDIR/early-init.el -*- lexical-binding: t; -*-
 (defvar user-emacs-directory (file-name-directory (or load-file-name buffer-file-name)))
+;; (shell-command (format "fd . %s -HIe elc -x rm" user-emacs-directory))
 #+end_src
 
 Check if we're bootstrapping the system, and whether we want reinstall the packages:
@@ -68,6 +69,7 @@ Set the borg package directory:
 #+end_src
 
 [[https://github.com/emacscollective/borg][We Are Borg.]]
+
 [[./borg.gif]]
 
 #+begin_src emacs-lisp

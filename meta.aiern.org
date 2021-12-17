@@ -97,8 +97,6 @@ tangle: tangle-setup
     -x chmod +x
 
 subinit: init
-|-git clone --depth 1 https://github.com/emacsmirror/epkgs.git $(mkfileDir)/epkgs
-|-git clone --depth 1 https://github.com/emacsmirror/epkgs.git $(mkfileDir)/var/epkgs
 |git -C $(mkfileDir) submodule sync --recursive
 # |git -C $(mkfileDir) submodule foreach 'git -C $$toplevel config submodule.$$name.ignore all'
 
