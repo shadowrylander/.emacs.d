@@ -7,7 +7,7 @@
 
 ;; #+name: 20210601221117005466700
 
-;; [[file:../promethean.aiern.org::20210601221117005466700][20210601221117005466700]]
+;; [[file:~/.emacs.d/promethean.aiern.org::20210601221117005466700][20210601221117005466700]]
 ;;; exo-ui-red-dark-theme.el
 
 ;; Version: 1.0.1

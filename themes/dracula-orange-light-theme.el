@@ -7,7 +7,7 @@
 
 ;; #+name: 20210601221128069216400
 
-;; [[file:../promethean.aiern.org::20210601221128069216400][20210601221128069216400]]
+;; [[file:~/.emacs.d/promethean.aiern.org::20210601221128069216400][20210601221128069216400]]
 ;;; dracula-orange-light-theme.el
 
 ;; Version: 1.0.1

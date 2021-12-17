@@ -7,7 +7,7 @@
 
 ;; #+name: 20210601221114066926500
 
-;; [[file:../promethean.aiern.org::20210601221114066926500][20210601221114066926500]]
+;; [[file:~/.emacs.d/promethean.aiern.org::20210601221114066926500][20210601221114066926500]]
 ;;; exo-ui-red-light-theme.el
 
 ;; Version: 1.0.1

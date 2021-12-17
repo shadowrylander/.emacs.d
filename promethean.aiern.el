@@ -7,7 +7,7 @@
 
 ;; #+name: 20210601221052630320600
 
-;; [[file:promethean.aiern.org::20210601221052630320600][20210601221052630320600]]
+;; [[file:~/.emacs.d/promethean.aiern.org::20210601221052630320600][20210601221052630320600]]
 `(default ((,class (:background ,shade0 :foreground ,shade7))))
   `(font-lock-builtin-face ((,class (:foreground ,accent5))))
   `(font-lock-comment-face ((,class (:foreground ,shade3))))

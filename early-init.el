@@ -1,4 +1,4 @@
-;; [[file:README.org::*early-init.el][early-init.el:2]]
+;; [[file:~/.emacs.d/README.org::*early-init.el][early-init.el:2]]
 ;;; $EMACSDIR/early-init.el -*- lexical-binding: t; -*-
 (defvar user-emacs-directory (file-name-directory (or load-file-name buffer-file-name)))
 (defvar meq/var/bootstrap (member "--bootstrap" command-line-args)) (delete "--bootstrap" command-line-args)
@@ -14,9 +14,14 @@
 (defun meq/require-and-load (pkg)
     (add-to-list 'load-path (concat user-emacs-directory "lib" meq/var/slash pkg) t)
     (require (intern pkg)))
-(mapc 'meq/require-and-load '("emacsql" "emacsql-sqlite" "closql"
-                              "epkg" "borg"
-                              ))
+(mapc 'meq/require-and-load '("emacsql" "emacsql-sqlite" "closql"))
+
+(add-to-list 'load-path (concat user-emacs-directory "lib" meq/var/slash "epkg" meq/var/slash "lisp") t)
+(require 'epkg)
+
+(add-to-list 'load-path (concat user-emacs-directory "lib" meq/var/slash "borg") t)
+(require 'borg)
+
 ;; (unless (or
 ;;           meq/var/phone
 ;;           ;; meq/var/windows
@@ -42,9 +47,6 @@
             (unwind-protect (format "\n\n%s\n\n" (buffer-string)) (kill-buffer buffer))
             (error "Borg Git: %s %s:\n\n%s" pkg args (buffer-string))))))
 (advice-add #'borg--call-git :override #'meq/borg--call-git-advice)
-(advice-add #'borg--maybe-confirm-unsafe-action :override #'ignore)
-(advice-add #'borg--maybe-reuse-gitdir :override #'ignore)
-(advice-add #'borg--maybe-absorb-gitdir :override #'ignore)
 (defun meq/borg-build-advice (clone &optional activate)
   "Build the clone named CLONE.
 Interactively, or when optional ACTIVATE is non-nil,
@@ -86,7 +88,6 @@ build and activate the drone."
   (interactive
    (nconc (borg-read-package "Assimilate package: " current-prefix-arg)
           (list (< (prefix-numeric-value current-prefix-arg) 0))))
-  (borg--maybe-confirm-unsafe-action "assimilate" package url)
   (message "Assimilating %s..." package)
   (unless (equal (borg-get package "s8472") "true")
       (borg--maybe-reuse-gitdir package)

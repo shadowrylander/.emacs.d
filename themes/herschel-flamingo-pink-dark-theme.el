@@ -7,7 +7,7 @@
 
 ;; #+name: 20210601221122472331200
 
-;; [[file:../promethean.aiern.org::20210601221122472331200][20210601221122472331200]]
+;; [[file:~/.emacs.d/promethean.aiern.org::20210601221122472331200][20210601221122472331200]]
 ;;; herschel-flamingo-pink-dark-theme.el
 
 ;; Version: 1.0.1

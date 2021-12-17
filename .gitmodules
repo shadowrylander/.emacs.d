@@ -15,7 +15,7 @@
         url = https://github.com/shadowrylander/aiern.git
 [submodule "aiern-aiernhide-state"]
         shallow = true
-        branch = master
+        branch = main
         path = lib/aiern-aiernhide-state
         url = https://github.com/shadowrylander/aiern-aiernhide-state.git
 [submodule "aiern-god-state"]
@@ -76,8 +76,8 @@
 [submodule "caddyfile-mode"]
         shallow = true
         branch = master
-        path = lib/caddyfile-mode
-        url = https://github.com/schnouki/caddyfile-mode.git
+	path = lib/caddyfile-mode
+	url = https://github.com/schnouki/caddyfile-mode.git
 [submodule "command-log-mode"]
         shallow = true
         branch = master
@@ -333,6 +333,26 @@
         branch = master
         path = lib/leaf-keywords
         url = https://github.com/conao3/leaf-keywords.el.git
+[submodule "lib/borg"]
+        shallow = true
+        branch = master
+        path = lib/borg
+        url = https://github.com/emacscollective/borg.git
+[submodule "lib/closql"]
+        shallow = true
+        branch = master
+        path = lib/closql
+        url = https://github.com/emacscollective/closql.git
+[submodule "lib/emacsql"]
+        shallow = true
+        branch = master
+        path = lib/emacsql
+        url = https://github.com/skeeto/emacsql.git
+[submodule "lib/epkg"]
+        shallow = true
+        branch = master
+        path = lib/epkg
+        url = https://github.com/emacscollective/epkg.git
 [submodule "lispy"]
         shallow = true
         branch = master
@@ -433,9 +453,13 @@
         branch = master
         path = lib/oneonone
         url = https://github.com/emacsmirror/oneonone.git
-[submodule "org"]
+[submodule "oreo"]
         shallow = true
         branch = master
+	path = lib/oreo
+	url = https://gitlab.com/shadowrylander/oreo.git
+[submodule "org"]
+        shallow = true
         path = lib/org
         url = https://git.savannah.gnu.org/git/emacs/org-mode.git
         build-step = make
@@ -564,6 +588,16 @@
         branch = master
         path = lib/s
         url = https://github.com/magnars/s.el.git
+[submodule "settings"]
+        shallow = true
+        branch = main
+        path = settings
+        url = https://github.com/shadowrylander/settings.git
+        build-step = chmod +x ./settings/org-tangle.sh
+        build-step = ./settings/org-tangle.sh .
+        build-step = borg-update-autoloads
+        build-step = borg-byte-compile
+        build-step = borg-makeinfo
 [submodule "shrink-path"]
         shallow = true
         branch = master
@@ -594,11 +628,6 @@
         branch = master
         path = lib/sr-speedbar
         url = https://github.com/emacsorphanage/sr-speedbar.git
-[submodule "oreo"]
-        shallow = true
-        branch = master
-        path = lib/oreo
-        url = https://gitlab.com/shadowrylander/oreo.git
 [submodule "titan"]
         shallow = true
         branch = main
@@ -672,8 +701,8 @@
 [submodule "use-package-oreo"]
         shallow = true
         branch = master
-        path = lib/use-package-oreo
-        url = https://github.com/shadowrylander/use-package-oreo.git
+	path = lib/use-package-oreo
+	url = https://github.com/shadowrylander/use-package-oreo.git
 [submodule "vimrc-mode"]
         shallow = true
         branch = master
@@ -724,33 +753,3 @@
         branch = master
         path = lib/zoxide
         url = https://gitlab.com/Vonfry/zoxide.el.git
-[submodule "settings"]
-        shallow = true
-        branch = main
-        path = settings
-        url = https://github.com/shadowrylander/settings.git
-        build-step = chmod +x ./settings/org-tangle.sh
-        build-step = ./settings/org-tangle.sh .
-        build-step = borg-update-autoloads
-        build-step = borg-byte-compile
-        build-step = borg-makeinfo
-[submodule "lib/borg"]
-        shallow = true
-        branch = master
-        path = lib/borg
-        url = https://github.com/emacscollective/borg.git
-[submodule "lib/epkg"]
-        shallow = true
-        branch = master
-        path = lib/epkg
-        url = https://github.com/emacscollective/epkg.git
-[submodule "lib/closql"]
-        shallow = true
-        branch = master
-        path = lib/closql
-        url = https://github.com/emacscollective/closql.git
-[submodule "lib/emacsql"]
-        shallow = true
-        branch = master
-        path = lib/emacsql
-        url = https://github.com/skeeto/emacsql.git

@@ -74,9 +74,14 @@ Set the borg package directory:
 (defun meq/require-and-load (pkg)
     (add-to-list 'load-path (concat user-emacs-directory "lib" meq/var/slash pkg) t)
     (require (intern pkg)))
-(mapc 'meq/require-and-load '("emacsql" "emacsql-sqlite" "closql"
-                              "epkg" "borg"
-                              ))
+(mapc 'meq/require-and-load '("emacsql" "emacsql-sqlite" "closql"))
+
+(add-to-list 'load-path (concat user-emacs-directory "lib" meq/var/slash "epkg" meq/var/slash "lisp") t)
+(require 'epkg)
+
+(add-to-list 'load-path (concat user-emacs-directory "lib" meq/var/slash "borg") t)
+(require 'borg)
+
 ;; (unless (or
 ;;           meq/var/phone
 ;;           ;; meq/var/windows

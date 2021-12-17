@@ -7,7 +7,7 @@
 ;; [[https://github.com/ch11ng][Chris Feng]], if necessary, with help from [[https://emacs.stackexchange.com/a/60455/31428][this answer]] by [[https://emacs.stackexchange.com/users/418/gregoryg][gregoryg]]:
 
 
-;; [[file:protean.aiern.org::*EXWM][EXWM:1]]
+;; [[file:~/.emacs.d/protean.aiern.org::*EXWM][EXWM:1]]
 (defvar meq/var/exwm nil)
 (when (get-buffer "*window-manager*")
   (kill-buffer "*window-manager*"))
@@ -31,7 +31,7 @@
 ;; - [[https://obsidian.md/][Obsidian]]
 
 
-;; [[file:protean.aiern.org::*EXWM][EXWM:2]]
+;; [[file:~/.emacs.d/protean.aiern.org::*EXWM][EXWM:2]]
 :init/defun* (post-exwm nil (interactive)
             (unless (get-buffer "Alacritty") (meq/run "alacritty"))
             (unless (get-buffer "obsidian") (meq/run "obsidian")))
@@ -44,7 +44,7 @@
 ;; [[https://github.com/lujun9972/el-dmenu/blob/e8cc9b27c79d3ecc252267c082ab8e9c82eab264/dmenu.el][dmenu]]:
 
 
-;; [[file:protean.aiern.org::*EXWM][EXWM:3]]
+;; [[file:~/.emacs.d/protean.aiern.org::*EXWM][EXWM:3]]
 :upnsd-preconfig (dmenu) (fringe :config
                     ;; (fringe-mode (quote (1 . 1)) nil (fringe))
                     ;; (fringe-mode '(3 . 0))
@@ -53,7 +53,7 @@
                     )
 ;; EXWM:3 ends here
 
-;; [[file:protean.aiern.org::*EXWM][EXWM:4]]
+;; [[file:~/.emacs.d/protean.aiern.org::*EXWM][EXWM:4]]
 :config
     (require 'scroll-bar)
     ;; Adapted From: https://github.com/ch11ng/exwm/blob/master/exwm-config.el#L34
@@ -75,7 +75,7 @@
 ;; These keybindings will run my major-mode-based deino, i.e. the ~exwm-global~ deino in this case:
 
 
-;; [[file:protean.aiern.org::*EXWM][EXWM:5]]
+;; [[file:~/.emacs.d/protean.aiern.org::*EXWM][EXWM:5]]
 ([?\s-p] . uru)
 ([?\s-`] . uru)
 ([?\s-z] . uru)
@@ -86,7 +86,7 @@
 ;; Switch buffers quickly:
 
 
-;; [[file:protean.aiern.org::*EXWM][EXWM:6]]
+;; [[file:~/.emacs.d/protean.aiern.org::*EXWM][EXWM:6]]
 (,(naked "s-tab") . next-buffer)
 (,(naked "s-<iso-lefttab>") . previous-buffer)
 (,(naked "M-s-tab") . previous-buffer)
@@ -97,11 +97,11 @@
 ;; ~[s]uper-q~ will activate my buffer deino:
 
 
-;; [[file:protean.aiern.org::*EXWM][EXWM:7]]
+;; [[file:~/.emacs.d/protean.aiern.org::*EXWM][EXWM:7]]
 ([?\s-q] . deino-buffer/body)
 ;; EXWM:7 ends here
 
-;; [[file:protean.aiern.org::*EXWM][EXWM:8]]
+;; [[file:~/.emacs.d/protean.aiern.org::*EXWM][EXWM:8]]
 ;; 's-N': Switch to certain workspace.
                 ,@(mapcar (lambda (i)
                             `(,(kbd (format "s-%d" i)) .
@@ -140,7 +140,7 @@
 ;; Here's the global ~exwm~ deino, triggered by [[https://github.com/shadowrylander/uru][uru]]:
 
 
-;; [[file:protean.aiern.org::*EXWM][EXWM:9]]
+;; [[file:~/.emacs.d/protean.aiern.org::*EXWM][EXWM:9]]
 :uru (exwm-mode t deino-exwm-global (:color blue) "e g"
         ("`" nil "cancel")
         ("c" exwm-input-release-keyboard "char mode")
@@ -156,7 +156,7 @@
 ;; This is my general ~exwm~ deino, leading to all the other ~exwm~ deinos:
 
 
-;; [[file:protean.aiern.org::*EXWM][EXWM:10]]
+;; [[file:~/.emacs.d/protean.aiern.org::*EXWM][EXWM:10]]
 :deino (deino-exwm nil "e e"
         ("`" nil "cancel")
         ("XF86PowerOff" deino-exwm/power/body "power")
@@ -168,7 +168,7 @@
 ;; I can reboot, power off, and suspend using this one:
 
 
-;; [[file:protean.aiern.org::*EXWM][EXWM:11]]
+;; [[file:~/.emacs.d/protean.aiern.org::*EXWM][EXWM:11]]
 (deino-exwm/power (:color blue) "e p"
     ("r" (meq/run "reboot") "reboot")
     ("q" (meq/run "poweroff") "poweroff")
@@ -180,7 +180,7 @@
 ;; And run my shells and terminals using this one:
 
 
-;; [[file:protean.aiern.org::*EXWM][EXWM:12]]
+;; [[file:~/.emacs.d/protean.aiern.org::*EXWM][EXWM:12]]
 (deino-exwm/shells (:color blue) "e s" ("a" (meq/run "alacritty") "alacritty"))
 ;; EXWM:12 ends here
 
@@ -189,7 +189,7 @@
 ;; I use the power button to trigger the general ~exwm~ deino:
 
 
-;; [[file:protean.aiern.org::*EXWM][EXWM:13]]
+;; [[file:~/.emacs.d/protean.aiern.org::*EXWM][EXWM:13]]
 :demon ((naked "XF86PowerOff") 'deino-exwm/body)
 ;; EXWM:13 ends here
 
@@ -198,7 +198,7 @@
 ;; And finally: no tiling:
 
 
-;; [[file:protean.aiern.org::*EXWM][EXWM:14]]
+;; [[file:~/.emacs.d/protean.aiern.org::*EXWM][EXWM:14]]
 :gsetq (exwm-manage-force-tiling t)
         ;; Adapted From: https://www.reddit.com/r/emacs/comments/8yf6dx/key_chords_in_exwm/
         ;; (exwm-input-line-mode-passthrough t)
@@ -211,17 +211,17 @@
 ;; :END:
 
 
-;; [[file:protean.aiern.org::*Bootstrap][Bootstrap:1]]
+;; [[file:~/.emacs.d/protean.aiern.org::*Bootstrap][Bootstrap:1]]
 (when (or meq/var/bootstrap meq/var/force-bootstrap)
 ;; Bootstrap:1 ends here
 
-;; [[file:protean.aiern.org::*Bootstrap][Bootstrap:2]]
+;; [[file:~/.emacs.d/protean.aiern.org::*Bootstrap][Bootstrap:2]]
 (defvar meq/var/not-in-terminal (meq/item-in-cla "--not-in-terminal"))
 (defvar meq/var/not-minimal (meq/item-in-cla "--not-minimal"))
 (defvar meq/var/neither (meq/item-in-cla "--neither"))
 ;; Bootstrap:2 ends here
 
-;; [[file:protean.aiern.org::*Bootstrap][Bootstrap:3]]
+;; [[file:~/.emacs.d/protean.aiern.org::*Bootstrap][Bootstrap:3]]
 (defvar meq/var/nix-env-channel (meq/if-two-items-in-cla
                                     "--channel"
                                     t
@@ -240,7 +240,7 @@
 ;; This is taken from [[https://functor.tokyo/blog/2018-02-20-show-packages-installed-on-nixos][here]]:
 
 
-;; [[file:protean.aiern.org::*Bootstrap][Bootstrap:4]]
+;; [[file:~/.emacs.d/protean.aiern.org::*Bootstrap][Bootstrap:4]]
 (defun meq/get-packages (pm)
     (mapcar #'(lambda (pkg) (interactive) (string-trim (string-join
                                     (butlast (split-string pkg (meq/pm-details pm :separator)))
@@ -249,7 +249,7 @@
                                                         (meq/pm-details pm :query)) " ")) "\n"))))
 ;; Bootstrap:4 ends here
 
-;; [[file:protean.aiern.org::*Bootstrap][Bootstrap:5]]
+;; [[file:~/.emacs.d/protean.aiern.org::*Bootstrap][Bootstrap:5]]
 (require 'a)
 (defun meq/get-pipx-packages nil
     (let* ((pipx-list (shell-command-to-string "pipx list --json"))
@@ -266,13 +266,19 @@
                                     (mapcar #'symbol-name (funcall get-vaxed app)))) apps))))))
 ;; Bootstrap:5 ends here
 
-;; [[file:protean.aiern.org::*Bootstrap][Bootstrap:6]]
+;; [[file:~/.emacs.d/protean.aiern.org::*Bootstrap][Bootstrap:6]]
 (defun meq/concat-pkg (attr pkg*)
     (let* ((pkg-is-list (listp pkg*)) (pkg (meq/rs pkg* t)))
         (if pkg-is-list `(,(concat attr pkg) ,@pkg*) (concat attr pkg))))
 
+(defun meq/fl (&rest args) (-flatten-n (if (integerp (car args)) (pop args) 1) (list args)))
+
+(defvar meq/var/pipx-libs
+    '(("https://github.com/hylang/hy/archive/master/hy.tar.gz" hy)
+        addict gitpython fuckit))
+
 (defvar meq/var/packages
-    (list :installed (-flatten-n 2 (list (mapcar #'(lambda (pm) (interactive)
+    (list :installed (meq/fl 2 (mapcar #'(lambda (pm) (interactive)
                                                         (let* ((pkgs (meq/get-packages pm)))
                                                             (list
                                                                 (meq/inconcat ":" pm)
@@ -280,21 +286,23 @@
                                                                     (nthcdr 2 pkgs)
                                                                     pkgs))))
                                 (mapcar #'car meq/var/package-managers))
-                            (list (list :pipx (meq/get-pipx-packages)))))
-        :pipx (list :apps '(black black-macchiato
+                            (list (list :pipx (meq/get-pipx-packages))))
+        :pipx (list :apps '(black black-macchiato borgmatic
+                            legit
                             poetry ;; pyls-black
                             (jupyterlab jupyter-lab))
-                    :libs (let* ((hy '(("https://github.com/hylang/hy/archive/master/hy.tar.gz" hy))))
-                            (list :xonsh (-flatten-n 1 (list hy)) :hy (-flatten-n 1 (list hy)))))
-        :pkg '(gitea libffi libzmq llvm python rust)
+                    :libs (list
+                            :xonsh (meq/fl meq/var/pipx-libs)
+                            :hy (meq/fl meq/var/pipx-libs)))
+        :pkg '(borgbackup et libffi libzmq llvm python rust)
         :pip '(pipx)
-        :base (-flatten-n 1 (list '(asdf-vm assh autojump autossh
-                                    bat bc byobu
-                                    cascadia-code coreutils ctop curl
+        :base (meq/fl '(asdf-vm assh autojump autossh
+                                    bat bc borgbackup byobu
+                                    cascadia-code coreutils ctop
                                     (ddar ignore-this) direnv diskus dos2unix duf
-                                    elvish entr exa
-                                    fasd fd fff ffmpeg figlet filet fish fzf
-                                    gcc git gitoxide git-crypt git-fire git-lfs glances gotop
+                                    elvish entr eternal-terminal exa
+                                    fasd fff ffmpeg figlet filet fish fzf
+                                    gitoxide git-crypt git-fire git-lfs glances gotop
                                     inetutils
                                     (jupyter jupyter-notebook)
                                     libffi lolcat lorri
@@ -308,10 +316,10 @@
                                     vim
                                     wget wtf
                                     xfce.thunar xz
-                                    zenith zsh)
+                                    zenith)
                                 (mapcar #'(lambda (pkg) (interactive)
                                             (meq/concat-pkg "gitAndTools." pkg))
-                                    '(git-extras git-hub gitflow gh hub lab))))
+                                    '(git-extras git-hub gitflow gh hub lab)))
         :extras '(acpilight
                     btrfs-progs ;; bcachefs-tools
                     copyq
@@ -339,12 +347,12 @@
                             ;; woeusb
                             xclip
                             yubikey-manager-qt yubikey-personalization-gui)
-        :not-minimal (-flatten-n 1 (list '(extra-container
+        :not-minimal (meq/fl '(extra-container
                                             ;; haskellPackages.hocker
                                             refind)
                                         (mapcar #'(lambda (pkg) (interactive)
                                                     (meq/concat-pkg "nix-prefetch-" pkg))
-                                            '(github docker scripts))))
+                                            '(github docker scripts)))
         :neither '(gnome3.gnome-boxes gnome3.gnome-tweaks
                     google-chrome google-chrome-beta google-chrome-dev
                     vivaldi vivaldi-ffmpeg-codecs vivaldi-widevine
@@ -357,7 +365,7 @@
 ;; # TODO: Vastly simplify this monstrosity
 
 
-;; [[file:protean.aiern.org::*Bootstrap][Bootstrap:7]]
+;; [[file:~/.emacs.d/protean.aiern.org::*Bootstrap][Bootstrap:7]]
 (defun meq/pipx-package-installed* (pkg)
     (not (-all? #'not (mapcar #'(lambda (pkg*) (interactive)
                         (let* ((pkg (meq/rs pkg*)))
@@ -431,14 +439,14 @@
                 (message "%s...done" buffer-name)))))
 ;; Bootstrap:7 ends here
 
-;; [[file:protean.aiern.org::*Bootstrap][Bootstrap:8]]
+;; [[file:~/.emacs.d/protean.aiern.org::*Bootstrap][Bootstrap:8]]
 (defun meq/wrapped-call (buffer-name &rest args)
     (message buffer-name)
     (apply #'meq/call (pop args) (format "*%s*" buffer-name) args)
     (message "%s...done" buffer-name))
 ;; Bootstrap:8 ends here
 
-;; [[file:protean.aiern.org::*Bootstrap][Bootstrap:9]]
+;; [[file:~/.emacs.d/protean.aiern.org::*Bootstrap][Bootstrap:9]]
 (cond (meq/var/phone (let* ((pm* "pkg")
                             (install (meq/pm-details pm* :install))
                             (pm (meq/pm-details pm* :manager)))
@@ -470,7 +478,7 @@
 ;; :END:
 
 
-;; [[file:protean.aiern.org::*Startup][Startup:1]]
+;; [[file:~/.emacs.d/protean.aiern.org::*Startup][Startup:1]]
 (when (> (length command-line-args) 1) (let* ((last-dab (car (last command-line-args))))
                                             (defvar meq/var/last-dab last-dab)
                                             (delete last-dab command-line-args)))

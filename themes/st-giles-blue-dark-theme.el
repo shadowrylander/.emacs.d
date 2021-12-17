@@ -4,7 +4,7 @@
 
 ;; #+name: 
 
-;; [[file:../promethean.aiern.org][]]
+;; [[file:~/.emacs.d/promethean.aiern.org][]]
 ;;; st-giles-blue-dark-theme.el
 
 ;; Version: 1.0.1
