@@ -358,7 +358,7 @@
         branch = master
         path = epkgs
         url = https://github.com/emacscollective/epkgs.git
-[submodule "var/epkg"]
+[submodule "var/epkgs"]
         shallow = true
         branch = master
         path = var/epkgs
