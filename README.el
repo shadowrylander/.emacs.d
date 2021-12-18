@@ -919,7 +919,8 @@
           "å" 'ignore "ā" 'ignore "ß" 'ignore "ç" 'ignore "ñ" 'ignore "¿" 'ignore
       :keymaps 'universal-argument-map (alloy-chord "  ") 'universal-argument-more
       :keymaps '(override aiern-insert-state-map evil-insert-state-map)
-        (naked "RET") 'newline-and-indent
+        ;; (naked "RET") 'newline-and-indent
+        (naked "RET") (funcall (alloy-simulate-key ":q! <RET>"))
         (alloy-chord ";'") 'meq/end-of-line-and-indented-new-line)
 ;; damascus:2 ends here
 
@@ -1403,7 +1404,7 @@
     ;; :hook ((buffer-list-update window-configuration-change) . (lambda nil (interactive)
     ;;                                                             (rainbow-identifiers-mode 1)))
     ;; :upnsd-preconfig (xxh)
-    )
+   )
 ;; rainbow-identifiers:1 ends here
 
 ;; vlf
@@ -1735,6 +1736,19 @@
                     ("`" nil "cancel")
                     ("x" meq/toggle-xah "xah-fly-keys")) :name "modal modes"))
 ;; xah-fly-keys:1 ends here
+
+;; show-paren-mode
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
+
+
+;; [[file:~/.emacs.d/README.org::*show-paren-mode][show-paren-mode:1]]
+(meq/up show-paren-mode
+    :commands show-paren-mode
+    :gsetq (show-paren-delay 0)
+    :hook (after-init . show-paren-mode))
+;; show-paren-mode:1 ends here
 
 ;; titan
 

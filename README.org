@@ -28,6 +28,7 @@ Start off by specifying the ~user-emacs-directory~, then cleaning it:
 ;;; $EMACSDIR/early-init.el -*- lexical-binding: t; -*- no-byte-compile: t -*-
 (defvar user-emacs-directory (file-name-directory (or load-file-name buffer-file-name)))
 (shell-command (format "fd . %s -HIe elc -x rm" user-emacs-directory))
+(shell-command (format "fd . %s -HIt d -t e -x rm -r" user-emacs-directory))
 #+end_src
 
 Check if we're bootstrapping the system, and whether we want reinstall the packages:
@@ -1605,7 +1606,7 @@ Colorful words with [[https://github.com/Fanael/rainbow-identifiers][rainbow-ide
     ;; :hook ((buffer-list-update window-configuration-change) . (lambda nil (interactive)
     ;;                                                             (rainbow-identifiers-mode 1)))
     ;; :upnsd-preconfig (xxh)
-    )
+   )
 #+end_src
 
 *** vlf
@@ -1941,6 +1942,18 @@ Cool [[https://github.com/iqbalansari/restart-emacs][package]] by
                     "A modal deino!"
                     ("`" nil "cancel")
                     ("x" meq/toggle-xah "xah-fly-keys")) :name "modal modes"))
+#+end_src
+
+*** show-paren-mode
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
+
+#+begin_src emacs-lisp
+(meq/up show-paren-mode
+    :commands show-paren-mode
+    :gsetq (show-paren-delay 0)
+    :hook (after-init . show-paren-mode))
 #+end_src
 
 *** Major Modes

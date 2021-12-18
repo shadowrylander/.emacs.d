@@ -469,6 +469,7 @@
 	path = lib/oreo
 	url = https://gitlab.com/shadowrylander/oreo.git
 [submodule "org"]
+	branch = main
         shallow = true
         path = lib/org
         url = https://git.savannah.gnu.org/git/emacs/org-mode.git
