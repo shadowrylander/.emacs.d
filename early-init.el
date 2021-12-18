@@ -1,6 +1,10 @@
 ;; [[file:~/.emacs.d/README.org::*early-init.el][early-init.el:2]]
 ;;; $EMACSDIR/early-init.el -*- lexical-binding: t; -*- no-byte-compile: t -*-
 (defvar user-emacs-directory (file-name-directory (or load-file-name buffer-file-name)))
+(unless (file-exists-p (concat user-emacs-directory "first-run-done"))
+    (message "Initializing everything for the first time...")
+    (shell-command (format "make -f %s init" (concat user-emacs-directory "makefile")))
+    (message "Initialization done! If you want to run this again, please delete the `first-run-done' file!"))
 (defvar meq/var/bootstrap (member "--bootstrap" command-line-args)) (delete "--bootstrap" command-line-args)
 (defvar meq/var/force-bootstrap (member "--force-bootstrap" command-line-args)) (delete "--force-bootstrap" command-line-args)
 (setq package-enable-at-startup nil)
