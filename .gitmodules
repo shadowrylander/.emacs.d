@@ -639,6 +639,11 @@
         branch = master
         path = lib/sr-speedbar
         url = https://github.com/emacsorphanage/sr-speedbar.git
+[submodule "systemd"]
+	shallow = true
+	branch = master
+	path = lib/systemd
+	url = https://github.com/holomorph/systemd-mode.git
 [submodule "titan"]
         shallow = true
         branch = main

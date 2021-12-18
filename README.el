@@ -1788,6 +1788,15 @@
         (ob-hy :commands (org-babel-execute:hy)))
 ;; hy-mode:1 ends here
 
+;; systemd-mode
+
+;; For ~systemd~:
+
+
+;; [[file:~/.emacs.d/README.org::*systemd-mode][systemd-mode:1]]
+(use-package systemd-mode :mode ("\\.service\\'"))
+;; systemd-mode:1 ends here
+
 ;; markdown-mode
 
 ;; For [[https://jblevins.org/projects/markdown-mode/][markdown]]:

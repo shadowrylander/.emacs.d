@@ -1998,6 +1998,14 @@ For [[https://github.com/hylang/hy-mode][hy]], plus [[https://github.com/brantou
         (ob-hy :commands (org-babel-execute:hy)))
 #+end_src
 
+**** systemd-mode
+
+For ~systemd~:
+
+#+begin_src emacs-lisp
+(use-package systemd-mode :mode ("\\.service\\'"))
+#+end_src
+
 **** markdown-mode
 
 For [[https://jblevins.org/projects/markdown-mode/][markdown]]:
