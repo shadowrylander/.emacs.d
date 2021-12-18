@@ -141,6 +141,10 @@ init: subinit
 |$(cleanAll)
 |echo > $(mkfileDir)/first-run-done
 
+ylv-init: subinit
+|$(cleanAll)
+|echo > $(mkfileDir)/first-run-done
+
 no-config-test: pre-test
 |emacs -Q
 
