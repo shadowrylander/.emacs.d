@@ -27,12 +27,6 @@ Start off by specifying the ~user-emacs-directory~, then cleaning it:
 #+begin_src emacs-lisp
 ;;; $EMACSDIR/early-init.el -*- lexical-binding: t; -*- no-byte-compile: t -*-
 (defvar user-emacs-directory (file-name-directory (or load-file-name buffer-file-name)))
-(unless (file-exists-p (concat user-emacs-directory "first-run-done"))
-    (message "Initializing everything for the first time...")
-;;     (shell-command (format "make -f %s init" (concat user-emacs-directory "makefile")))
-    (shell-command (format "git -C %s submodule update --init --depth 1 --recursive --remote --force" user-emacs-directory))
-    (shell-command (format "fd . %s -HIe elc -x rm" user-emacs-directory))
-    (message "Initialization done! If you want to run this again, please delete the `first-run-done' file!"))
 #+end_src
 
 Check if we're bootstrapping the system, and whether we want reinstall the packages:
