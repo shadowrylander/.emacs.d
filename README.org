@@ -1999,7 +1999,7 @@ For [[https://github.com/hylang/hy-mode][hy]], plus [[https://github.com/brantou
 For [[https://jblevins.org/projects/markdown-mode/][markdown]]:
 
 #+begin_src emacs-lisp
-`(use-package markdown-mode :mode ,(meq/titan-append-modes "markdown" "\\.md\\'"))
+(eval `(use-package markdown-mode :mode ,(meq/titan-append-modes "markdown" "\\.md\\'")))
 #+end_src
 
 **** nix-mode
@@ -2107,7 +2107,7 @@ The one and only [[https://orgmode.org/][org-mode]], with [[https://orgmode.org/
 - Here's the [[https://git.sr.ht/~bzg/org-contrib][contrib repo]]
 
 #+begin_src emacs-lisp
-`(use-package org
+(eval `(use-package org
 #+end_src
 
 ~org-mode~ will activate when any files using the [[https://github.com/shadowrylander/titan][~titan-org~]] super major-mode,
@@ -2255,5 +2255,5 @@ The following commands are from [[https://github.com/bzg/org-mode/blob/main/lisp
 Upon exiting ~org-src-mode~ I don't want any indentation added to my code blocks, so I use [[https://emacs.stackexchange.com/users/29861/doltes][doltes's]] answer [[https://emacs.stackexchange.com/a/60638/31428][here]]:
 
 #+begin_src emacs-lisp
-        (org-edit-src-content-indentation 0))
+        (org-edit-src-content-indentation 0)))
 #+end_src

@@ -1,8 +1,6 @@
 ;; [[file:~/.emacs.d/README.org::*early-init.el][early-init.el:2]]
 ;;; $EMACSDIR/early-init.el -*- lexical-binding: t; -*- no-byte-compile: t -*-
 (defvar user-emacs-directory (file-name-directory (or load-file-name buffer-file-name)))
-(shell-command (format "fd . %s -HIe elc -x rm" user-emacs-directory))
-(shell-command (format "fd . %s -HIt d -t e -x rm -r" user-emacs-directory))
 (defvar meq/var/bootstrap (member "--bootstrap" command-line-args)) (delete "--bootstrap" command-line-args)
 (defvar meq/var/force-bootstrap (member "--force-bootstrap" command-line-args)) (delete "--force-bootstrap" command-line-args)
 (setq package-enable-at-startup nil)

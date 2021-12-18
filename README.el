@@ -919,8 +919,7 @@
           "å" 'ignore "ā" 'ignore "ß" 'ignore "ç" 'ignore "ñ" 'ignore "¿" 'ignore
       :keymaps 'universal-argument-map (alloy-chord "  ") 'universal-argument-more
       :keymaps '(override aiern-insert-state-map evil-insert-state-map)
-        ;; (naked "RET") 'newline-and-indent
-        (naked "RET") (funcall (alloy-simulate-key ":q! <RET>"))
+        (naked "RET") 'newline-and-indent
         (alloy-chord ";'") 'meq/end-of-line-and-indented-new-line)
 ;; damascus:2 ends here
 
@@ -1795,7 +1794,7 @@
 
 
 ;; [[file:~/.emacs.d/README.org::*markdown-mode][markdown-mode:1]]
-`(use-package markdown-mode :mode ,(meq/titan-append-modes "markdown" "\\.md\\'"))
+(eval `(use-package markdown-mode :mode ,(meq/titan-append-modes "markdown" "\\.md\\'")))
 ;; markdown-mode:1 ends here
 
 ;; nix-mode
@@ -1911,7 +1910,7 @@
 
 
 ;; [[file:~/.emacs.d/README.org::*org-mode][org-mode:1]]
-`(use-package org
+(eval `(use-package org
 ;; org-mode:1 ends here
 
 
@@ -2080,5 +2079,5 @@
 
 
 ;; [[file:~/.emacs.d/README.org::*org-mode][org-mode:11]]
-(org-edit-src-content-indentation 0))
+(org-edit-src-content-indentation 0)))
 ;; org-mode:11 ends here
