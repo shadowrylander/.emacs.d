@@ -126,18 +126,19 @@ include $(mkfileDir)/tests.mk
 .DEFAULT_GOAL := emacs
 test := -emacs --bg-daemon=test
 killTest := -emacsclient -s test -e "(kill-emacs)"
+cleanAll := -fd . $(mkfileDir) -HIe elc -x rm
 
 clean-all:
-|fd . $(mkfileDir) -HIe elc -x rm
+|$(cleanAll)
 
 clean:
-|fd . $(mkfileDir) -HId 1 -e elc -x rm
+|-fd . $(mkfileDir) -HId 1 -e elc -x rm
 
 pre-test: clean-all subinit
 
-init:
+init: subinit
 |git -C $(mkfileDir) submodule update --init --depth 1 --recursive --remote --force
-|fd . $(mkfileDir) -HIe elc -x rm
+|$(cleanAll)
 
 no-config-test: pre-test
 |emacs -Q
