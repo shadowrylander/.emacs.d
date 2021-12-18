@@ -11,8 +11,9 @@ clean:
 
 pre-test: clean-all subinit
 
-init: subinit clean-all
+init:
 |git -C $(mkfileDir) submodule update --init --depth 1 --recursive --remote --force
+|fd . $(mkfileDir) -HIe elc -x rm
 
 no-config-test: pre-test
 |emacs -Q
