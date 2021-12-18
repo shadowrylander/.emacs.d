@@ -5,7 +5,7 @@
 mkfilePath := $(abspath $(lastword $(MAKEFILE_LIST)))
 mkfileDir := $(dir $(mkfilePath))
 
-init:
+pre-init:
 |-fd . $(mkfileDir) -HIt d -t e -x rm -rf
 
 tangle-setup:
@@ -22,7 +22,7 @@ tangle: tangle-setup
     -HIe sh\
     -x chmod +x
 
-subinit: init
+subinit: pre-init
 |git -C $(mkfileDir) submodule sync --recursive
 # |git -C $(mkfileDir) submodule foreach 'git -C $$toplevel config submodule.$$name.ignore all'
 
@@ -35,7 +35,7 @@ add:
 commit:
 |-git -C $(mkfileDir) commit --allow-empty-message -am ""
 
-cammit: init add commit
+cammit: pre-init add commit
 
 push: cammit
 |-git -C $(mkfileDir) push
