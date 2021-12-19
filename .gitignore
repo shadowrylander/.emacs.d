@@ -19,3 +19,4 @@ var/org/persist/*
 /etc
 /first-run-done
 /auto-save-list
+/eln-cache
