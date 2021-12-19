@@ -216,23 +216,32 @@
 
 
 
-;; Wake up the borg:
+;; Update the autoload files for the drines:
 
 
 ;; [[file:~/.emacs.d/README.org::*We are Borg.][We are Borg.:2]]
+(mapc #'borg-update-autoloads (mapcar #'car (borg-drones t)))
+;; We are Borg.:2 ends here
+
+
+
+;; Wake up the borg:
+
+
+;; [[file:~/.emacs.d/README.org::*We are Borg.][We are Borg.:3]]
 (setq borg-rewrite-urls-alist '(("git@github.com:" . "https://github.com/")
                                 ("git@gitlab.com:" . "https://gitlab.com/")))
 (borg-initialize)
-;; We are Borg.:2 ends here
+;; We are Borg.:3 ends here
 
 
 
 ;; /Finally/ activate my function library:
 
 
-;; [[file:~/.emacs.d/README.org::*We are Borg.][We are Borg.:3]]
+;; [[file:~/.emacs.d/README.org::*We are Borg.][We are Borg.:4]]
 (require 'meq)
-;; We are Borg.:3 ends here
+;; We are Borg.:4 ends here
 
 ;; Custom
 ;; :PROPERTIES:
@@ -938,6 +947,8 @@
         size-indicator-mode t
         user-full-name "Jeet Ray"
         user-mail-address "aiern@protonmail.com"
+        scroll-step 1
+        scroll-conservatively most-positive-fixnum
         vc-follow-symlinks t)
 ;; damascus:4 ends here
 

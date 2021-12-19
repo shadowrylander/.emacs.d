@@ -489,6 +489,12 @@ Assimilate the packages from my ~.gitmodules~ file:
             (list (car pkg) (cl-getf (cdr pkg) 'url))) gitmodules))))
 #+end_src
 
+Update the autoload files for the drines:
+
+#+begin_src emacs-lisp
+(mapc #'borg-update-autoloads (mapcar #'car (borg-drones t)))
+#+end_src
+
 Wake up the borg:
 
 #+begin_src emacs-lisp
@@ -1164,6 +1170,8 @@ Load the latest help package, and set a few self-describing variables:
             size-indicator-mode t
             user-full-name "Jeet Ray"
             user-mail-address "aiern@protonmail.com"
+            scroll-step 1
+            scroll-conservatively most-positive-fixnum
             vc-follow-symlinks t)
 #+end_src
 
