@@ -477,7 +477,8 @@
     "\e[C" [right]
     "M-x" 'meq/M-x
     (alloy-chord "  ") 'universal-argument
-    (naked "<tab>") 'org-cycle)
+    (naked "<tab>") 'org-cycle
+    (naked "backtab") 'org-shifttab)
 ;; alloy:5 ends here
 
 
@@ -712,8 +713,8 @@
 
 
 ;; [[file:~/.emacs.d/README.org::*aiern][aiern:1]]
-(meq/up aiern
-    :gsetq (aiern-undo-system 'undo-fu)
+(meq/up aiern :disabled t
+    :gsetq (aiern-undo-system 'undo-fu aiern-move-beyond-eol t)
     :hook (after-init . (lambda nil (interactive)
         (setq state (list aiern-default-state))
         (aiern-mode 1)
@@ -1332,7 +1333,7 @@
 
 
 ;; [[file:~/.emacs.d/README.org::*evil][evil:3]]
-:gsetq (evil-escape-key-sequence) (evil-undo-system 'undo-fu)
+:gsetq (evil-escape-key-sequence nil evil-undo-system 'undo-fu evil-move-beyond-eol t)
 ;; evil:3 ends here
 
 
@@ -2040,9 +2041,7 @@
 ;; [[file:~/.emacs.d/README.org::*org-mode][org-mode:8]]
 :config (load (meq/ued-settings "org-tangle-functions"))
     ;; (setq auto-mode-alist (append auto-mode-alist (meq/titan-append-modes org ("\\.org\\'" . org-mode))))
-:demon (
-    ;; (naked "backtab") 'evil-close-fold
-    (alloy-chord "bb") 'org-toggle-link-display)
+:demon ((alloy-chord "bb") 'org-toggle-link-display)
 :meta (org-mode-map)
 :meta-rename (org-mode-map "ESC" "org-metadir")
 :minoru (org-src-mode deino-edit-spc (:color blue) "o s"
@@ -2074,7 +2073,8 @@
         ("F" org-babel-tangle-file "tangle file")
         ("n" meq/narrow-or-widen-dwim "narrow")
         ("s" org-edit-special "org edit special")
-        ("e" deino-ob-export/body "export"))
+        ("e" deino-ob-export/body "export")
+        ("g" meq/go-to-parent "go to parent"))
 :gsetq
     ;; I'm using ox-pandoc
     ;; (org-export-backends '(md gfm latex odt org))
