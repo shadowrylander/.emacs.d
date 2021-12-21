@@ -476,7 +476,8 @@
     "\eOC" [right]
     "\e[C" [right]
     "M-x" 'meq/M-x
-    (alloy-chord "  ") 'universal-argument)
+    (alloy-chord "  ") 'universal-argument
+    (naked "<tab>") 'org-cycle)
 ;; alloy:5 ends here
 
 
@@ -928,6 +929,7 @@
           "å" 'ignore "ā" 'ignore "ß" 'ignore "ç" 'ignore "ñ" 'ignore "¿" 'ignore
       :keymaps 'universal-argument-map (alloy-chord "  ") 'universal-argument-more
       :keymaps '(override aiern-insert-state-map evil-insert-state-map)
+        (naked "C-backspace") 'meq/delete-white-or-word
         (naked "RET") 'newline-and-indent
         (alloy-chord ";'") 'meq/end-of-line-and-indented-new-line)
 ;; damascus:2 ends here
@@ -942,11 +944,12 @@
 :gsetq
     (indent-tabs-mode nil
         confirm-kill-emacs nil
+        delete-selection-mode 1
         echo-keystrokes .1
         column-number-mode t
         size-indicator-mode t
         user-full-name "Jeet Ray"
-        user-mail-address "aiern@protonmail.com"
+        user-mail-address "titaniumfiles@outlook.com"
         scroll-step 1
         scroll-conservatively most-positive-fixnum
         vc-follow-symlinks t)
@@ -1943,23 +1946,9 @@
 :mode ,(meq/titan-append-modes "org" '("\\.org\\'" . org-mode))
 ;; org-mode:2 ends here
 
-
-
-;; I use [[https://www.reddit.com/r/emacs/comments/6klewl/comment/djniygy/?utm_source=share&utm_medium=web2x&context=3][this]] to skip over expanding any sub-headers:
-
-
-;; [[file:~/.emacs.d/README.org::*org-mode][org-mode:3]]
-:hook ((org-cycle . (lambda (state) (interactive) (when (eq state 'children) (setq org-cycle-subtree-status 'subtree))))
-;; org-mode:3 ends here
-
 ;; [[file:~/.emacs.d/README.org::*org-mode][org-mode:4]]
-;; (org-tab-first-hook . (lambda nil (interactive) (when (org-in-src-block-p t) (insert (make-string 4 ?\s)))))
-)
-;; org-mode:4 ends here
-
-;; [[file:~/.emacs.d/README.org::*org-mode][org-mode:5]]
 :use-package-postconfig (org-contrib)
-;; org-mode:5 ends here
+;; org-mode:4 ends here
 
 
 
@@ -1968,7 +1957,7 @@
 ;; on saving the file.
 
 
-;; [[file:~/.emacs.d/README.org::*org-mode][org-mode:6]]
+;; [[file:~/.emacs.d/README.org::*org-mode][org-mode:5]]
 (ox-pandoc :upnsd-postconfig (riot :if (not (meq/item-in-cla "--anti-riot")))
     :deino (deino-ob-export-as (:color blue) "o e a"
             ("`" nil "cancel")
@@ -1995,14 +1984,14 @@
             ("a" deino-ob-export-as/body "export as")
             ("t" deino-ob-export-to/body "export to")
             ("o" deino-ob-export-and-open/body "export and open"))
-;; org-mode:6 ends here
+;; org-mode:5 ends here
 
 
 
 ;; I have advised the ~org-pandoc-export~ function to allow derived modes of ~org-mode~ as well, to account for my super major-modes, such as [[https://github.com/shadowrylander/titan][~titan~]], [[https://github.com/shadowrylander/fell][~fell~]], [[https://github.com/shadowrylander/doc][~doc~]], etc.
 
 
-;; [[file:~/.emacs.d/README.org::*org-mode][org-mode:7]]
+;; [[file:~/.emacs.d/README.org::*org-mode][org-mode:6]]
 :config/defun* (meq/org-pandoc-export-advice (format a s v b e &optional buf-or-open)
     "General interface for Pandoc Export.
     If BUF-OR-OPEN is nil, output to file.  0, then open the file.
@@ -2016,14 +2005,14 @@
                                 (concat (make-temp-name ".tmp") ".org") s)
         a s v b e (lambda (f) (org-pandoc-run-to-buffer-or-file f format s buf-or-open))))
 :leaf (ox-pandoc :advice (:override org-pandoc-export meq/org-pandoc-export-advice)))
-;; org-mode:7 ends here
+;; org-mode:6 ends here
 
 
 
 ;; Set up [[https://github.com/joaotavora/yasnippet][yasnippet]] by [[https://github.com/joaotavora][João Távora]], with the ~deino~ coming from [[https://github.com/abo-abo/hydra/wiki/YASnippet][here]]:
 
 
-;; [[file:~/.emacs.d/README.org::*org-mode][org-mode:8]]
+;; [[file:~/.emacs.d/README.org::*org-mode][org-mode:7]]
 (yasnippet :config (add-to-list 'yas-snippet-dirs (meq/ued "snippets") t)
     :deino (deino-yasnippet (:color blue :hint nil) "y"
         "
@@ -2046,33 +2035,11 @@
         ("g" yas/global-mode)
         ("m" yas/minor-mode)
         ("a" yas-reload-all)))
-;; org-mode:8 ends here
+;; org-mode:7 ends here
 
-;; [[file:~/.emacs.d/README.org::*org-mode][org-mode:9]]
+;; [[file:~/.emacs.d/README.org::*org-mode][org-mode:8]]
 :config (load (meq/ued-settings "org-tangle-functions"))
     ;; (setq auto-mode-alist (append auto-mode-alist (meq/titan-append-modes org ("\\.org\\'" . org-mode))))
-    (defun meq/org-cycle-2 (func &rest args)
-        (defvar meq/var/tab-size-in-spaces 4)
-        (cond ((meq/fbatp aiern-mode) (cond
-                ((member aiern-state '(normal visual)) (apply func args))
-                ((member aiern-state '(insert)) (insert (make-string meq/var/tab-size-in-spaces ?\s)))
-
-                ;; TODO: Need to be able to either fold OR indent
-                ((member aiern-state '(emacs)) (insert (make-string meq/var/tab-size-in-spaces ?\s)))
-
-                (t (apply func args))))
-            ((meq/fbatp evil-mode) (cond
-                ((member evil-state '(normal visual)) (apply func args))
-                ((member evil-state '(insert)) (insert (make-string meq/var/tab-size-in-spaces ?\s)))
-
-                ;; TODO: Need to be able to either fold OR indent
-                ((member evil-state '(emacs)) (insert (make-string meq/var/tab-size-in-spaces ?\s)))
-
-                (t (apply func args))))
-
-            ;; TODO: Need to be able to either fold OR indent
-            (t (apply func args))))
-    (advice-add #'org-cycle :around #'meq/org-cycle-2)
 :demon (
     ;; (naked "backtab") 'evil-close-fold
     (alloy-chord "bb") 'org-toggle-link-display)
@@ -2082,7 +2049,7 @@
         ("`" nil "cancel")
         ("i" meq/narrow-or-widen-dwim "narrow")
         ("x" org-edit-special "org edit special")
-;; org-mode:9 ends here
+;; org-mode:8 ends here
 
 
 
@@ -2092,13 +2059,13 @@
 ;; - ~org-edit-src-abort~ on [[https://github.com/bzg/org-mode/blob/main/lisp/org-src.el#L1207][Line 1207]]
 
 
-;; [[file:~/.emacs.d/README.org::*org-mode][org-mode:10]]
+;; [[file:~/.emacs.d/README.org::*org-mode][org-mode:9]]
 ("s" org-edit-src-save "save")
 ("e" org-edit-src-exit "exit")
 ("a" org-edit-src-abort "abort"))
-;; org-mode:10 ends here
+;; org-mode:9 ends here
 
-;; [[file:~/.emacs.d/README.org::*org-mode][org-mode:11]]
+;; [[file:~/.emacs.d/README.org::*org-mode][org-mode:10]]
 :uru (org-mode nil deino-org (:color blue) "o o"
         "A deino for org-mode!"
         ("`" nil "cancel")
@@ -2117,16 +2084,16 @@
     (org-startup-folded t)
     (org-src-fontify-natively t)
     ;; (org-src-window-setup 'current-window)
-    (org-cycle-emulate-tab 'whitestart)
+    ;; (org-cycle-emulate-tab 'whitestart)
     (org-support-shift-select t)
     ;; (org-src-tab-acts-natively t)
-;; org-mode:11 ends here
+;; org-mode:10 ends here
 
 
 
 ;; Upon exiting ~org-src-mode~ I don't want any indentation added to my code blocks, so I use [[https://emacs.stackexchange.com/users/29861/doltes][doltes's]] answer [[https://emacs.stackexchange.com/a/60638/31428][here]]:
 
 
-;; [[file:~/.emacs.d/README.org::*org-mode][org-mode:12]]
+;; [[file:~/.emacs.d/README.org::*org-mode][org-mode:11]]
 (org-edit-src-content-indentation 0)))
-;; org-mode:12 ends here
+;; org-mode:11 ends here

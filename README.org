@@ -29,11 +29,22 @@ Start off by specifying the ~user-emacs-directory~, then cleaning it:
 (defvar user-emacs-directory (file-name-directory (or load-file-name buffer-file-name)))
 #+end_src
 
+Define preliminary versions of [[https://github.com/shadowrylander/meq/blob/fa12afdcdd4b4e148c04936337239e165e7dcdb2/meq.el#L945][meq/item-in-cla]], [[https://github.com/shadowrylander/meq/blob/fa12afdcdd4b4e148c04936337239e165e7dcdb2/meq.el#L936][meq/get-next-in-cla]], and [[https://github.com/shadowrylander/meq/blob/fa12afdcdd4b4e148c04936337239e165e7dcdb2/meq.el#L951][meq/*two-items-in-cla]]:
+
+#+begin_src emacs-lisp
+(defun meq/*item-in-cla (item) (unwind-protect (member item command-line-args) (delete item command-line-args)))
+(defun meq/*get-next-in-cla (item)
+    (let* ((index (seq-position command-line-args item))
+            (value (when index (nth (1+ index) command-line-args))))
+        (when value (unwind-protect value (delete value command-line-args)))))
+(defun meq/*two-items-in-list (item) (unwind-protect (when (member item command-line-args) (meq/*get-next-in-cla item)) (delete item command-line-args)))
+#+end_src
+
 Check if we're bootstrapping the system, and whether we want reinstall the packages:
 
 #+begin_src emacs-lisp
-(defvar meq/var/bootstrap (member "--bootstrap" command-line-args)) (delete "--bootstrap" command-line-args)
-(defvar meq/var/force-bootstrap (member "--force-bootstrap" command-line-args)) (delete "--force-bootstrap" command-line-args)
+(defvar meq/var/bootstrap (meq/*item-in-cla "--bootstrap"))
+(defvar meq/var/force-bootstrap (meq/*item-in-cla "--force-bootstrap"))
 #+end_src
 
 Disable [[https://www.emacswiki.org/emacs/InstallingPackages][~package.el~]] on startup: 
@@ -195,11 +206,25 @@ build and activate the drone."
 (advice-add #'borg-assimilate :override #'meq/borg-assimilate-advice)
 #+end_src
 
-Update assimilated packages if necessary:
+Update all assimilated packages if necessary:
 
 #+begin_src emacs-lisp
-(defvar meq/var/update (member "--update" command-line-args)) (delete "--update" command-line-args)
+(defvar meq/var/update (meq/*item-in-cla "--update"))
 (when meq/var/update (mapc #'borg-build (mapcar #'car (borg-drones t))))
+#+end_src
+
+Update assimilated packages */WITHOUT/* [[https://orgmode.org/][ORG]] if necessary:
+
+#+begin_src emacs-lisp
+(defvar meq/var/update-norg (meq/*item-in-cla "--update-norg"))
+(when meq/var/update-norg (mapc #'borg-build (remove "org" (mapcar #'car (borg-drones t)))))
+#+end_src
+
+Update the specified assimilated package if necessary:
+
+#+begin_src emacs-lisp
+(defvar meq/var/update-this (meq/*two-items-in-list "--update-this"))
+(when meq/var/update-this (borg-build meq/var/update-this))
 #+end_src
 
 Avoid stale ~*.elc~ files using [[https://emacs.stackexchange.com/a/186/31428][this answer]], by [[https://emacs.stackexchange.com/users/50/malabarba][Malabarba]]:
@@ -739,7 +764,8 @@ This binds some fundamental keys to the following keymaps:
             "\eOC" [right]
             "\e[C" [right]
             "M-x" 'meq/M-x
-            (alloy-chord "  ") 'universal-argument)
+            (alloy-chord "  ") 'universal-argument
+            (naked "<tab>") 'org-cycle)
 #+end_src
 
 And finally, this allows ~alloy~ to assume ~kbd~ is being used, or in this case, [[https://www.emacswiki.org/emacs/naked.el][naked]]:
@@ -1143,6 +1169,7 @@ These are keys primarily accessible for me on Android:
               "å" 'ignore "ā" 'ignore "ß" 'ignore "ç" 'ignore "ñ" 'ignore "¿" 'ignore
           :keymaps 'universal-argument-map (alloy-chord "  ") 'universal-argument-more
           :keymaps '(override aiern-insert-state-map evil-insert-state-map)
+            (naked "C-backspace") 'meq/delete-white-or-word
             (naked "RET") 'newline-and-indent
             (alloy-chord ";'") 'meq/end-of-line-and-indented-new-line)
 #+end_src
@@ -1165,11 +1192,12 @@ Load the latest help package, and set a few self-describing variables:
     :gsetq
         (indent-tabs-mode nil
             confirm-kill-emacs nil
+            delete-selection-mode 1
             echo-keystrokes .1
             column-number-mode t
             size-indicator-mode t
             user-full-name "Jeet Ray"
-            user-mail-address "aiern@protonmail.com"
+            user-mail-address "<<email>>"
             scroll-step 1
             scroll-conservatively most-positive-fixnum
             vc-follow-symlinks t)
@@ -2133,17 +2161,10 @@ or with the extension ~.org~, are opened:
     :mode ,(meq/titan-append-modes "org" '("\\.org\\'" . org-mode))
 #+end_src
 
-I use [[https://www.reddit.com/r/emacs/comments/6klewl/comment/djniygy/?utm_source=share&utm_medium=web2x&context=3][this]] to skip over expanding any sub-headers:
+I used to use [[https://www.reddit.com/r/emacs/comments/6klewl/comment/djniygy/?utm_source=share&utm_medium=web2x&context=3][this]] to skip over expanding any sub-headers; now I just use [[https://github.com/shadowrylander/meq/blob/fa12afdcdd4b4e148c04936337239e165e7dcdb2/meq.el#L215][my own]]:
 
-#+begin_src emacs-lisp
-    :hook ((org-cycle . (lambda (state) (interactive) (when (eq state 'children) (setq org-cycle-subtree-status 'subtree))))
-#+end_src
-
-
-
-#+begin_src emacs-lisp
-        ;; (org-tab-first-hook . (lambda nil (interactive) (when (org-in-src-block-p t) (insert (make-string 4 ?\s)))))
-        )
+#+begin_src emacs-lisp :tangle no
+    :hook (org-cycle . (lambda (state) (interactive) (when (eq state 'children) (setq org-cycle-subtree-status 'subtree))))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -2231,28 +2252,6 @@ Set up [[https://github.com/joaotavora/yasnippet][yasnippet]] by [[https://githu
 #+begin_src emacs-lisp
     :config (load (meq/ued-settings "org-tangle-functions"))
         ;; (setq auto-mode-alist (append auto-mode-alist (meq/titan-append-modes org ("\\.org\\'" . org-mode))))
-        (defun meq/org-cycle-2 (func &rest args)
-            (defvar meq/var/tab-size-in-spaces 4)
-            (cond ((meq/fbatp aiern-mode) (cond
-                    ((member aiern-state '(normal visual)) (apply func args))
-                    ((member aiern-state '(insert)) (insert (make-string meq/var/tab-size-in-spaces ?\s)))
-
-                    ;; TODO: Need to be able to either fold OR indent
-                    ((member aiern-state '(emacs)) (insert (make-string meq/var/tab-size-in-spaces ?\s)))
-
-                    (t (apply func args))))
-                ((meq/fbatp evil-mode) (cond
-                    ((member evil-state '(normal visual)) (apply func args))
-                    ((member evil-state '(insert)) (insert (make-string meq/var/tab-size-in-spaces ?\s)))
-
-                    ;; TODO: Need to be able to either fold OR indent
-                    ((member evil-state '(emacs)) (insert (make-string meq/var/tab-size-in-spaces ?\s)))
-
-                    (t (apply func args))))
-
-                ;; TODO: Need to be able to either fold OR indent
-                (t (apply func args))))
-        (advice-add #'org-cycle :around #'meq/org-cycle-2)
     :demon (
         ;; (naked "backtab") 'evil-close-fold
         (alloy-chord "bb") 'org-toggle-link-display)
@@ -2294,7 +2293,7 @@ The following commands are from [[https://github.com/bzg/org-mode/blob/main/lisp
         (org-startup-folded t)
         (org-src-fontify-natively t)
         ;; (org-src-window-setup 'current-window)
-        (org-cycle-emulate-tab 'whitestart)
+        ;; (org-cycle-emulate-tab 'whitestart)
         (org-support-shift-select t)
         ;; (org-src-tab-acts-natively t)
 #+end_src
