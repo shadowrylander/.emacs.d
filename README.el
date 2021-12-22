@@ -713,7 +713,7 @@
 
 
 ;; [[file:~/.emacs.d/README.org::*aiern][aiern:1]]
-(meq/up aiern :disabled t
+(meq/up aiern
     :gsetq (aiern-undo-system 'undo-fu aiern-move-beyond-eol t)
     :hook (after-init . (lambda nil (interactive)
         (setq state (list aiern-default-state))
