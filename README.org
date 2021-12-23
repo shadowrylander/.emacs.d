@@ -22,11 +22,17 @@ This way, I can maintain some semblance of a literate config.
 ,#+end_src
 #+end_src
 
-Start off by specifying the ~user-emacs-directory~, then cleaning it:
+Start off by specifying the ~user-emacs-directory~:
 
 #+begin_src emacs-lisp
 ;;; $EMACSDIR/early-init.el -*- lexical-binding: t; -*- no-byte-compile: t -*-
 (defvar user-emacs-directory (file-name-directory (or load-file-name buffer-file-name)))
+#+end_src
+
+If I ever need it, this will give me the initial directory I was in; the code is adapted from [[https://emacs.stackexchange.com/users/1979/stefan][Stefan's]] answer [[https://emacs.stackexchange.com/a/31662/31428][here]]:
+
+#+begin_src emacs-lisp
+(setq meq/var/initial-directory default-directory)
 #+end_src
 
 Define preliminary versions of [[https://github.com/shadowrylander/meq/blob/fa12afdcdd4b4e148c04936337239e165e7dcdb2/meq.el#L945][meq/item-in-cla]], [[https://github.com/shadowrylander/meq/blob/fa12afdcdd4b4e148c04936337239e165e7dcdb2/meq.el#L936][meq/get-next-in-cla]], and [[https://github.com/shadowrylander/meq/blob/fa12afdcdd4b4e148c04936337239e165e7dcdb2/meq.el#L951][meq/*two-items-in-cla]]:
@@ -392,12 +398,6 @@ Merge instead of overwrite because there may have bene changes to
             (delete-dups (append file-name-handler-alist
                                  meq/var/file-name-handler-alist))))
     (add-hook 'emacs-startup-hook #'meq/reset-file-handler-alist-h 101))
-#+end_src
-
-If I ever need it, this will give me the initial directory I was in; the code is adapted from [[https://emacs.stackexchange.com/users/1979/stefan][Stefan's]] answer [[https://emacs.stackexchange.com/a/31662/31428][here]]:
-
-#+begin_src emacs-lisp
-(setq meq/var/initial-directory default-directory)
 #+end_src
 
 The next few bits are adapted from [[https://www.reddit.com/r/emacs/comments/dppmqj/do_i_even_need_to_leverage_earlyinitel_if_i_have/?utm_source=amp&utm_medium=&utm_content=post_body][here]], with a few quotes from myself and others scattered here and there,
@@ -1192,6 +1192,7 @@ Load the latest help package, and set a few self-describing variables:
     :load-siluam-file-postconfig ("help+20")
     :gsetq
         (indent-tabs-mode nil
+            inhibit-startup-screen t
             confirm-kill-emacs nil
             delete-selection-mode 1
             echo-keystrokes .1
@@ -1218,6 +1219,13 @@ This would set the ~initial-major-mode~, from [[https://emacsredux.com/blog/2014
 
 #+begin_src emacs-lisp
     :init
+        (let* ((testing (meq/ued "testing.aiern.org"))
+                (resting (meq/ued "resting.aiern.org")))
+            ;; (setq initial-buffer-choice testing)
+            (eval `(add-hook 'kill-emacs-hook #'(lambda nil (interactive)
+                ;; Adapted From: http://ergoemacs.org/emacs/elisp_file_name_dir_name.html
+                (when (get-file-buffer ,testing) (delete-file ,testing) (copy-file ,resting ,testing))))))
+
         ;; This determines the style of line numbers in effect. If set to `nil', line
         ;; numbers are disabled. For relative line numbers, set this to `relative'.
         ;; Adapted From: https://www.reddit.com/r/emacs/comments/8fz6x2/relative_number_with_line_folding/dy7lmh7?utm_source=share&utm_medium=web2x&context=3

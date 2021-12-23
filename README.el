@@ -84,15 +84,6 @@
 
 
 
-;; If I ever need it, this will give me the initial directory I was in; the code is adapted from [[https://emacs.stackexchange.com/users/1979/stefan][Stefan's]] answer [[https://emacs.stackexchange.com/a/31662/31428][here]]:
-
-
-;; [[file:~/.emacs.d/README.org::*Optimizations][Optimizations:6]]
-(setq meq/var/initial-directory default-directory)
-;; Optimizations:6 ends here
-
-
-
 ;; The next few bits are adapted from [[https://www.reddit.com/r/emacs/comments/dppmqj/do_i_even_need_to_leverage_earlyinitel_if_i_have/?utm_source=amp&utm_medium=&utm_content=post_body][here]], with a few quotes from myself and others scattered here and there,
 ;; such as this bit [[https://www.reddit.com/r/emacs/comments/41m7x3/why_are_you_changing_gcconsthreshold/cz3t775?utm_source=share&utm_medium=web2x&context=3][about ~gc-cons-percentage~]]:
 
@@ -104,7 +95,7 @@
 ;; #+end_quote
 
 
-;; [[file:~/.emacs.d/README.org::*Optimizations][Optimizations:7]]
+;; [[file:~/.emacs.d/README.org::*Optimizations][Optimizations:6]]
 (defvar meq/var/gc-cons-percentage gc-cons-percentage)
 
 (add-hook 'after-init-hook
@@ -119,9 +110,9 @@
                 (add-function :after after-focus-change-function #'meq/gc-on-lose-focus))))
 
 (setq-default gc-cons-percentage 0.6)
-;; Optimizations:7 ends here
+;; Optimizations:6 ends here
 
-;; [[file:~/.emacs.d/README.org::*Optimizations][Optimizations:8]]
+;; [[file:~/.emacs.d/README.org::*Optimizations][Optimizations:7]]
 (setq-default auto-window-vscroll nil
     frame-inhibit-implied-resize t
     inhibit-compacting-font-caches t)
@@ -142,7 +133,7 @@
 (push '(vertical-scroll-bars . 0) default-frame-alist)
 (push '(left-fringe . 0) default-frame-alist)
 (push '(right-fringe . 0) default-frame-alist)
-;; Optimizations:8 ends here
+;; Optimizations:7 ends here
 
 ;; Libraries
 ;; :PROPERTIES:
@@ -944,6 +935,7 @@
 :load-siluam-file-postconfig ("help+20")
 :gsetq
     (indent-tabs-mode nil
+        inhibit-startup-screen t
         confirm-kill-emacs nil
         delete-selection-mode 1
         echo-keystrokes .1
@@ -967,6 +959,13 @@
 
 ;; [[file:~/.emacs.d/README.org::*damascus][damascus:7]]
 :init
+    (let* ((testing (meq/ued "testing.aiern.org"))
+            (resting (meq/ued "resting.aiern.org")))
+        ;; (setq initial-buffer-choice testing)
+        (eval `(add-hook 'kill-emacs-hook #'(lambda nil (interactive)
+            ;; Adapted From: http://ergoemacs.org/emacs/elisp_file_name_dir_name.html
+            (when (get-file-buffer ,testing) (delete-file ,testing) (copy-file ,resting ,testing))))))
+
     ;; This determines the style of line numbers in effect. If set to `nil', line
     ;; numbers are disabled. For relative line numbers, set this to `relative'.
     ;; Adapted From: https://www.reddit.com/r/emacs/comments/8fz6x2/relative_number_with_line_folding/dy7lmh7?utm_source=share&utm_medium=web2x&context=3

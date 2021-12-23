@@ -76,8 +76,8 @@
 [submodule "caddyfile-mode"]
         shallow = true
         branch = master
-	path = lib/caddyfile-mode
-	url = https://github.com/schnouki/caddyfile-mode.git
+        path = lib/caddyfile-mode
+        url = https://github.com/schnouki/caddyfile-mode.git
 [submodule "command-log-mode"]
         shallow = true
         branch = master
@@ -173,6 +173,11 @@
         branch = master
         path = lib/doom-themes
         url = https://github.com/hlissner/emacs-doom-themes.git
+[submodule "epkgs"]
+        shallow = true
+        branch = master
+        path = epkgs
+        url = https://github.com/emacscollective/epkgs.git
 [submodule "escreen"]
         shallow = true
         branch = master
@@ -353,16 +358,6 @@
         branch = master
         path = lib/epkg
         url = https://github.com/emacscollective/epkg.git
-[submodule "epkgs"]
-        shallow = true
-        branch = master
-        path = epkgs
-        url = https://github.com/emacscollective/epkgs.git
-[submodule "var/epkgs"]
-        shallow = true
-        branch = master
-        path = var/epkgs
-        url = https://github.com/emacscollective/epkgs.git
 [submodule "lispy"]
         shallow = true
         branch = master
@@ -466,10 +461,10 @@
 [submodule "oreo"]
         shallow = true
         branch = master
-	path = lib/oreo
-	url = https://gitlab.com/shadowrylander/oreo.git
+        path = lib/oreo
+        url = https://gitlab.com/shadowrylander/oreo.git
 [submodule "org"]
-	branch = main
+        branch = main
         shallow = true
         path = lib/org
         url = https://git.savannah.gnu.org/git/emacs/org-mode.git
@@ -640,10 +635,10 @@
         path = lib/sr-speedbar
         url = https://github.com/emacsorphanage/sr-speedbar.git
 [submodule "systemd"]
-	shallow = true
-	branch = master
-	path = lib/systemd
-	url = https://github.com/holomorph/systemd-mode.git
+        shallow = true
+        branch = master
+        path = lib/systemd
+        url = https://github.com/holomorph/systemd-mode.git
 [submodule "titan"]
         shallow = true
         branch = main
@@ -717,8 +712,13 @@
 [submodule "use-package-oreo"]
         shallow = true
         branch = master
-	path = lib/use-package-oreo
-	url = https://github.com/shadowrylander/use-package-oreo.git
+        path = lib/use-package-oreo
+        url = https://github.com/shadowrylander/use-package-oreo.git
+[submodule "var/epkgs"]
+        shallow = true
+        branch = master
+        path = var/epkgs
+        url = https://github.com/emacscollective/epkgs.git
 [submodule "vimrc-mode"]
         shallow = true
         branch = master

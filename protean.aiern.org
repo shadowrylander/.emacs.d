@@ -471,12 +471,12 @@ This is taken from [[https://functor.tokyo/blog/2018-02-20-show-packages-install
 
 * Startup
 :PROPERTIES:
-:header-args:emacs-lisp+: :tangle yes
+:header-args:emacs-lisp+: :tangle no
 :END:
 
 #+begin_src emacs-lisp
 (when (> (length command-line-args) 1) (let* ((last-dab (car (last command-line-args))))
-                                            (defvar meq/var/last-dab last-dab)
+                                            (defvar meq/var/last-dab last-dab) ;; substitute-in-file-name
                                             (delete last-dab command-line-args)))
 (let* ((testing (meq/ued "testing.aiern.org"))
         (resting (meq/ued "resting.aiern.org"))

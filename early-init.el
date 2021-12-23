@@ -1,6 +1,7 @@
 ;; [[file:~/.emacs.d/README.org::*early-init.el][early-init.el:2]]
 ;;; $EMACSDIR/early-init.el -*- lexical-binding: t; -*- no-byte-compile: t -*-
 (defvar user-emacs-directory (file-name-directory (or load-file-name buffer-file-name)))
+(setq meq/var/initial-directory default-directory)
 (defun meq/*item-in-cla (item) (unwind-protect (member item command-line-args) (delete item command-line-args)))
 (defun meq/*get-next-in-cla (item)
     (let* ((index (seq-position command-line-args item))
