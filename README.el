@@ -455,21 +455,22 @@
 
 ;; [[file:~/.emacs.d/README.org::*alloy][alloy:5]]
 (alloy-def :keymaps demon-run
-    ;; Adapted From:
-    ;; Answer: https://stackoverflow.com/a/4557027/10827766
-    ;; User: https://stackoverflow.com/users/387076/gilles-so-stop-being-evil
-    "\eOA" [up]
-    "\e[A" [up]
-    "\eOB" [down]
-    "\e[B" [down]
-    "\eOD" [left]
-    "\e[D" [left]
-    "\eOC" [right]
-    "\e[C" [right]
-    "M-x" 'meq/M-x
-    (alloy-chord "  ") 'universal-argument
-    (naked "<tab>") 'org-cycle
-    (naked "backtab") 'org-shifttab)
+        ;; Adapted From:
+        ;; Answer: https://stackoverflow.com/a/4557027/10827766
+        ;; User: https://stackoverflow.com/users/387076/gilles-so-stop-being-evil
+        "\eOA" [up]
+        "\e[A" [up]
+        "\eOB" [down]
+        "\e[B" [down]
+        "\eOD" [left]
+        "\e[D" [left]
+        "\eOC" [right]
+        "\e[C" [right]
+        "M-x" 'meq/M-x
+        (alloy-chord "jj") 'universal-argument
+        (naked "<tab>") 'org-cycle
+        (naked "backtab") 'org-shifttab
+    :keymaps 'universal-argument-map (alloy-chord "jj") 'universal-argument-more)
 ;; alloy:5 ends here
 
 
@@ -490,7 +491,8 @@
 
 
 ;; [[file:~/.emacs.d/README.org::*uru][uru:1]]
-(meq/up uru :demon ((alloy-chord "uu") 'uru (alloy-chord "ii") 'minoru)
+(meq/up uru
+    ;; :demon ((alloy-chord "uu") 'uru (alloy-chord "ii") 'minoru)
     :config (with-eval-after-load 'prime (prime "u u" uru "uru") (prime "u m" minoru "minoru")))
 ;; uru:1 ends here
 
@@ -609,7 +611,8 @@
 
 
 ;; [[file:~/.emacs.d/README.org::*sorrow][sorrow:1]]
-(meq/up sorrow :demon ((alloy-chord "kk") 'meq/sorrow-execute-with-current-bindings)
+(meq/up sorrow
+    ;; :demon ((alloy-chord "kk") 'meq/sorrow-execute-with-current-bindings)
     :config (with-eval-after-load 'prime (primer+ "t" "toggles"))
             ;; From: https://github.com/shadowrylander/sorrow#which-key-integration
             (push '((nil . "sorrow:.*:") . (nil . "")) which-key-replacement-alist))
@@ -645,7 +648,7 @@
 
 ;; [[file:~/.emacs.d/README.org::*undo-fu][undo-fu:1]]
 (meq/up undo-fu
-    :demon ((alloy-chord "ui") 'deino-undo/body)
+    ;; :demon ((alloy-chord "ui") 'deino-undo/body)
     :deino (deino-undo nil "u"
             ("u" undo-fu-only-undo "undo")
             ("r" undo-fu-only-redo "redo")
@@ -706,11 +709,7 @@
 ;; [[file:~/.emacs.d/README.org::*aiern][aiern:1]]
 (meq/up aiern
     :gsetq (aiern-undo-system 'undo-fu aiern-move-beyond-eol t)
-    :hook (after-init . (lambda nil (interactive)
-        (setq state (list aiern-default-state))
-        (aiern-mode 1)
-        (push 'aiern-mode meq/var/ignored-modal-modes)
-        (push "aiern" meq/var/ignored-modal-prefixes)))
+    :hook (after-init . (lambda nil (interactive) (meq/add-to-ignored-modal-modes aiern (setq state (list aiern-default-state)))))
 ;; aiern:1 ends here
 
 
@@ -742,8 +741,7 @@
 ;; aiern:4 ends here
 
 ;; [[file:~/.emacs.d/README.org::*aiern][aiern:5]]
-:demon
-    ((alloy-chord "jj") 'meq/aiern-execute-with-current-bindings)
+;; :demon
     ;; ((alloy-chord "") 'meq/toggle-aiern-ex-cosmoem)
 
     ;; TODO
@@ -906,32 +904,70 @@
 
 
 
-;; These are keys primarily accessible for me on Android:
+;; Define some universal deinos:
 
 
 ;; [[file:~/.emacs.d/README.org::*damascus][damascus:2]]
-:alloy (:keymaps demon-run
-          "¡" 'ignore "¹" 'ignore "½" 'ignore "⅓" 'ignore "¼" 'ignore "⅛" 'ignore "²" 'ignore "⅜" 'ignore
-          "¾" 'ignore "³" 'ignore "⁴" 'ignore "⅚" 'ignore "⁵" 'ignore "⅝" 'ignore "⁶" 'ignore "⅞" 'ignore
-          "⁷" 'ignore "⁸" 'ignore "⁹" 'ignore "∅" 'ignore "ⁿ" 'ignore "⁰" 'ignore "·" 'ignore "—" 'ignore
-          "∞" 'ignore "≠" 'ignore "≈" 'ignore "ê" 'ignore "é" 'ignore "è" 'ignore "ë" 'ignore "ē" 'ignore
-          "ū" 'ignore "ü" 'ignore "ú" 'ignore "û" 'ignore "ù" 'ignore "ì" 'evil-ex "ï" 'ignore "í" 'aiern-ex
-          "î" 'ignore "ī" 'ignore "ō" 'ignore "œ" 'ignore "ø" 'ignore "õ" 'ignore "ö" 'ignore "ó" 'ignore
-          "ô" 'ignore "ò" 'ignore "à" 'ignore "á" 'ignore "â" 'ignore "ä" 'ignore "æ" 'ignore "ã" 'ignore
-          "å" 'ignore "ā" 'ignore "ß" 'ignore "ç" 'ignore "ñ" 'ignore "¿" 'ignore
-      :keymaps 'universal-argument-map (alloy-chord "  ") 'universal-argument-more
-      :keymaps '(override aiern-insert-state-map evil-insert-state-map)
-        (naked "C-backspace") 'meq/delete-white-or-word
-        (naked "RET") 'newline-and-indent
-        (alloy-chord ";'") 'meq/end-of-line-and-indented-new-line)
+:deino (deino-universal/shortcuts (:color blue) nil
+        "A deino for universal shortcuts!"
+        ("`" nil "cancel")
+        ("a" meq/aiern-execute-with-current-bindings "aiern execute")
+        (";" aiern-ex "aiern-ex"))
+    (deino-universal/major-minor-modes (:color blue) nil
+        "A deino for major and minor modes!"
+        ("`" nil "cancel"))
+    (deino-universal/modal-modes (:color blue) nil
+        "A deino for modal modes!"
+        ("`" nil "cancel"))
 ;; damascus:2 ends here
+
+
+
+;; Bind some universal deinos:
+
+
+;; [[file:~/.emacs.d/README.org::*damascus][damascus:3]]
+:alloy (:keymaps demon-run
+        (alloy-chord ";'") 'deino-universal/shortcuts/body
+        (alloy-chord "l;") 'deino-universal/major-minor-modes/body
+        (alloy-chord "kl") 'deino-universal/modal-modes/body
+;; damascus:3 ends here
+
+
+
+;; Bind some keys primarily accessible for me on Android:
+
+
+;; [[file:~/.emacs.d/README.org::*damascus][damascus:4]]
+"¡" 'ignore "¹" 'ignore "½" 'ignore "⅓" 'ignore "¼" 'ignore "⅛" 'ignore "²" 'ignore "⅜" 'ignore
+"¾" 'ignore "³" 'ignore "⁴" 'ignore "⅚" 'ignore "⁵" 'ignore "⅝" 'ignore "⁶" 'ignore "⅞" 'ignore
+"⁷" 'ignore "⁸" 'ignore "⁹" 'ignore "∅" 'ignore "ⁿ" 'ignore "⁰" 'ignore "·" 'ignore "—" 'ignore
+"∞" 'ignore "≠" 'ignore "≈" 'ignore "ê" 'ignore "é" 'ignore "è" 'universal-argument "ë" 'ignore "ē" 'ignore
+"ū" 'ignore "ü" 'ignore "ú" 'ignore "û" 'ignore "ù" 'ignore "ì" 'evil-ex "ï" 'ignore "í" 'aiern-ex
+"î" 'ignore "ī" 'ignore "ō" 'ignore "œ" 'ignore "ø" 'ignore "õ" 'ignore "ö" 'ignore "ó" 'ignore
+"ô" 'ignore "ò" 'ignore "à" 'ignore "á" 'ignore "â" 'ignore "ä" 'ignore "æ" 'ignore "ã" 'ignore
+"å" 'ignore "ā" 'ignore "ß" 'ignore "ç" 'ignore "ñ" 'ignore "¿" 'ignore
+;; damascus:4 ends here
+
+
+
+;; And bind some keys of general use:
+
+
+;; [[file:~/.emacs.d/README.org::*damascus][damascus:5]]
+:keymaps '(override aiern-insert-state-map evil-insert-state-map)
+    (naked "C-backspace") 'meq/delete-white-or-word
+    (naked "RET") 'newline-and-indent
+    ;; (alloy-chord ";'") 'meq/end-of-line-and-indented-new-line
+    )
+;; damascus:5 ends here
 
 
 
 ;; Load the latest help package, and set a few self-describing variables:
 
 
-;; [[file:~/.emacs.d/README.org::*damascus][damascus:4]]
+;; [[file:~/.emacs.d/README.org::*damascus][damascus:7]]
 :load-siluam-file-postconfig ("help+20")
 :gsetq
     (indent-tabs-mode nil
@@ -946,39 +982,43 @@
         scroll-step 1
         scroll-conservatively most-positive-fixnum
         vc-follow-symlinks t)
-;; damascus:4 ends here
+;; damascus:7 ends here
 
 
 
 ;; Do not show byte-compiler warnings, from [[https://emacs.stackexchange.com/a/19507][this answer]] by [[https://emacs.stackexchange.com/users/50/malabarba][Malabarba]]:
 
 
-;; [[file:~/.emacs.d/README.org::*damascus][damascus:5]]
+;; [[file:~/.emacs.d/README.org::*damascus][damascus:8]]
 (byte-compile-warnings nil)
-;; damascus:5 ends here
+;; damascus:8 ends here
 
-;; [[file:~/.emacs.d/README.org::*damascus][damascus:7]]
+;; [[file:~/.emacs.d/README.org::*damascus][damascus:10]]
 :init
     (let* ((testing (meq/ued "testing.aiern.org"))
             (resting (meq/ued "resting.aiern.org")))
         ;; (setq initial-buffer-choice testing)
+        (eval `(add-hook 'after-init-hook #'(lambda nil (interactive) (unless (buffer-file-name) (find-file ,testing)))))
         (eval `(add-hook 'kill-emacs-hook #'(lambda nil (interactive)
             ;; Adapted From: http://ergoemacs.org/emacs/elisp_file_name_dir_name.html
             (when (get-file-buffer ,testing) (delete-file ,testing) (copy-file ,resting ,testing))))))
+    (let* ((loaddefs (meq/ued-lib "org" "lisp" "org-loaddefs.el"))) (when (get-file-buffer loaddefs) (kill-buffer (get-file-buffer loaddefs))))
+    (when (get-buffer "*Compile-Log*") (kill-buffer "*Compile-Log*"))
+    (when (get-buffer "*Shell Command Output*") (kill-buffer "*Shell Command Output*"))
 
     ;; This determines the style of line numbers in effect. If set to `nil', line
     ;; numbers are disabled. For relative line numbers, set this to `relative'.
     ;; Adapted From: https://www.reddit.com/r/emacs/comments/8fz6x2/relative_number_with_line_folding/dy7lmh7?utm_source=share&utm_medium=web2x&context=3
     ;; (display-line-numbers-mode t)
     (setq display-line-numbers-type 'relative)
-;; damascus:7 ends here
+;; damascus:10 ends here
 
-;; [[file:~/.emacs.d/README.org::*damascus][damascus:8]]
+;; [[file:~/.emacs.d/README.org::*damascus][damascus:11]]
 ;; Adapted From:
 ;; Answer: https://stackoverflow.com/a/50716229/10827766
 ;; User: https://stackoverflow.com/users/1482346/muro
 (global-display-line-numbers-mode t)
-;; damascus:8 ends here
+;; damascus:11 ends here
 
 
 
@@ -989,9 +1029,9 @@
 ;; #+end_quote
 
 
-;; [[file:~/.emacs.d/README.org::*damascus][damascus:9]]
+;; [[file:~/.emacs.d/README.org::*damascus][damascus:12]]
 (setq initial-scratch-message "")
-;; damascus:9 ends here
+;; damascus:12 ends here
 
 
 
@@ -1000,11 +1040,11 @@
 ;; #+end_quote
 
 
-;; [[file:~/.emacs.d/README.org::*damascus][damascus:10]]
+;; [[file:~/.emacs.d/README.org::*damascus][damascus:13]]
 (defun meq/remove-scratch-buffer nil (interactive)
     (when (get-buffer "*scratch*") (kill-buffer "*scratch*")))
 (add-hook 'after-change-major-mode-hook 'meq/remove-scratch-buffer)
-;; damascus:10 ends here
+;; damascus:13 ends here
 
 
 
@@ -1013,13 +1053,13 @@
 ;; #+end_quote
 
 
-;; [[file:~/.emacs.d/README.org::*damascus][damascus:12]]
+;; [[file:~/.emacs.d/README.org::*damascus][damascus:15]]
 (add-hook 'minibuffer-exit-hook
     '(lambda nil
         (let ((buffer "*Completions*"))
         (and (get-buffer buffer)
                 (kill-buffer buffer)))))
-;; damascus:12 ends here
+;; damascus:15 ends here
 
 
 
@@ -1028,9 +1068,9 @@
 ;; #+end_quote
 
 
-;; [[file:~/.emacs.d/README.org::*damascus][damascus:13]]
+;; [[file:~/.emacs.d/README.org::*damascus][damascus:16]]
 (setq inhibit-startup-buffer-menu t)
-;; damascus:13 ends here
+;; damascus:16 ends here
 
 
 
@@ -1039,18 +1079,18 @@
 ;; #+end_quote
 
 
-;; [[file:~/.emacs.d/README.org::*damascus][damascus:14]]
+;; [[file:~/.emacs.d/README.org::*damascus][damascus:17]]
 (add-hook 'window-setup-hook 'delete-other-windows)
-;; damascus:14 ends here
+;; damascus:17 ends here
 
 
 
 ;; And finally, make emacs fullscreen, from [[https://emacs.stackexchange.com/users/253/dan][Dan's]] answer [[https://emacs.stackexchange.com/a/3017/31428][here]]:
 
 
-;; [[file:~/.emacs.d/README.org::*damascus][damascus:16]]
+;; [[file:~/.emacs.d/README.org::*damascus][damascus:19]]
 (add-to-list 'default-frame-alist '(fullscreen . fullboth)))
-;; damascus:16 ends here
+;; damascus:19 ends here
 
 ;; dired-sidebar
 ;; :PROPERTIES:
@@ -1061,7 +1101,8 @@
 
 
 ;; [[file:~/.emacs.d/README.org::*dired-sidebar][dired-sidebar:1]]
-(meq/up dired-sidebar :demon ((alloy-chord "\\\\") 'meq/backslash-toggle)
+(meq/up dired-sidebar
+    ;; :demon ((alloy-chord "\\\\") 'meq/backslash-toggle)
 ;; dired-sidebar:1 ends here
 
 
@@ -1130,7 +1171,7 @@
 
 ;; [[file:~/.emacs.d/README.org::*doom-aiern-modeline][doom-aiern-modeline:2]]
 :use-package-preconfig (shrink-path)
-        (god-mode :demon ((alloy-chord "hh") 'meq/god-execute-with-current-bindings)
+        (god-mode ;; :demon ((alloy-chord "hh") 'meq/god-execute-with-current-bindings)
             :upnsd-postconfig (aiern-god-state) (evil-god-state)
             :config (which-key-enable-god-mode-support))
 ;; doom-aiern-modeline:2 ends here
@@ -1452,9 +1493,9 @@
         (doom-themes-enable-italic t)
         (meq/var/default-theme-override nil)
         (meq/var/default-default-theme 'dracula-purple-dark)
-    :use-package-postconfig
-        (doom-themes-ext-neotree :config (doom-themes-neotree-config))
-        (doom-themes-ext-org :config (doom-themes-org-config))
+    ;; :use-package-postconfig
+    ;;     (doom-themes-ext-neotree :config (doom-themes-neotree-config))
+    ;;     (doom-themes-ext-org :config (doom-themes-org-config))
     :config
         (unless (meq/which-theme) (cond
             ((member "--purple" command-line-args)
@@ -1507,7 +1548,7 @@
 ;; [[file:~/.emacs.d/README.org::*windmove][windmove:1]]
 (meq/up windmove
     :config (winner-mode)
-    :demon ((alloy-chord "ww") 'deino-wb/body)
+    ;; :demon ((alloy-chord "ww") 'deino-wb/body)
     :deino (deino-wb nil nil ("b" deino-buffer/body "buffer") ("w" deino-window/body "window"))
 ;; windmove:1 ends here
 
@@ -1715,7 +1756,7 @@
 
 ;; [[file:~/.emacs.d/README.org::*restart-emacs][restart-emacs:1]]
 (meq/up restart-emacs
-    :demon ((alloy-chord "aa") 'deino-restart/body)
+    ;; :demon ((alloy-chord "aa") 'deino-restart/body)
     :deino (deino-restart (:color blue) "r"
             ("`" nil "cancel")
             ("l" meq/reload-emacs "reload")
@@ -1729,7 +1770,7 @@
 
 
 ;; [[file:~/.emacs.d/README.org::*ryo modal][ryo modal:1]]
-(meq/up ryo-modal :demon ((alloy-chord "KK") 'meq/ryo-execute-with-current-bindings)
+(meq/up ryo-modal ;; :demon ((alloy-chord "KK") 'meq/ryo-execute-with-current-bindings)
     :config ;; From: https://github.com/Kungsgeten/ryo-modal#which-key-integration
         (push '((nil . "ryo:.*:") . (nil . "")) which-key-replacement-alist))
 ;; ryo modal:1 ends here
@@ -1757,10 +1798,8 @@
 
 
 ;; [[file:~/.emacs.d/README.org::*show-paren-mode][show-paren-mode:1]]
-(meq/up show-paren-mode
-    :commands show-paren-mode
-    :gsetq (show-paren-delay 0)
-    :hook (after-init . show-paren-mode))
+(setq show-paren-delay 0)
+(add-hook 'after-init-hook #'show-paren-mode)
 ;; show-paren-mode:1 ends here
 
 ;; titan
@@ -2040,7 +2079,7 @@
 ;; [[file:~/.emacs.d/README.org::*org-mode][org-mode:8]]
 :config (load (meq/ued-settings "org-tangle-functions"))
     ;; (setq auto-mode-alist (append auto-mode-alist (meq/titan-append-modes org ("\\.org\\'" . org-mode))))
-:demon ((alloy-chord "bb") 'org-toggle-link-display)
+;; :demon ((alloy-chord "bb") 'org-toggle-link-display)
 :meta (org-mode-map)
 :meta-rename (org-mode-map "ESC" "org-metadir")
 :minoru (org-src-mode deino-edit-spc (:color blue) "o s"

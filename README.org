@@ -35,6 +35,23 @@ If I ever need it, this will give me the initial directory I was in; the code is
 (setq meq/var/initial-directory default-directory)
 #+end_src
 
+Advise ~message~ to not show messages about creating autoloads and ~Library is file~, then remove it after initialization:
+
+#+begin_src emacs-lisp
+(defun meq/message (func &rest args) (interactive)
+    (let* ((*message (apply #'format args)))
+
+        ;; NOTE: THE SPACE BEFORE `CREATING' IS MEANT TO BE THERE!
+        (unless (or (string-prefix-p " Creating" *message)
+
+                    (string-prefix-p "Configuring" *message)
+                    (string-prefix-p "Loading" *message)
+                    (string-prefix-p "Library is file" *message))
+            (apply func args))))
+(advice-add #'message :around #'meq/message)
+(add-hook 'after-init-hook #'(lambda nil (interactive) (advice-remove #'message #'meq/message)))
+#+end_src
+
 Define preliminary versions of [[https://github.com/shadowrylander/meq/blob/fa12afdcdd4b4e148c04936337239e165e7dcdb2/meq.el#L945][meq/item-in-cla]], [[https://github.com/shadowrylander/meq/blob/fa12afdcdd4b4e148c04936337239e165e7dcdb2/meq.el#L936][meq/get-next-in-cla]], and [[https://github.com/shadowrylander/meq/blob/fa12afdcdd4b4e148c04936337239e165e7dcdb2/meq.el#L951][meq/*two-items-in-cla]]:
 
 #+begin_src emacs-lisp
@@ -752,21 +769,22 @@ This binds some fundamental keys to the following keymaps:
 
 #+begin_src emacs-lisp
         (alloy-def :keymaps demon-run
-            ;; Adapted From:
-            ;; Answer: https://stackoverflow.com/a/4557027/10827766
-            ;; User: https://stackoverflow.com/users/387076/gilles-so-stop-being-evil
-            "\eOA" [up]
-            "\e[A" [up]
-            "\eOB" [down]
-            "\e[B" [down]
-            "\eOD" [left]
-            "\e[D" [left]
-            "\eOC" [right]
-            "\e[C" [right]
-            "M-x" 'meq/M-x
-            (alloy-chord "  ") 'universal-argument
-            (naked "<tab>") 'org-cycle
-            (naked "backtab") 'org-shifttab)
+                ;; Adapted From:
+                ;; Answer: https://stackoverflow.com/a/4557027/10827766
+                ;; User: https://stackoverflow.com/users/387076/gilles-so-stop-being-evil
+                "\eOA" [up]
+                "\e[A" [up]
+                "\eOB" [down]
+                "\e[B" [down]
+                "\eOD" [left]
+                "\e[D" [left]
+                "\eOC" [right]
+                "\e[C" [right]
+                "M-x" 'meq/M-x
+                (alloy-chord "jj") 'universal-argument
+                (naked "<tab>") 'org-cycle
+                (naked "backtab") 'org-shifttab
+            :keymaps 'universal-argument-map (alloy-chord "jj") 'universal-argument-more)
 #+end_src
 
 And finally, this allows ~alloy~ to assume ~kbd~ is being used, or in this case, [[https://www.emacswiki.org/emacs/naked.el][naked]]:
@@ -783,7 +801,8 @@ And finally, this allows ~alloy~ to assume ~kbd~ is being used, or in this case,
 This sets up my package [[https://github.com/shadowrylander/uru][uru]], which activates ~deinos~ based on the current major-mode, as mentioned in [[https://codeberg.org/dr.ops/medusa/src/branch/main/medusa.org#headline-4][magic medusa hydra]], by [[https://codeberg.org/dr.ops][Andy Drop]]:
 
 #+begin_src emacs-lisp
-(meq/up uru :demon ((alloy-chord "uu") 'uru (alloy-chord "ii") 'minoru)
+(meq/up uru
+    ;; :demon ((alloy-chord "uu") 'uru (alloy-chord "ii") 'minoru)
     :config (with-eval-after-load 'prime (prime "u u" uru "uru") (prime "u m" minoru "minoru")))
 #+end_src
 
@@ -887,7 +906,8 @@ A ~deino~ for all my modal-mode keymaps:
 Finally, [[https://github.com/shadowrylander/sorrow][sorrow]], forked from [[https://github.com/Kungsgeten/ryo-modal][ryo-modal]] by [[https://github.com/Kungsgeten][Erik Sjöstrand]]:
 
 #+begin_src emacs-lisp
-(meq/up sorrow :demon ((alloy-chord "kk") 'meq/sorrow-execute-with-current-bindings)
+(meq/up sorrow
+    ;; :demon ((alloy-chord "kk") 'meq/sorrow-execute-with-current-bindings)
     :config (with-eval-after-load 'prime (primer+ "t" "toggles"))
             ;; From: https://github.com/shadowrylander/sorrow#which-key-integration
             (push '((nil . "sorrow:.*:") . (nil . "")) which-key-replacement-alist))
@@ -921,7 +941,7 @@ Set up [[https://github.com/emacsmirror/undo-fu][undo-fu]] and [[https://github.
 
 #+begin_src emacs-lisp
 (meq/up undo-fu
-    :demon ((alloy-chord "ui") 'deino-undo/body)
+    ;; :demon ((alloy-chord "ui") 'deino-undo/body)
     :deino (deino-undo nil "u"
             ("u" undo-fu-only-undo "undo")
             ("r" undo-fu-only-redo "redo")
@@ -978,11 +998,7 @@ such that it isn't disabled by ~meq/disable-all-modal-modes~:
 #+begin_src emacs-lisp
 (meq/up aiern
     :gsetq (aiern-undo-system 'undo-fu aiern-move-beyond-eol t)
-    :hook (after-init . (lambda nil (interactive)
-        (setq state (list aiern-default-state))
-        (aiern-mode 1)
-        (push 'aiern-mode meq/var/ignored-modal-modes)
-        (push "aiern" meq/var/ignored-modal-prefixes)))
+    :hook (after-init . (lambda nil (interactive) (meq/add-to-ignored-modal-modes aiern (setq state (list aiern-default-state)))))
 #+end_src
 
 Both ~evil~ and ~aiern~ require [[https://github.com/justbur/emacs-bind-map][emacs-bind-map]], by [[https://github.com/justbur][Justin Burkett]]:
@@ -1005,8 +1021,7 @@ in this case being ~aiern-normal-state-map~ and ~aiern-insert-state-map~:
 #+end_src
 
 #+begin_src emacs-lisp
-    :demon
-        ((alloy-chord "jj") 'meq/aiern-execute-with-current-bindings)
+    ;; :demon
         ;; ((alloy-chord "") 'meq/toggle-aiern-ex-cosmoem)
 
         ;; TODO
@@ -1156,23 +1171,52 @@ Set up the base of this config, including the [[https://github.com/emacsmirror/r
 (meq/upnsd damascus :use-package-postconfig (rainbow-mode :config (rainbow-mode 1)) (help-fns+)
 #+end_src
 
-These are keys primarily accessible for me on Android:
+Define some universal deinos:
+
+#+begin_src emacs-lisp
+    :deino (deino-universal/shortcuts (:color blue) nil
+            "A deino for universal shortcuts!"
+            ("`" nil "cancel")
+            ("a" meq/aiern-execute-with-current-bindings "aiern execute")
+            (";" aiern-ex "aiern-ex"))
+        (deino-universal/major-minor-modes (:color blue) nil
+            "A deino for major and minor modes!"
+            ("`" nil "cancel"))
+        (deino-universal/modal-modes (:color blue) nil
+            "A deino for modal modes!"
+            ("`" nil "cancel"))
+#+end_src
+
+Bind some universal deinos:
 
 #+begin_src emacs-lisp
     :alloy (:keymaps demon-run
-              "¡" 'ignore "¹" 'ignore "½" 'ignore "⅓" 'ignore "¼" 'ignore "⅛" 'ignore "²" 'ignore "⅜" 'ignore
-              "¾" 'ignore "³" 'ignore "⁴" 'ignore "⅚" 'ignore "⁵" 'ignore "⅝" 'ignore "⁶" 'ignore "⅞" 'ignore
-              "⁷" 'ignore "⁸" 'ignore "⁹" 'ignore "∅" 'ignore "ⁿ" 'ignore "⁰" 'ignore "·" 'ignore "—" 'ignore
-              "∞" 'ignore "≠" 'ignore "≈" 'ignore "ê" 'ignore "é" 'ignore "è" 'ignore "ë" 'ignore "ē" 'ignore
-              "ū" 'ignore "ü" 'ignore "ú" 'ignore "û" 'ignore "ù" 'ignore "ì" 'evil-ex "ï" 'ignore "í" 'aiern-ex
-              "î" 'ignore "ī" 'ignore "ō" 'ignore "œ" 'ignore "ø" 'ignore "õ" 'ignore "ö" 'ignore "ó" 'ignore
-              "ô" 'ignore "ò" 'ignore "à" 'ignore "á" 'ignore "â" 'ignore "ä" 'ignore "æ" 'ignore "ã" 'ignore
-              "å" 'ignore "ā" 'ignore "ß" 'ignore "ç" 'ignore "ñ" 'ignore "¿" 'ignore
-          :keymaps 'universal-argument-map (alloy-chord "  ") 'universal-argument-more
-          :keymaps '(override aiern-insert-state-map evil-insert-state-map)
+            (alloy-chord ";'") 'deino-universal/shortcuts/body
+            (alloy-chord "l;") 'deino-universal/major-minor-modes/body
+            (alloy-chord "kl") 'deino-universal/modal-modes/body
+#+end_src
+
+Bind some keys primarily accessible for me on Android:
+
+#+begin_src emacs-lisp
+            "¡" 'ignore "¹" 'ignore "½" 'ignore "⅓" 'ignore "¼" 'ignore "⅛" 'ignore "²" 'ignore "⅜" 'ignore
+            "¾" 'ignore "³" 'ignore "⁴" 'ignore "⅚" 'ignore "⁵" 'ignore "⅝" 'ignore "⁶" 'ignore "⅞" 'ignore
+            "⁷" 'ignore "⁸" 'ignore "⁹" 'ignore "∅" 'ignore "ⁿ" 'ignore "⁰" 'ignore "·" 'ignore "—" 'ignore
+            "∞" 'ignore "≠" 'ignore "≈" 'ignore "ê" 'ignore "é" 'ignore "è" 'universal-argument "ë" 'ignore "ē" 'ignore
+            "ū" 'ignore "ü" 'ignore "ú" 'ignore "û" 'ignore "ù" 'ignore "ì" 'evil-ex "ï" 'ignore "í" 'aiern-ex
+            "î" 'ignore "ī" 'ignore "ō" 'ignore "œ" 'ignore "ø" 'ignore "õ" 'ignore "ö" 'ignore "ó" 'ignore
+            "ô" 'ignore "ò" 'ignore "à" 'ignore "á" 'ignore "â" 'ignore "ä" 'ignore "æ" 'ignore "ã" 'ignore
+            "å" 'ignore "ā" 'ignore "ß" 'ignore "ç" 'ignore "ñ" 'ignore "¿" 'ignore
+#+end_src
+
+And bind some keys of general use:
+
+#+begin_src emacs-lisp
+        :keymaps '(override aiern-insert-state-map evil-insert-state-map)
             (naked "C-backspace") 'meq/delete-white-or-word
             (naked "RET") 'newline-and-indent
-            (alloy-chord ";'") 'meq/end-of-line-and-indented-new-line)
+            ;; (alloy-chord ";'") 'meq/end-of-line-and-indented-new-line
+            )
 #+end_src
 
 This hook and function combo would allow me to save files without query, taken from [[https://emacs.stackexchange.com/a/51829][this answer]] by [[https://emacs.stackexchange.com/users/2370/tobias][Tobias]]:
@@ -1222,9 +1266,18 @@ This would set the ~initial-major-mode~, from [[https://emacsredux.com/blog/2014
         (let* ((testing (meq/ued "testing.aiern.org"))
                 (resting (meq/ued "resting.aiern.org")))
             ;; (setq initial-buffer-choice testing)
+
+            ;; Adapted From:
+            ;; Answer: https://emacs.stackexchange.com/a/66329
+            ;; User: https://emacs.stackexchange.com/users/26541/hettomei
+            (eval `(add-hook 'after-init-hook #'(lambda nil (interactive) (unless (buffer-file-name) (find-file ,testing)))))
+            
             (eval `(add-hook 'kill-emacs-hook #'(lambda nil (interactive)
                 ;; Adapted From: http://ergoemacs.org/emacs/elisp_file_name_dir_name.html
                 (when (get-file-buffer ,testing) (delete-file ,testing) (copy-file ,resting ,testing))))))
+        (let* ((loaddefs (meq/ued-lib "org" "lisp" "org-loaddefs.el"))) (when (get-file-buffer loaddefs) (kill-buffer (get-file-buffer loaddefs))))
+        (when (get-buffer "*Compile-Log*") (kill-buffer "*Compile-Log*"))
+        (when (get-buffer "*Shell Command Output*") (kill-buffer "*Shell Command Output*"))
 
         ;; This determines the style of line numbers in effect. If set to `nil', line
         ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -1324,7 +1377,8 @@ And finally, make emacs fullscreen, from [[https://emacs.stackexchange.com/users
 Set up [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Dired.html][dired]] and its [[https://github.com/jojojames/dired-sidebar][sidebar]], by [[https://github.com/jojojames][James]]:
 
 #+begin_src emacs-lisp
-(meq/up dired-sidebar :demon ((alloy-chord "\\\\") 'meq/backslash-toggle)
+(meq/up dired-sidebar
+    ;; :demon ((alloy-chord "\\\\") 'meq/backslash-toggle)
 #+end_src
 
 For some reason, on terminal interfaces, the arrow keys in ~dired~ tried to change ownership of file;
@@ -1377,7 +1431,7 @@ Then this sets up [[https://github.com/emacsorphanage/god-mode][god-mode]], [[ht
 
 #+begin_src emacs-lisp
     :use-package-preconfig (shrink-path)
-            (god-mode :demon ((alloy-chord "hh") 'meq/god-execute-with-current-bindings)
+            (god-mode ;; :demon ((alloy-chord "hh") 'meq/god-execute-with-current-bindings)
                 :upnsd-postconfig (aiern-god-state) (evil-god-state)
                 :config (which-key-enable-god-mode-support))
 #+end_src
@@ -1684,9 +1738,9 @@ View Large Files with [[https://github.com/m00natic/vlfi][vlfi]], by [[https://g
         (doom-themes-enable-italic t)
         (meq/var/default-theme-override nil)
         (meq/var/default-default-theme 'dracula-purple-dark)
-    :use-package-postconfig
-        (doom-themes-ext-neotree :config (doom-themes-neotree-config))
-        (doom-themes-ext-org :config (doom-themes-org-config))
+    ;; :use-package-postconfig
+    ;;     (doom-themes-ext-neotree :config (doom-themes-neotree-config))
+    ;;     (doom-themes-ext-org :config (doom-themes-org-config))
     :config
         (unless (meq/which-theme) (cond
             ((member "--purple" command-line-args)
@@ -1738,7 +1792,7 @@ View Large Files with [[https://github.com/m00natic/vlfi][vlfi]], by [[https://g
 #+begin_src emacs-lisp
 (meq/up windmove
     :config (winner-mode)
-    :demon ((alloy-chord "ww") 'deino-wb/body)
+    ;; :demon ((alloy-chord "ww") 'deino-wb/body)
     :deino (deino-wb nil nil ("b" deino-buffer/body "buffer") ("w" deino-window/body "window"))
 #+end_src
 
@@ -1936,7 +1990,7 @@ Cool [[https://github.com/iqbalansari/restart-emacs][package]] by
 
 #+begin_src emacs-lisp
 (meq/up restart-emacs
-    :demon ((alloy-chord "aa") 'deino-restart/body)
+    ;; :demon ((alloy-chord "aa") 'deino-restart/body)
     :deino (deino-restart (:color blue) "r"
             ("`" nil "cancel")
             ("l" meq/reload-emacs "reload")
@@ -1949,7 +2003,7 @@ Cool [[https://github.com/iqbalansari/restart-emacs][package]] by
 :END:
 
 #+begin_src emacs-lisp
-(meq/up ryo-modal :demon ((alloy-chord "KK") 'meq/ryo-execute-with-current-bindings)
+(meq/up ryo-modal ;; :demon ((alloy-chord "KK") 'meq/ryo-execute-with-current-bindings)
     :config ;; From: https://github.com/Kungsgeten/ryo-modal#which-key-integration
         (push '((nil . "ryo:.*:") . (nil . "")) which-key-replacement-alist))
 #+end_src
@@ -1962,7 +2016,7 @@ Cool [[https://github.com/iqbalansari/restart-emacs][package]] by
 #+begin_src emacs-lisp
 (meq/up vterm :use-package-postconfig (multi-vterm)
     :if (not (member system-type '(windows-nt ms-dos)))
-    :demon ((alloy-chord "vv") 'meq/shell)
+    ;; :demon ((alloy-chord "vv") 'meq/shell)
     :gsetq
         ;; From: https://www.reddit.com/r/emacs/comments/pjtm91/vterm_a_little_bit_slow/hbz40xb?utm_medium=android_app&utm_source=share&context=3
         (vterm-timer-delay 0.01)
@@ -1993,10 +2047,8 @@ Cool [[https://github.com/iqbalansari/restart-emacs][package]] by
 :END:
 
 #+begin_src emacs-lisp
-(meq/up show-paren-mode
-    :commands show-paren-mode
-    :gsetq (show-paren-delay 0)
-    :hook (after-init . show-paren-mode))
+(setq show-paren-delay 0)
+(add-hook 'after-init-hook #'show-paren-mode)
 #+end_src
 
 *** Major Modes
@@ -2261,7 +2313,7 @@ Set up [[https://github.com/joaotavora/yasnippet][yasnippet]] by [[https://githu
 #+begin_src emacs-lisp
     :config (load (meq/ued-settings "org-tangle-functions"))
         ;; (setq auto-mode-alist (append auto-mode-alist (meq/titan-append-modes org ("\\.org\\'" . org-mode))))
-    :demon ((alloy-chord "bb") 'org-toggle-link-display)
+    ;; :demon ((alloy-chord "bb") 'org-toggle-link-display)
     :meta (org-mode-map)
     :meta-rename (org-mode-map "ESC" "org-metadir")
     :minoru (org-src-mode deino-edit-spc (:color blue) "o s"
