@@ -491,9 +491,7 @@
 
 
 ;; [[file:~/.emacs.d/README.org::*uru][uru:1]]
-(meq/up uru
-    ;; :demon ((alloy-chord "uu") 'uru (alloy-chord "ii") 'minoru)
-    :config (with-eval-after-load 'prime (prime "u u" uru "uru") (prime "u m" minoru "minoru")))
+(meq/up uru :config (with-eval-after-load 'prime (prime "u u" uru "uru") (prime "u m" minoru "minoru")))
 ;; uru:1 ends here
 
 ;; which-key
@@ -611,11 +609,9 @@
 
 
 ;; [[file:~/.emacs.d/README.org::*sorrow][sorrow:1]]
-(meq/up sorrow
-    ;; :demon ((alloy-chord "kk") 'meq/sorrow-execute-with-current-bindings)
-    :config (with-eval-after-load 'prime (primer+ "t" "toggles"))
-            ;; From: https://github.com/shadowrylander/sorrow#which-key-integration
-            (push '((nil . "sorrow:.*:") . (nil . "")) which-key-replacement-alist))
+(meq/up sorrow :config (with-eval-after-load 'prime (primer+ "t" "toggles"))
+    ;; From: https://github.com/shadowrylander/sorrow#which-key-integration
+    (push '((nil . "sorrow:.*:") . (nil . "")) which-key-replacement-alist))
 ;; sorrow:1 ends here
 
 ;; exec-path-from-shell
@@ -647,12 +643,10 @@
 
 
 ;; [[file:~/.emacs.d/README.org::*undo-fu][undo-fu:1]]
-(meq/up undo-fu
-    ;; :demon ((alloy-chord "ui") 'deino-undo/body)
-    :deino (deino-undo nil "u"
-            ("u" undo-fu-only-undo "undo")
-            ("r" undo-fu-only-redo "redo")
-            ("R" undo-fu-only-redo-all "redo all"))
+(meq/up undo-fu :deino (deino-undo nil "u"
+        ("u" undo-fu-only-undo "undo")
+        ("r" undo-fu-only-redo "redo")
+        ("R" undo-fu-only-redo-all "redo all"))
     :upnsd-postconfig
         (undo-fu-session
             :gsetq
@@ -908,17 +902,33 @@
 
 
 ;; [[file:~/.emacs.d/README.org::*damascus][damascus:2]]
-:deino (deino-universal/shortcuts (:color blue) nil
+:deino (deino-universal/shortcuts (:color blue) "d u s"
         "A deino for universal shortcuts!"
         ("`" nil "cancel")
-        ("a" meq/aiern-execute-with-current-bindings "aiern execute")
-        (";" aiern-ex "aiern-ex"))
-    (deino-universal/major-minor-modes (:color blue) nil
-        "A deino for major and minor modes!"
-        ("`" nil "cancel"))
-    (deino-universal/modal-modes (:color blue) nil
+        (";" aiern-ex "aiern-ex")
+        (":" evil-ex "evil-ex")
+        ("u" uru "uru")
+        ("m" minoru "minoru")
+        ("w" deino-wb/body "window-buffer deino")
+        ;; ("s" meq/shell "shell")
+        ("'" aiern-write "save")
+        ("RET" aiern-save-and-quit "save and quit"))
+    (deino-universal/modal-modes (:color blue) "d u m"
         "A deino for modal modes!"
-        ("`" nil "cancel"))
+        ("a" meq/aiern-execute-with-current-bindings "aiern execute")
+        ("s" meq/sorrow-execute-with-current-bindings "sorrow execute")
+        ("g" meq/god-execute-with-current-bindings "god execute")
+        ("r" meq/ryo-execute-with-current-bindings "ruo execute")
+        ("`" nil "cancel")
+    (deino-universal/major-minor-modes (:color blue) "d u M"
+        "A deino for major and minor modes!"
+        ("`" nil "cancel")))
+    (deino-universal/everything-else (:color blue) "d u e"
+        "A deino for everything else!"
+        ("`" nil "cancel")
+        ("u" deino-undo/body "deino-undo")
+        ("RET" meq/end-of-line-and-indented-new-line "indented new line")
+        ("r" deino-restart/body "deino-restart"))
 ;; damascus:2 ends here
 
 
@@ -929,8 +939,10 @@
 ;; [[file:~/.emacs.d/README.org::*damascus][damascus:3]]
 :alloy (:keymaps demon-run
         (alloy-chord ";'") 'deino-universal/shortcuts/body
-        (alloy-chord "l;") 'deino-universal/major-minor-modes/body
-        (alloy-chord "kl") 'deino-universal/modal-modes/body
+        (alloy-chord "l;") 'deino-universal/modal-modes/body
+        (alloy-chord "kl") 'deino-universal/major-minor-modes/body
+        (alloy-chord "jk") 'deino-universal/everything-else/body
+        (alloy-chord "hj") 'aiern-exits/body
 ;; damascus:3 ends here
 
 
@@ -942,8 +954,9 @@
 "¡" 'ignore "¹" 'ignore "½" 'ignore "⅓" 'ignore "¼" 'ignore "⅛" 'ignore "²" 'ignore "⅜" 'ignore
 "¾" 'ignore "³" 'ignore "⁴" 'ignore "⅚" 'ignore "⁵" 'ignore "⅝" 'ignore "⁶" 'ignore "⅞" 'ignore
 "⁷" 'ignore "⁸" 'ignore "⁹" 'ignore "∅" 'ignore "ⁿ" 'ignore "⁰" 'ignore "·" 'ignore "—" 'ignore
-"∞" 'ignore "≠" 'ignore "≈" 'ignore "ê" 'ignore "é" 'ignore "è" 'universal-argument "ë" 'ignore "ē" 'ignore
-"ū" 'ignore "ü" 'ignore "ú" 'ignore "û" 'ignore "ù" 'ignore "ì" 'evil-ex "ï" 'ignore "í" 'aiern-ex
+"∞" 'ignore "≠" 'ignore "≈" 'ignore "ê" 'ignore "é" 'ignore
+"è" 'universal-argument "ë" 'ignore "ē" 'ignore
+"ū" 'ignore "ü" 'ignore "ú" 'ignore "û" 'ignore "ù" 'ignore "ì" 'ignore "ï" 'ignore "í" 'ignore
 "î" 'ignore "ī" 'ignore "ō" 'ignore "œ" 'ignore "ø" 'ignore "õ" 'ignore "ö" 'ignore "ó" 'ignore
 "ô" 'ignore "ò" 'ignore "à" 'ignore "á" 'ignore "â" 'ignore "ä" 'ignore "æ" 'ignore "ã" 'ignore
 "å" 'ignore "ā" 'ignore "ß" 'ignore "ç" 'ignore "ñ" 'ignore "¿" 'ignore
@@ -957,9 +970,7 @@
 ;; [[file:~/.emacs.d/README.org::*damascus][damascus:5]]
 :keymaps '(override aiern-insert-state-map evil-insert-state-map)
     (naked "C-backspace") 'meq/delete-white-or-word
-    (naked "RET") 'newline-and-indent
-    ;; (alloy-chord ";'") 'meq/end-of-line-and-indented-new-line
-    )
+    (naked "RET") 'newline-and-indent)
 ;; damascus:5 ends here
 
 
@@ -995,13 +1006,23 @@
 
 ;; [[file:~/.emacs.d/README.org::*damascus][damascus:10]]
 :init
+
+    ;; TODO: Use the previous implementation of this to create a version which will use command-line arguments
+    ;;       to open specific files, such as this README, protean.aiern.org, meta.aiern.org, settings/README.org, etc. ,
+    ;;       in addition to any files called from the command-line itself.
     (let* ((testing (meq/ued "testing.aiern.org"))
             (resting (meq/ued "resting.aiern.org")))
         ;; (setq initial-buffer-choice testing)
+
+        ;; Adapted From:
+        ;; Answer: https://emacs.stackexchange.com/a/66329
+        ;; User: https://emacs.stackexchange.com/users/26541/hettomei
         (eval `(add-hook 'after-init-hook #'(lambda nil (interactive) (unless (buffer-file-name) (find-file ,testing)))))
+
         (eval `(add-hook 'kill-emacs-hook #'(lambda nil (interactive)
             ;; Adapted From: http://ergoemacs.org/emacs/elisp_file_name_dir_name.html
             (when (get-file-buffer ,testing) (delete-file ,testing) (copy-file ,resting ,testing))))))
+
     (let* ((loaddefs (meq/ued-lib "org" "lisp" "org-loaddefs.el"))) (when (get-file-buffer loaddefs) (kill-buffer (get-file-buffer loaddefs))))
     (when (get-buffer "*Compile-Log*") (kill-buffer "*Compile-Log*"))
     (when (get-buffer "*Shell Command Output*") (kill-buffer "*Shell Command Output*"))
@@ -1101,8 +1122,7 @@
 
 
 ;; [[file:~/.emacs.d/README.org::*dired-sidebar][dired-sidebar:1]]
-(meq/up dired-sidebar
-    ;; :demon ((alloy-chord "\\\\") 'meq/backslash-toggle)
+(meq/up dired-sidebar :demon ((alloy-chord "\\\\") 'meq/backslash-toggle)
 ;; dired-sidebar:1 ends here
 
 
@@ -1171,9 +1191,8 @@
 
 ;; [[file:~/.emacs.d/README.org::*doom-aiern-modeline][doom-aiern-modeline:2]]
 :use-package-preconfig (shrink-path)
-        (god-mode ;; :demon ((alloy-chord "hh") 'meq/god-execute-with-current-bindings)
-            :upnsd-postconfig (aiern-god-state) (evil-god-state)
-            :config (which-key-enable-god-mode-support))
+        (god-mode :upnsd-postconfig (aiern-god-state) (evil-god-state)
+                  :config (which-key-enable-god-mode-support))
 ;; doom-aiern-modeline:2 ends here
 
 
@@ -1390,7 +1409,6 @@
 ;; [[file:~/.emacs.d/README.org::*evil][evil:5]]
 ;; :demon
     ;; TODO
-    ;; ((alloy-chord "\"\"") 'evil-ex)
     ;; ((alloy-chord "") 'meq/toggle-evil-ex-cosmoem)
 :config
     ;; From: https://www.reddit.com/r/emacs/comments/lp45zd/help_requested_in_configuring_ryomodal/gp3rfx9?utm_source=share&utm_medium=web2x&context=3
@@ -1548,7 +1566,6 @@
 ;; [[file:~/.emacs.d/README.org::*windmove][windmove:1]]
 (meq/up windmove
     :config (winner-mode)
-    ;; :demon ((alloy-chord "ww") 'deino-wb/body)
     :deino (deino-wb nil nil ("b" deino-buffer/body "buffer") ("w" deino-window/body "window"))
 ;; windmove:1 ends here
 
@@ -1750,13 +1767,11 @@
 ;; :header-args:emacs-lisp+: :tangle yes
 ;; :END:
 
-;; Cool [[https://github.com/iqbalansari/restart-emacs][package]] by
-;; [[https://github.com/iqbalansari][Iqbal Ansari]]!
+;; Cool [[https://github.com/iqbalansari/restart-emacs][package]] by [[https://github.com/iqbalansari][Iqbal Ansari]]!
 
 
 ;; [[file:~/.emacs.d/README.org::*restart-emacs][restart-emacs:1]]
 (meq/up restart-emacs
-    ;; :demon ((alloy-chord "aa") 'deino-restart/body)
     :deino (deino-restart (:color blue) "r"
             ("`" nil "cancel")
             ("l" meq/reload-emacs "reload")
@@ -1770,7 +1785,7 @@
 
 
 ;; [[file:~/.emacs.d/README.org::*ryo modal][ryo modal:1]]
-(meq/up ryo-modal ;; :demon ((alloy-chord "KK") 'meq/ryo-execute-with-current-bindings)
+(meq/up ryo-modal
     :config ;; From: https://github.com/Kungsgeten/ryo-modal#which-key-integration
         (push '((nil . "ryo:.*:") . (nil . "")) which-key-replacement-alist))
 ;; ryo modal:1 ends here
@@ -2079,7 +2094,6 @@
 ;; [[file:~/.emacs.d/README.org::*org-mode][org-mode:8]]
 :config (load (meq/ued-settings "org-tangle-functions"))
     ;; (setq auto-mode-alist (append auto-mode-alist (meq/titan-append-modes org ("\\.org\\'" . org-mode))))
-;; :demon ((alloy-chord "bb") 'org-toggle-link-display)
 :meta (org-mode-map)
 :meta-rename (org-mode-map "ESC" "org-metadir")
 :minoru (org-src-mode deino-edit-spc (:color blue) "o s"
@@ -2112,7 +2126,8 @@
         ("n" meq/narrow-or-widen-dwim "narrow")
         ("s" org-edit-special "org edit special")
         ("e" deino-ob-export/body "export")
-        ("g" meq/go-to-parent "go to parent"))
+        ("g" meq/go-to-parent "go to parent")
+        ("l" org-toggle-link-display "toggle link display"))
 :gsetq
     ;; I'm using ox-pandoc
     ;; (org-export-backends '(md gfm latex odt org))
