@@ -433,11 +433,6 @@
         branch = master
         path = lib/no-littering
         url = https://github.com/emacscollective/no-littering.git
-[submodule "ob-hy"]
-        shallow = true
-        branch = master
-        path = lib/ob-hy
-        url = https://github.com/brantou/ob-hy.git
 [submodule "objed"]
         shallow = true
         branch = master
@@ -594,16 +589,6 @@
         branch = master
         path = lib/s
         url = https://github.com/magnars/s.el.git
-[submodule "settings"]
-        shallow = true
-        branch = main
-        path = settings
-        url = https://github.com/shadowrylander/settings.git
-        build-step = chmod +x ./settings/org-tangle.sh
-        build-step = ./settings/org-tangle.sh .
-        build-step = borg-update-autoloads
-        build-step = borg-byte-compile
-        build-step = borg-makeinfo
 [submodule "shrink-path"]
         shallow = true
         branch = master
@@ -769,3 +754,16 @@
         branch = master
         path = lib/zoxide
         url = https://gitlab.com/Vonfry/zoxide.el.git
+[submodule "pyvenv"]
+        shallow = true
+        branch = master
+        path = lib/pyvenv
+        url = https://github.com/jorgenschaefer/pyvenv.git
+[submodule "ob-hy"]
+	path = lib/ob-hy
+	url = https://github.com/allison-casey/ob-hy.git
+	branch = master
+[submodule "settings"]
+	path = settings
+	url = https://github.com/sylvorg/settings.git
+	branch = main

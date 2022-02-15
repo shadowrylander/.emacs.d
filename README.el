@@ -3,7 +3,7 @@
 ;; Remove ~--~ from scripts:
 
 
-;; [[file:~/.emacs.d/README.org::*Startup][Startup:1]]
+;; [[file:README.org::*Startup][Startup:1]]
 (when (string= (car (last command-line-args)) "--") (delete "--" command-line-args))
 ;; Startup:1 ends here
 
@@ -26,7 +26,7 @@
 ;; #+end_quote
 
 
-;; [[file:~/.emacs.d/README.org::*Optimizations][Optimizations:1]]
+;; [[file:README.org::*Optimizations][Optimizations:1]]
 (setq gc-cons-threshold most-positive-fixnum)
 ;; Optimizations:1 ends here
 
@@ -35,7 +35,7 @@
 ;; And for the ~file-name-handler-alist~:
 
 
-;; [[file:~/.emacs.d/README.org::*Optimizations][Optimizations:2]]
+;; [[file:README.org::*Optimizations][Optimizations:2]]
 (setq meq/var/file-name-handler-alist file-name-handler-alist)
 (unless (or (daemonp) noninteractive)
 ;; Optimizations:2 ends here
@@ -51,7 +51,7 @@
 ;; #+end_quote
 
 
-;; [[file:~/.emacs.d/README.org::*Optimizations][Optimizations:3]]
+;; [[file:README.org::*Optimizations][Optimizations:3]]
 (setq-default file-name-handler-alist nil)
 ;; Optimizations:3 ends here
 
@@ -63,7 +63,7 @@
 ;; #+end_quote
 
 
-;; [[file:~/.emacs.d/README.org::*Optimizations][Optimizations:4]]
+;; [[file:README.org::*Optimizations][Optimizations:4]]
 (defun meq/reset-file-handler-alist-h ()
   (setq file-name-handler-alist
 ;; Optimizations:4 ends here
@@ -76,7 +76,7 @@
 ;; #+end_quote
 
 
-;; [[file:~/.emacs.d/README.org::*Optimizations][Optimizations:5]]
+;; [[file:README.org::*Optimizations][Optimizations:5]]
 (delete-dups (append file-name-handler-alist
                              meq/var/file-name-handler-alist))))
 (add-hook 'emacs-startup-hook #'meq/reset-file-handler-alist-h 101))
@@ -95,7 +95,7 @@
 ;; #+end_quote
 
 
-;; [[file:~/.emacs.d/README.org::*Optimizations][Optimizations:6]]
+;; [[file:README.org::*Optimizations][Optimizations:6]]
 (defvar meq/var/gc-cons-percentage gc-cons-percentage)
 
 (add-hook 'after-init-hook
@@ -112,7 +112,7 @@
 (setq-default gc-cons-percentage 0.6)
 ;; Optimizations:6 ends here
 
-;; [[file:~/.emacs.d/README.org::*Optimizations][Optimizations:7]]
+;; [[file:README.org::*Optimizations][Optimizations:7]]
 (setq-default auto-window-vscroll nil
     frame-inhibit-implied-resize t
     inhibit-compacting-font-caches t)
@@ -144,7 +144,7 @@
 ;; and [[https://www.emacswiki.org/emacs/LoadPath#h5o-2][from this section of the Emacs Wiki]].
 
 
-;; [[file:~/.emacs.d/README.org::*Libraries][Libraries:1]]
+;; [[file:README.org::*Libraries][Libraries:1]]
 (let* ((default-directory (concat user-emacs-directory "siluam")))
     (normal-top-level-add-to-load-path '("."))
     (normal-top-level-add-subdirs-to-load-path))
@@ -162,7 +162,7 @@
 ;; #+end_quote
 
 
-;; [[file:~/.emacs.d/README.org::*Native Comp][Native Comp:1]]
+;; [[file:README.org::*Native Comp][Native Comp:1]]
 (ignore-errors
     (setq native-comp-async-report-warnings-errors nil)
 ;; Native Comp:1 ends here
@@ -174,7 +174,7 @@
 ;; #+end_quote
 
 
-;; [[file:~/.emacs.d/README.org::*Native Comp][Native Comp:2]]
+;; [[file:README.org::*Native Comp][Native Comp:2]]
 (add-to-list 'native-comp-eln-load-path (meq/ued-local "eln-cache/")))
 ;; Native Comp:2 ends here
 
@@ -188,7 +188,7 @@
 ;; # with the help of [[https://stackoverflow.com/a/28686228/10827766][this]], by [[https://stackoverflow.com/users/596361/mirzhan-irkegulov][Mirzhan Irkegulov]]:
 
 
-;; [[file:~/.emacs.d/README.org::*We are Borg.][We are Borg.:1]]
+;; [[file:README.org::*We are Borg.][We are Borg.:1]]
 (let* ((gitmodules (borg-drones t t))
         (command)
 
@@ -210,7 +210,7 @@
 ;; Update the autoload files for the drines:
 
 
-;; [[file:~/.emacs.d/README.org::*We are Borg.][We are Borg.:2]]
+;; [[file:README.org::*We are Borg.][We are Borg.:2]]
 (mapc #'borg-update-autoloads (mapcar #'car (borg-drones t)))
 ;; We are Borg.:2 ends here
 
@@ -219,7 +219,7 @@
 ;; Wake up the borg:
 
 
-;; [[file:~/.emacs.d/README.org::*We are Borg.][We are Borg.:3]]
+;; [[file:README.org::*We are Borg.][We are Borg.:3]]
 (setq borg-rewrite-urls-alist '(("git@github.com:" . "https://github.com/")
                                 ("git@gitlab.com:" . "https://gitlab.com/")))
 (borg-initialize)
@@ -230,7 +230,7 @@
 ;; /Finally/ activate my function library:
 
 
-;; [[file:~/.emacs.d/README.org::*We are Borg.][We are Borg.:4]]
+;; [[file:README.org::*We are Borg.][We are Borg.:4]]
 (require 'meq)
 ;; We are Borg.:4 ends here
 
@@ -242,7 +242,7 @@
 ;; As adapted from [[https://emacs.stackexchange.com/users/2731/ebpa][ebpa's]] answer [[https://emacs.stackexchange.com/a/18682/31428][here]]:
 
 
-;; [[file:~/.emacs.d/README.org::*Custom][Custom:1]]
+;; [[file:README.org::*Custom][Custom:1]]
 (setq custom-file (meq/ued "custom.el"))
 (meq/cl custom-file)
 (setq auto-save-list-file-prefix user-emacs-directory)
@@ -254,7 +254,7 @@
 ;; :END:
 
 
-;; [[file:~/.emacs.d/README.org::*Themes][Themes:1]]
+;; [[file:README.org::*Themes][Themes:1]]
 (byte-recompile-directory (meq/ued "themes") nil)
 (add-to-list 'custom-theme-load-path (meq/ued "themes"))
 (setq custom-safe-themes t)
@@ -268,7 +268,7 @@
 ;; [[https://github.com/jwiegley/use-package][use-package]] with [[https://github.com/jwiegley][John Wiegley]]:
 
 
-;; [[file:~/.emacs.d/README.org::*use-package][use-package:1]]
+;; [[file:README.org::*use-package][use-package:1]]
 (with-no-warnings
   (setq use-package-verbose t)
   (setq use-package-enable-imenu-support t))
@@ -281,7 +281,7 @@
 ;; then delete the argument from the list; also set the variable if Emacs is running as a daemon.
 
 
-;; [[file:~/.emacs.d/README.org::*use-package][use-package:2]]
+;; [[file:README.org::*use-package][use-package:2]]
 (setq use-package-always-demand (or (meq/item-in-cla "--always-demand") (daemonp)))
 ;; use-package:2 ends here
 
@@ -363,7 +363,7 @@
 ;; And in my experience... Not a good idea; much too confusing. Use [[https://www.reddit.com/r/emacs/comments/j2xezg/usepackage_best_practices/][the arguments here]] to decide whether to use this or ~:defer <n>~ instead.
 
 
-;; [[file:~/.emacs.d/README.org::*Sometimes defer package loading][Sometimes defer package loading:1]]
+;; [[file:README.org::*Sometimes defer package loading][Sometimes defer package loading:1]]
 (setq use-package-always-defer (meq/item-in-cla "--always-defer"))
 ;; Sometimes defer package loading:1 ends here
 
@@ -372,7 +372,7 @@
 ;; This sets up [[https://github.com/conao3/leaf.el][leaf.el]] by [[https://github.com/conao3][Naoya Yamashita]]:
 
 
-;; [[file:~/.emacs.d/README.org::*extras][extras:1]]
+;; [[file:README.org::*extras][extras:1]]
 (use-package leaf :demand t
     :init (defmacro meq/leaf (&rest args) `(leaf ,@args :require ,(cl-getf args :require t)))
     :config (use-package leaf-keywords :demand t))
@@ -383,7 +383,7 @@
 ;; And then [[https://github.com/shadowrylander/use-package-extras][use-package-extras]] by yours truely:
 
 
-;; [[file:~/.emacs.d/README.org::*extras][extras:2]]
+;; [[file:README.org::*extras][extras:2]]
 (use-package use-package-extras :demand t
     :config (meq/up use-package-ensure-system-package))
 ;; extras:2 ends here
@@ -396,7 +396,7 @@
 ;; This sets up [[https://github.com/abo-abo/hydra][hydra]] by [[https://github.com/abo-abo][Oleh Krehel]], as well as its ~use-package~ keywords:
 
 
-;; [[file:~/.emacs.d/README.org::*hydra][hydra:1]]
+;; [[file:README.org::*hydra][hydra:1]]
 (meq/up hydra
     :custom (hydra-hint-display-type 'lv)
     :bind (:map hydra-base-map ("~" . hydra--universal-argument))
@@ -412,7 +412,7 @@
 ;; [[https://github.com/abo-abo/hydra][hydra]] by [[https://github.com/abo-abo][Oleh Krehel]]
 
 
-;; [[file:~/.emacs.d/README.org::*hydra][hydra:2]]
+;; [[file:README.org::*hydra][hydra:2]]
 :use-package-preconfig (janus) (use-package-hydra)
 :use-package-postconfig (use-package-deino) (deino :custom (deino-hint-display-type 'lv)))
 ;; hydra:2 ends here
@@ -425,7 +425,7 @@
 ;; Here is the configuration for [[https://github.com/shadowrylander/alloy][alloy]], forked from [[https://github.com/noctuid/general.el][general.el]] by [[https://github.com/noctuid][Fox Kiester]]:
 
 
-;; [[file:~/.emacs.d/README.org::*alloy][alloy:1]]
+;; [[file:README.org::*alloy][alloy:1]]
 (meq/up alloy
 ;; alloy:1 ends here
 
@@ -438,7 +438,7 @@
 ;; - [[https://github.com/waymondo/use-package-chords][use-package-chords]] by [[https://github.com/waymondo][justin talbott]]
 
 
-;; [[file:~/.emacs.d/README.org::*alloy][alloy:2]]
+;; [[file:README.org::*alloy][alloy:2]]
 :use-package-preconfig (command-log-mode)
     ;; Important: https://github.com/noctuid/general.el/issues/53#issuecomment-307262154
     (use-package-chords)
@@ -449,11 +449,11 @@
 ;; I don't like having to unbind keys before reassigning them:
 
 
-;; [[file:~/.emacs.d/README.org::*alloy][alloy:3]]
+;; [[file:README.org::*alloy][alloy:3]]
 :config (alloy-auto-unbind-keys)
 ;; alloy:3 ends here
 
-;; [[file:~/.emacs.d/README.org::*alloy][alloy:5]]
+;; [[file:README.org::*alloy][alloy:5]]
 (alloy-def :keymaps demon-run
         ;; Adapted From:
         ;; Answer: https://stackoverflow.com/a/4557027/10827766
@@ -478,7 +478,7 @@
 ;; And finally, this allows ~alloy~ to assume ~kbd~ is being used, or in this case, [[https://www.emacswiki.org/emacs/naked.el][naked]]:
 
 
-;; [[file:~/.emacs.d/README.org::*alloy][alloy:6]]
+;; [[file:README.org::*alloy][alloy:6]]
 :custom (alloy-implicit-naked t))
 ;; alloy:6 ends here
 
@@ -490,7 +490,7 @@
 ;; This sets up my package [[https://github.com/shadowrylander/uru][uru]], which activates ~deinos~ based on the current major-mode, as mentioned in [[https://codeberg.org/dr.ops/medusa/src/branch/main/medusa.org#headline-4][magic medusa hydra]], by [[https://codeberg.org/dr.ops][Andy Drop]]:
 
 
-;; [[file:~/.emacs.d/README.org::*uru][uru:1]]
+;; [[file:README.org::*uru][uru:1]]
 (meq/up uru :config (with-eval-after-load 'prime (prime "u u" uru "uru") (prime "u m" minoru "minoru")))
 ;; uru:1 ends here
 
@@ -502,7 +502,7 @@
 ;; The incredible [[https://github.com/justbur/emacs-which-key][emacs-which-key]] by the incredible [[https://github.com/justbur][Justin Burkett]]:
 
 
-;; [[file:~/.emacs.d/README.org::*which-key][which-key:1]]
+;; [[file:README.org::*which-key][which-key:1]]
 (meq/up which-key :deino (deino/which-key (:color blue :columns 4) "w"
         ("`" nil "cancel")
         ("a" cosmoem-any-popup-showing-p "any popup showing")
@@ -546,11 +546,11 @@
 ;; Meet the [[https://gitlab.com/shadowrylander/cosmoem][cosmoem]] named [[https://bulbapedia.bulbagarden.net/wiki/Nebby][Nebby]], forked from [[https://gitlab.com/jjzmajic/hercules.el][hercules.el]] by [[https://gitlab.com/jjzmajic][jjzmajic]]:
 
 
-;; [[file:~/.emacs.d/README.org::*cosmoem][cosmoem:1]]
+;; [[file:README.org::*cosmoem][cosmoem:1]]
 (meq/up cosmoem
 ;; cosmoem:1 ends here
 
-;; [[file:~/.emacs.d/README.org::*cosmoem][cosmoem:2]]
+;; [[file:README.org::*cosmoem][cosmoem:2]]
 :config (with-eval-after-load 'prime
             (prime ", m" map-of-infinity/body "map-of-infinity")
             (meq/which-key-change-ryo "," "damascus"))
@@ -561,7 +561,7 @@
 ;; This ~deino~ leads to a bunch of other useful ~deinos~, as well as a few useful functions:
 
 
-;; [[file:~/.emacs.d/README.org::*cosmoem][cosmoem:3]]
+;; [[file:README.org::*cosmoem][cosmoem:3]]
 :deino (map-of-infinity nil ", m"
     ("`" nil "cancel")
     ("w" deino/which-key/body "which-key")
@@ -576,7 +576,7 @@
 ;; The ~deino~ for this package:
 
 
-;; [[file:~/.emacs.d/README.org::*cosmoem][cosmoem:4]]
+;; [[file:README.org::*cosmoem][cosmoem:4]]
 (deino/cosmoem (:color blue) ", c"
     ("`" nil "cancel")
     ("h" cosmoem-hide-all-modal-modes "hide all modal modes"))
@@ -587,7 +587,7 @@
 ;; A ~deino~ for all my modal-mode toggles:
 
 
-;; [[file:~/.emacs.d/README.org::*cosmoem][cosmoem:5]]
+;; [[file:README.org::*cosmoem][cosmoem:5]]
 (toggles (:color blue) ", t" ("`" nil "cancel"))
 ;; cosmoem:5 ends here
 
@@ -596,7 +596,7 @@
 ;; A ~deino~ for all my modal-mode keymaps:
 
 
-;; [[file:~/.emacs.d/README.org::*cosmoem][cosmoem:6]]
+;; [[file:README.org::*cosmoem][cosmoem:6]]
 (all-keymaps (:color blue) ", k" ("`" nil "cancel")))
 ;; cosmoem:6 ends here
 
@@ -608,7 +608,7 @@
 ;; Finally, [[https://github.com/shadowrylander/sorrow][sorrow]], forked from [[https://github.com/Kungsgeten/ryo-modal][ryo-modal]] by [[https://github.com/Kungsgeten][Erik Sjöstrand]]:
 
 
-;; [[file:~/.emacs.d/README.org::*sorrow][sorrow:1]]
+;; [[file:README.org::*sorrow][sorrow:1]]
 (meq/up sorrow :config (with-eval-after-load 'prime (primer+ "t" "toggles"))
     ;; From: https://github.com/shadowrylander/sorrow#which-key-integration
     (push '((nil . "sorrow:.*:") . (nil . "")) which-key-replacement-alist))
@@ -623,7 +623,7 @@
 ;; [[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]] by [[https://github.com/purcell][Steve Purcell]]:
 
 
-;; [[file:~/.emacs.d/README.org::*exec-path-from-shell][exec-path-from-shell:1]]
+;; [[file:README.org::*exec-path-from-shell][exec-path-from-shell:1]]
 (unless (meq/windows-p)
     (meq/up exec-path-from-shell
         :gsetq
@@ -642,7 +642,7 @@
 ;; Set up [[https://github.com/emacsmirror/undo-fu][undo-fu]] and [[https://github.com/emacsmirror/undo-fu-session][undo-fu-session]]:
 
 
-;; [[file:~/.emacs.d/README.org::*undo-fu][undo-fu:1]]
+;; [[file:README.org::*undo-fu][undo-fu:1]]
 (meq/up undo-fu :deino (deino-undo nil "u"
         ("u" undo-fu-only-undo "undo")
         ("r" undo-fu-only-redo "redo")
@@ -663,7 +663,7 @@
 ;; Set up [[https://github.com/shadowrylander/lode][lode]] by yours truely:
 
 
-;; [[file:~/.emacs.d/README.org::*lode][lode:1]]
+;; [[file:README.org::*lode][lode:1]]
 (meq/up lode)
 ;; lode:1 ends here
 
@@ -675,7 +675,7 @@
 ;; Set up [[https://github.com/shadowrylander/lode][meta]] by yours truely:
 
 
-;; [[file:~/.emacs.d/README.org::*meta][meta:1]]
+;; [[file:README.org::*meta][meta:1]]
 (meq/up meta)
 ;; meta:1 ends here
 
@@ -687,7 +687,7 @@
 ;; Set up [[https://github.com/shadowrylander/lode][prime]] by yours truely:
 
 
-;; [[file:~/.emacs.d/README.org::*prime][prime:1]]
+;; [[file:README.org::*prime][prime:1]]
 (meq/up prime)
 ;; prime:1 ends here
 
@@ -700,7 +700,7 @@
 ;; such that it isn't disabled by ~meq/disable-all-modal-modes~:
 
 
-;; [[file:~/.emacs.d/README.org::*aiern][aiern:1]]
+;; [[file:README.org::*aiern][aiern:1]]
 (meq/up aiern
     :gsetq (aiern-undo-system 'undo-fu aiern-move-beyond-eol t)
     :hook (after-init . (lambda nil (interactive) (meq/add-to-ignored-modal-modes aiern (setq state (list aiern-default-state)))))
@@ -711,7 +711,7 @@
 ;; Both ~evil~ and ~aiern~ require [[https://github.com/justbur/emacs-bind-map][emacs-bind-map]], by [[https://github.com/justbur][Justin Burkett]]:
 
 
-;; [[file:~/.emacs.d/README.org::*aiern][aiern:2]]
+;; [[file:README.org::*aiern][aiern:2]]
 :use-package-preconfig (bind-map)
 ;; aiern:2 ends here
 
@@ -720,7 +720,7 @@
 ;; More aiern, courtesy of [[https://github.com/shadowrylander/aiern-aiernhide-state][this]], [[https://github.com/mohsenil85/evil-evilified-state][this]], and [[https://github.com/syl20bnr/spacemacs][this]]:
 
 
-;; [[file:~/.emacs.d/README.org::*aiern][aiern:3]]
+;; [[file:README.org::*aiern][aiern:3]]
 :use-package-postconfig (aiern-aiernhide-state)
 ;; aiern:3 ends here
 
@@ -730,11 +730,11 @@
 ;; in this case being ~aiern-normal-state-map~ and ~aiern-insert-state-map~:
 
 
-;; [[file:~/.emacs.d/README.org::*aiern][aiern:4]]
+;; [[file:README.org::*aiern][aiern:4]]
 :meta-aiern (aiern-normal-state-map) (aiern-insert-state-map)
 ;; aiern:4 ends here
 
-;; [[file:~/.emacs.d/README.org::*aiern][aiern:5]]
+;; [[file:README.org::*aiern][aiern:5]]
 ;; :demon
     ;; ((alloy-chord "") 'meq/toggle-aiern-ex-cosmoem)
 
@@ -769,7 +769,7 @@
 ;; And here are the ~aiern~ bindings set in the ~sorrow~ modal-mode:
 
 
-;; [[file:~/.emacs.d/README.org::*aiern][aiern:6]]
+;; [[file:README.org::*aiern][aiern:6]]
 :sorrow ("l" :deino
             '(aiern-exits (:color blue) "e"
                 ;; From: https://github.com/emacs-evil/evil/blob/master/evil-maps.el#L449
@@ -792,7 +792,7 @@
 ;; I use [[https://connary.com/cartograph.html][Cartograph]] by [[https://connary.com/index.html][Connary Fagen, Inc.]], but I got it cheaper [[https://www.fontspring.com/fonts/connary-fagen-type-design/cartograph-cf][here]]; the second site often has sales on fonts.
 
 
-;; [[file:~/.emacs.d/README.org::*all-the-icons][all-the-icons:1]]
+;; [[file:README.org::*all-the-icons][all-the-icons:1]]
 (meq/up all-the-icons :config
     (ignore-errors
         (set-face-attribute 'default nil :font "Cartograph CF Extra Bold-12")
@@ -808,7 +808,7 @@
 ;; This binds ~ctrl-tab~ and ~ctrl-shift-tab~ to buffer-cycling motions:
 
 
-;; [[file:~/.emacs.d/README.org::*buffer][buffer:1]]
+;; [[file:README.org::*buffer][buffer:1]]
 (alloy-def :keymaps demon-run "C-tab" 'next-buffer "C-<iso-lefttab>" 'previous-buffer)
 ;; buffer:1 ends here
 
@@ -817,7 +817,7 @@
 ;; And this is mostly adapted from [[https://sam217pa.github.io/2016/09/23/keybindings-strategies-in-emacs/][here]]:
 
 
-;; [[file:~/.emacs.d/README.org::*buffer][buffer:2]]
+;; [[file:README.org::*buffer][buffer:2]]
 (sorrow-key "b" :deino '(deino-buffer (:color red :columns 3) "b"
   "
                 Buffers :
@@ -846,7 +846,7 @@
 ;; From the [[https://github.com/abo-abo/swiper][swiper]] package by [[https://github.com/abo-abo][Oleh Krehel]]:
 
 
-;; [[file:~/.emacs.d/README.org::*ivy][ivy:1]]
+;; [[file:README.org::*ivy][ivy:1]]
 (meq/up ivy :sorrow ("x" :deino '(deino-execute (:color blue) "x" "A deino for launching stuff!"
         ("`" nil "cancel")
         ("e" execute-extended-command "M-x")) :name "execute order 65")
@@ -862,7 +862,7 @@
 ;; From the [[https://github.com/abo-abo/swiper][swiper]] package by [[https://github.com/abo-abo][Oleh Krehel]]:
 
 
-;; [[file:~/.emacs.d/README.org::*counsel][counsel:1]]
+;; [[file:README.org::*counsel][counsel:1]]
 (meq/up counsel
     :use-package-postconfig (prescient) (ivy-prescient)
     :hook (after-init . (lambda nil (interactive)
@@ -892,7 +892,7 @@
 ;; Set up the base of this config, including the [[https://github.com/emacsmirror/rainbow-mode][rainbow-mode]] package:
 
 
-;; [[file:~/.emacs.d/README.org::*damascus][damascus:1]]
+;; [[file:README.org::*damascus][damascus:1]]
 (meq/upnsd damascus :use-package-postconfig (rainbow-mode :config (rainbow-mode 1)) (help-fns+)
 ;; damascus:1 ends here
 
@@ -901,7 +901,7 @@
 ;; Define some universal deinos:
 
 
-;; [[file:~/.emacs.d/README.org::*damascus][damascus:2]]
+;; [[file:README.org::*damascus][damascus:2]]
 :deino (deino-universal/shortcuts (:color blue) "d u s"
         "A deino for universal shortcuts!"
         ("`" nil "cancel")
@@ -936,7 +936,7 @@
 ;; Bind some universal deinos:
 
 
-;; [[file:~/.emacs.d/README.org::*damascus][damascus:3]]
+;; [[file:README.org::*damascus][damascus:3]]
 :alloy (:keymaps demon-run
         (alloy-chord ";'") 'deino-universal/shortcuts/body
         (alloy-chord "l;") 'deino-universal/modal-modes/body
@@ -950,7 +950,7 @@
 ;; Bind some keys primarily accessible for me on Android:
 
 
-;; [[file:~/.emacs.d/README.org::*damascus][damascus:4]]
+;; [[file:README.org::*damascus][damascus:4]]
 "¡" 'ignore "¹" 'ignore "½" 'ignore "⅓" 'ignore "¼" 'ignore "⅛" 'ignore "²" 'ignore "⅜" 'ignore
 "¾" 'ignore "³" 'ignore "⁴" 'ignore "⅚" 'ignore "⁵" 'ignore "⅝" 'ignore "⁶" 'ignore "⅞" 'ignore
 "⁷" 'ignore "⁸" 'ignore "⁹" 'ignore "∅" 'ignore "ⁿ" 'ignore "⁰" 'ignore "·" 'ignore "—" 'ignore
@@ -967,7 +967,7 @@
 ;; And bind some keys of general use:
 
 
-;; [[file:~/.emacs.d/README.org::*damascus][damascus:5]]
+;; [[file:README.org::*damascus][damascus:5]]
 :keymaps '(override aiern-insert-state-map evil-insert-state-map)
     (naked "C-backspace") 'meq/delete-white-or-word
     (naked "RET") 'newline-and-indent)
@@ -978,7 +978,7 @@
 ;; Load the latest help package, and set a few self-describing variables:
 
 
-;; [[file:~/.emacs.d/README.org::*damascus][damascus:7]]
+;; [[file:README.org::*damascus][damascus:7]]
 :load-siluam-file-postconfig ("help+20")
 :gsetq
     (indent-tabs-mode nil
@@ -1000,11 +1000,11 @@
 ;; Do not show byte-compiler warnings, from [[https://emacs.stackexchange.com/a/19507][this answer]] by [[https://emacs.stackexchange.com/users/50/malabarba][Malabarba]]:
 
 
-;; [[file:~/.emacs.d/README.org::*damascus][damascus:8]]
+;; [[file:README.org::*damascus][damascus:8]]
 (byte-compile-warnings nil)
 ;; damascus:8 ends here
 
-;; [[file:~/.emacs.d/README.org::*damascus][damascus:10]]
+;; [[file:README.org::*damascus][damascus:10]]
 :init
 
     ;; TODO: Use the previous implementation of this to create a version which will use command-line arguments
@@ -1034,7 +1034,7 @@
     (setq display-line-numbers-type 'relative)
 ;; damascus:10 ends here
 
-;; [[file:~/.emacs.d/README.org::*damascus][damascus:11]]
+;; [[file:README.org::*damascus][damascus:11]]
 ;; Adapted From:
 ;; Answer: https://stackoverflow.com/a/50716229/10827766
 ;; User: https://stackoverflow.com/users/1482346/muro
@@ -1050,7 +1050,7 @@
 ;; #+end_quote
 
 
-;; [[file:~/.emacs.d/README.org::*damascus][damascus:12]]
+;; [[file:README.org::*damascus][damascus:12]]
 (setq initial-scratch-message "")
 ;; damascus:12 ends here
 
@@ -1061,7 +1061,7 @@
 ;; #+end_quote
 
 
-;; [[file:~/.emacs.d/README.org::*damascus][damascus:13]]
+;; [[file:README.org::*damascus][damascus:13]]
 (defun meq/remove-scratch-buffer nil (interactive)
     (when (get-buffer "*scratch*") (kill-buffer "*scratch*")))
 (add-hook 'after-change-major-mode-hook 'meq/remove-scratch-buffer)
@@ -1074,7 +1074,7 @@
 ;; #+end_quote
 
 
-;; [[file:~/.emacs.d/README.org::*damascus][damascus:15]]
+;; [[file:README.org::*damascus][damascus:15]]
 (add-hook 'minibuffer-exit-hook
     '(lambda nil
         (let ((buffer "*Completions*"))
@@ -1089,7 +1089,7 @@
 ;; #+end_quote
 
 
-;; [[file:~/.emacs.d/README.org::*damascus][damascus:16]]
+;; [[file:README.org::*damascus][damascus:16]]
 (setq inhibit-startup-buffer-menu t)
 ;; damascus:16 ends here
 
@@ -1100,7 +1100,7 @@
 ;; #+end_quote
 
 
-;; [[file:~/.emacs.d/README.org::*damascus][damascus:17]]
+;; [[file:README.org::*damascus][damascus:17]]
 (add-hook 'window-setup-hook 'delete-other-windows)
 ;; damascus:17 ends here
 
@@ -1109,7 +1109,7 @@
 ;; And finally, make emacs fullscreen, from [[https://emacs.stackexchange.com/users/253/dan][Dan's]] answer [[https://emacs.stackexchange.com/a/3017/31428][here]]:
 
 
-;; [[file:~/.emacs.d/README.org::*damascus][damascus:19]]
+;; [[file:README.org::*damascus][damascus:19]]
 (add-to-list 'default-frame-alist '(fullscreen . fullboth)))
 ;; damascus:19 ends here
 
@@ -1121,7 +1121,7 @@
 ;; Set up [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Dired.html][dired]] and its [[https://github.com/jojojames/dired-sidebar][sidebar]], by [[https://github.com/jojojames][James]]:
 
 
-;; [[file:~/.emacs.d/README.org::*dired-sidebar][dired-sidebar:1]]
+;; [[file:README.org::*dired-sidebar][dired-sidebar:1]]
 (meq/up dired-sidebar :demon ((alloy-chord "\\\\") 'meq/backslash-toggle)
 ;; dired-sidebar:1 ends here
 
@@ -1131,7 +1131,7 @@
 ;; this was resolved using the following bit, adapted from [[https://www.reddit.com/r/emacs/comments/pce8f4/dired_ellipses_in_square_brackets_before_file/hakuehb/?utm_medium=android_app&utm_source=share&context=3][here]]:
 
 
-;; [[file:~/.emacs.d/README.org::*dired-sidebar][dired-sidebar:2]]
+;; [[file:README.org::*dired-sidebar][dired-sidebar:2]]
 :upnsd-preconfig (dired+ :gsetq (diredp-bind-problematic-terminal-keys (display-graphic-p)))
 ;; dired-sidebar:2 ends here
 
@@ -1140,7 +1140,7 @@
 ;; Since ~dired-details~ is already implemented in ~dired~ from Emacs version 24.4, we'll enable it only for prior versions:
 
 
-;; [[file:~/.emacs.d/README.org::*dired-sidebar][dired-sidebar:3]]
+;; [[file:README.org::*dired-sidebar][dired-sidebar:3]]
 (dired-details :if (version< emacs-version "24.4"))
 (dired-details+ :if (version< emacs-version "24.4"))
 ;; dired-sidebar:3 ends here
@@ -1151,7 +1151,7 @@
 ;; also, no hidden details hint, courtesy of [[https://www.emacswiki.org/emacs/DiredDetails#h5o-1][the Emacs wiki]]:
 
 
-;; [[file:~/.emacs.d/README.org::*dired-sidebar][dired-sidebar:4]]
+;; [[file:README.org::*dired-sidebar][dired-sidebar:4]]
 :gsetq (dired-sidebar-close-sidebar-on-file-open t)
     (dired-details-hidden-string "")
 ;; dired-sidebar:4 ends here
@@ -1162,7 +1162,7 @@
 ;; Zettelkasten files for my novel and documentation:
 
 
-;; [[file:~/.emacs.d/README.org::*dired-sidebar][dired-sidebar:5]]
+;; [[file:README.org::*dired-sidebar][dired-sidebar:5]]
 :uru (dired-mode t deino-dired-mode (:color blue) "d d"
         ("`" nil "cancel")
         ("f" (meq/dired-create-and-open-fell-markdown) "create & edit fell file")
@@ -1179,7 +1179,7 @@
 ;; This sets up [[https://github.com/shadowrylander/doom-aiern-modeline][my fork]] of [[https://github.com/seagle0128/doom-modeline][doom-modeline]] by [[https://github.com/seagle0128][Vincent Zhang]] upon initialization:
 
 
-;; [[file:~/.emacs.d/README.org::*doom-aiern-modeline][doom-aiern-modeline:1]]
+;; [[file:README.org::*doom-aiern-modeline][doom-aiern-modeline:1]]
 (use-package doom-aiern-modeline
     :hook (after-init . doom-aiern-modeline-mode)
 ;; doom-aiern-modeline:1 ends here
@@ -1189,7 +1189,7 @@
 ;; Then this sets up [[https://github.com/emacsorphanage/god-mode][god-mode]], [[https://github.com/gridaphobe/evil-god-state][evil-god-state]] by [[https://github.com/gridaphobe][Eric Seidel]], and my fork of it [[https://github.com/shadowrylander/aiern-god-state][aiern-god-state]]
 
 
-;; [[file:~/.emacs.d/README.org::*doom-aiern-modeline][doom-aiern-modeline:2]]
+;; [[file:README.org::*doom-aiern-modeline][doom-aiern-modeline:2]]
 :use-package-preconfig (shrink-path)
         (god-mode :upnsd-postconfig (aiern-god-state) (evil-god-state)
                   :config (which-key-enable-god-mode-support))
@@ -1200,7 +1200,7 @@
 ;; Most of the following is adapted from [[https://github.com/seagle0128/doom-aiern-modeline#customize][here]]:
 
 
-;; [[file:~/.emacs.d/README.org::*doom-aiern-modeline][doom-aiern-modeline:3]]
+;; [[file:README.org::*doom-aiern-modeline][doom-aiern-modeline:3]]
 :gsetq
     ;; How tall the mode-line should be. It's only respected in GUI.
     ;; If the actual char height is larger, it respects the actual height.
@@ -1373,7 +1373,7 @@
 ;; As mentioned before, both [[https://github.com/emacs-evil/evil][~evil~]] and [[https://github.com/shadowrylander/aiern][~aiern~]] require [[https://github.com/justbur/emacs-bind-map][emacs-bind-map]], by [[https://github.com/justbur][Justin Burkett]]:
 
 
-;; [[file:~/.emacs.d/README.org::*evil][evil:1]]
+;; [[file:README.org::*evil][evil:1]]
 (meq/up evil :use-package-preconfig (bind-map)
 ;; evil:1 ends here
 
@@ -1382,7 +1382,7 @@
 ;; More evil, courtesy of [[https://github.com/mohsenil85/evil-evilified-state][this]] and [[https://github.com/syl20bnr/spacemacs][this]]:
 
 
-;; [[file:~/.emacs.d/README.org::*evil][evil:2]]
+;; [[file:README.org::*evil][evil:2]]
 :use-package-postconfig (evil-evilified-state)
 ;; evil:2 ends here
 
@@ -1391,7 +1391,7 @@
 ;; Disable the ~evil-escape-key-sequence~, and set the ~evil-undo-system~ to [[https://github.com/emacsmirror/undo-fu][~undo-fu~]]
 
 
-;; [[file:~/.emacs.d/README.org::*evil][evil:3]]
+;; [[file:README.org::*evil][evil:3]]
 :gsetq (evil-escape-key-sequence nil evil-undo-system 'undo-fu evil-move-beyond-eol t)
 ;; evil:3 ends here
 
@@ -1400,13 +1400,13 @@
 ;; This allows me to disable ~evil-insert-state~:
 
 
-;; [[file:~/.emacs.d/README.org::*evil][evil:4]]
+;; [[file:README.org::*evil][evil:4]]
 :leaf (evil :advice
     (:override evil-insert-state (lambda (&rest args) (interactive)
         (meq/disable-all-modal-modes))))
 ;; evil:4 ends here
 
-;; [[file:~/.emacs.d/README.org::*evil][evil:5]]
+;; [[file:README.org::*evil][evil:5]]
 ;; :demon
     ;; TODO
     ;; ((alloy-chord "") 'meq/toggle-evil-ex-cosmoem)
@@ -1456,7 +1456,7 @@
 ;; Zen-mode with [[https://github.com/rnkn/olivetti][olivetti]], by [[https://github.com/rnkn][Paul W. Rankin]]:
 
 
-;; [[file:~/.emacs.d/README.org::*olivetti][olivetti:1]]
+;; [[file:README.org::*olivetti][olivetti:1]]
 (meq/up olivetti :gsetq (olivetti-body-width 0.60))
 ;; olivetti:1 ends here
 
@@ -1468,7 +1468,7 @@
 ;; Colorful words with [[https://github.com/Fanael/rainbow-identifiers][rainbow-identifiers]], by [[https://github.com/Fanael][Fanael Linithien]]:
 
 
-;; [[file:~/.emacs.d/README.org::*rainbow-identifiers][rainbow-identifiers:1]]
+;; [[file:README.org::*rainbow-identifiers][rainbow-identifiers:1]]
 (meq/up rainbow-identifiers
     ;; Adapted From:
     ;; Answer: https://stackoverflow.com/a/31253253/10827766
@@ -1487,7 +1487,7 @@
 ;; View Large Files with [[https://github.com/m00natic/vlfi][vlfi]], by [[https://github.com/m00natic][Andrey Kotlarski]]
 
 
-;; [[file:~/.emacs.d/README.org::*vlf][vlf:1]]
+;; [[file:README.org::*vlf][vlf:1]]
 (meq/up vlf :gsetq (vlf-application 'always))
 ;; vlf:1 ends here
 
@@ -1497,7 +1497,7 @@
 ;; :END:
 
 
-;; [[file:~/.emacs.d/README.org::*doom-themes][doom-themes:1]]
+;; [[file:README.org::*doom-themes][doom-themes:1]]
 (meq/up doom-themes
     :deino (deino-themes-light (:color blue) nil "A deino for light themes!" ("`" nil "cancel"))
         (deino-themes-dark (:color blue) nil "A deino for dark themes!" ("`" nil "cancel"))
@@ -1563,7 +1563,7 @@
 ;; :END:
 
 
-;; [[file:~/.emacs.d/README.org::*windmove][windmove:1]]
+;; [[file:README.org::*windmove][windmove:1]]
 (meq/up windmove
     :config (winner-mode)
     :deino (deino-wb nil nil ("b" deino-buffer/body "buffer") ("w" deino-window/body "window"))
@@ -1575,7 +1575,7 @@
 ;; [[https://github.com/abo-abo/hydra/wiki/Window-Management#deluxe-window-moving][here]]:
 
 
-;; [[file:~/.emacs.d/README.org::*windmove][windmove:2]]
+;; [[file:README.org::*windmove][windmove:2]]
 :sorrow ("w" :deino '(deino-window (:columns 5) "w"
     ("`" nil "cancel")
     ("s" deino-buffer/body "buffer" :color blue)
@@ -1610,7 +1610,7 @@
 ;; :END:
 
 
-;; [[file:~/.emacs.d/README.org::*ace-window][ace-window:1]]
+;; [[file:README.org::*ace-window][ace-window:1]]
 (meq/up ace-window
     :deino+ (deino-window (:color red)
         ("a" (lambda nil (interactive) (ace-window 1) (add-hook 'ace-window-end-once-hook
@@ -1629,7 +1629,7 @@
 ;; :END:
 
 
-;; [[file:~/.emacs.d/README.org::*alamode][alamode:1]]
+;; [[file:README.org::*alamode][alamode:1]]
 (meq/upnsd alamode)
 ;; alamode:1 ends here
 
@@ -1639,7 +1639,7 @@
 ;; :END:
 
 
-;; [[file:~/.emacs.d/README.org::*cosmog][cosmog:1]]
+;; [[file:README.org::*cosmog][cosmog:1]]
 (meq/upnsd cosmog :prime ("c" deino-cosmog/body "cosmog"))
 ;; cosmog:1 ends here
 
@@ -1649,7 +1649,7 @@
 ;; :END:
 
 
-;; [[file:~/.emacs.d/README.org::*helm][helm:1]]
+;; [[file:README.org::*helm][helm:1]]
 (meq/up helm
     ;; :commands (helm-M-x helm-mini helm-mode)
     :deino+ (deino-execute nil
@@ -1672,7 +1672,7 @@
 ;; Adapted From: https://github.com/asok/.emacs.d/blob/master/inits/init-hydra.el#L62
 
 
-;; [[file:~/.emacs.d/README.org::*magit][magit:1]]
+;; [[file:README.org::*magit][magit:1]]
 (meq/up magit :deino (deino-magit (:color blue :columns 8) "g"
   "It's just like magit!"
   ("s" magit-status "status")
@@ -1691,7 +1691,7 @@
 ;; :END:
 
 
-;; [[file:~/.emacs.d/README.org::*modalka][modalka:1]]
+;; [[file:README.org::*modalka][modalka:1]]
 (meq/up modalka)
 ;; modalka:1 ends here
 
@@ -1701,7 +1701,7 @@
 ;; :END:
 
 
-;; [[file:~/.emacs.d/README.org::*objed][objed:1]]
+;; [[file:README.org::*objed][objed:1]]
 (meq/up objed)
 ;; objed:1 ends here
 
@@ -1713,7 +1713,7 @@
 ;; Adapted From: https://sam217pa.github.io/2016/09/23/keybindings-strategies-in-emacs/
 
 
-;; [[file:~/.emacs.d/README.org::*projectile][projectile:1]]
+;; [[file:README.org::*projectile][projectile:1]]
 (meq/up projectile
     :use-package-preconfig (counsel-projectile :config (counsel-projectile-mode 1)) (helm-projectile)
     ;; Adapted From: https://codeberg.org/dr.ops/medusa/src/branch/main/medusa.org#headline-16
@@ -1762,6 +1762,19 @@
                 ("`"   nil "cancel"))))
 ;; projectile:1 ends here
 
+;; pyvenv
+
+;; Adapted from [[https://blog.fredrikmeyer.net//2020/08/26/emacs-python-venv.html][here]], [[https://emacs.stackexchange.com/users/22272/user5293][user5293's]] answer [[https://emacs.stackexchange.com/a/52673/31428][here]], [[https://emacs.stackexchange.com/users/5187/pandikunta-anand-reddy][Pandikunta Anand Reddy's]] answer [[https://emacs.stackexchange.com/a/18086/31428][here]]:
+
+
+;; [[file:README.org::*pyvenv][pyvenv:1]]
+(meq/up pyvenv :hook (after-init . pyvenv-mode)
+               :config (pyvenv-activate (meq/ued ".local" "venv"))
+               :gsetq (meq/var/python "python3")
+                      (pyvenv-post-activate-hooks (list (lambda () (setq python-shell-interpreter (concat pyvenv-virtual-env "bin/python3")))))
+                      (pyvenv-post-deactivate-hooks (list (lambda () (setq python-shell-interpreter meq/var/python)))))
+;; pyvenv:1 ends here
+
 ;; restart-emacs
 ;; :PROPERTIES:
 ;; :header-args:emacs-lisp+: :tangle yes
@@ -1770,7 +1783,7 @@
 ;; Cool [[https://github.com/iqbalansari/restart-emacs][package]] by [[https://github.com/iqbalansari][Iqbal Ansari]]!
 
 
-;; [[file:~/.emacs.d/README.org::*restart-emacs][restart-emacs:1]]
+;; [[file:README.org::*restart-emacs][restart-emacs:1]]
 (meq/up restart-emacs
     :deino (deino-restart (:color blue) "r"
             ("`" nil "cancel")
@@ -1784,7 +1797,7 @@
 ;; :END:
 
 
-;; [[file:~/.emacs.d/README.org::*ryo modal][ryo modal:1]]
+;; [[file:README.org::*ryo modal][ryo modal:1]]
 (meq/up ryo-modal
     :config ;; From: https://github.com/Kungsgeten/ryo-modal#which-key-integration
         (push '((nil . "ryo:.*:") . (nil . "")) which-key-replacement-alist))
@@ -1796,7 +1809,7 @@
 ;; :END:
 
 
-;; [[file:~/.emacs.d/README.org::*xah-fly-keys][xah-fly-keys:1]]
+;; [[file:README.org::*xah-fly-keys][xah-fly-keys:1]]
 (meq/up xah-fly-keys
     :commands xah-fly-keys
     :sorrow ("m" :deino
@@ -1812,17 +1825,24 @@
 ;; :END:
 
 
-;; [[file:~/.emacs.d/README.org::*show-paren-mode][show-paren-mode:1]]
+;; [[file:README.org::*show-paren-mode][show-paren-mode:1]]
 (setq show-paren-delay 0)
 (add-hook 'after-init-hook #'show-paren-mode)
 ;; show-paren-mode:1 ends here
+
+;; emacs-lisp
+
+
+;; [[file:README.org::*emacs-lisp][emacs-lisp:1]]
+(meq/up emacs-lisp-mode :use-package-preconfig  (lispy) (sly))
+;; emacs-lisp:1 ends here
 
 ;; titan
 
 ;; Set up my super major-mode [[https://github.com/shadowrylander/titan][titan]]:
 
 
-;; [[file:~/.emacs.d/README.org::*titan][titan:1]]
+;; [[file:README.org::*titan][titan:1]]
 (meq/up titan :gsetq (meq/var/titan-snippets-dir (meq/ued-lib "titan" "snippets")))
 ;; titan:1 ends here
 
@@ -1831,7 +1851,7 @@
 ;; For [[https://github.com/Schnouki/caddyfile-mode][caddyfiles]]:
 
 
-;; [[file:~/.emacs.d/README.org::*caddyfile-mode][caddyfile-mode:1]]
+;; [[file:README.org::*caddyfile-mode][caddyfile-mode:1]]
 (use-package caddyfile-mode :mode ("\\caddyfile\\'"))
 ;; caddyfile-mode:1 ends here
 
@@ -1840,7 +1860,7 @@
 ;; For [[https://github.com/spotify/dockerfile-mode][dockerfiles]]:
 
 
-;; [[file:~/.emacs.d/README.org::*dockerfile-mode][dockerfile-mode:1]]
+;; [[file:README.org::*dockerfile-mode][dockerfile-mode:1]]
 (use-package dockerfile-mode :mode ("\\Dockerfile\\'"))
 ;; dockerfile-mode:1 ends here
 
@@ -1849,11 +1869,12 @@
 ;; For [[https://github.com/hylang/hy-mode][hy]], plus [[https://github.com/brantou/ob-hy][ob-hy]]:
 
 
-;; [[file:~/.emacs.d/README.org::*hy-mode][hy-mode:1]]
+;; [[file:README.org::*hy-mode][hy-mode:1]]
 (use-package hy-mode
+    :commands (org-babel-execute:hy)
     :mode ("\\.hy\\'")
-    :use-package-preconfig (lispy) (sly)
-        (ob-hy :commands (org-babel-execute:hy)))
+    :gsetq (org-babel-hy-command (pyvenv-virtual-env "bin/hy"))
+    :use-package-preconfig (ob-hy :commands (org-babel-execute:hy)))
 ;; hy-mode:1 ends here
 
 ;; systemd-mode
@@ -1861,7 +1882,7 @@
 ;; For ~systemd~:
 
 
-;; [[file:~/.emacs.d/README.org::*systemd-mode][systemd-mode:1]]
+;; [[file:README.org::*systemd-mode][systemd-mode:1]]
 (use-package systemd-mode :mode ("\\.service\\'"))
 ;; systemd-mode:1 ends here
 
@@ -1870,7 +1891,7 @@
 ;; For [[https://jblevins.org/projects/markdown-mode/][markdown]]:
 
 
-;; [[file:~/.emacs.d/README.org::*markdown-mode][markdown-mode:1]]
+;; [[file:README.org::*markdown-mode][markdown-mode:1]]
 (eval `(use-package markdown-mode :mode ,(meq/titan-append-modes "markdown" "\\.md\\'")))
 ;; markdown-mode:1 ends here
 
@@ -1879,7 +1900,7 @@
 ;; For [[https://github.com/NixOS/nix-mode][nix]], with ~org-babel-execute:nix~ coming from [[https://emacs.stackexchange.com/users/20061/zeta][Zeta's]] answer [[https://emacs.stackexchange.com/a/61442][here]]:
 
 
-;; [[file:~/.emacs.d/README.org::*nix-mode][nix-mode:1]]
+;; [[file:README.org::*nix-mode][nix-mode:1]]
 (use-package nix-mode
     :commands (org-babel-execute:nix)
     :mode ("\\.nix\\'")
@@ -1905,14 +1926,14 @@
 ;; python
 
 
-;; [[file:~/.emacs.d/README.org::*python][python:1]]
+;; [[file:README.org::*python][python:1]]
 (use-package ob-python :commands (org-babel-execute:python))
 ;; python:1 ends here
 
 ;; shell
 
 
-;; [[file:~/.emacs.d/README.org::*shell][shell:1]]
+;; [[file:README.org::*shell][shell:1]]
 (use-package ob-shell :commands (org-babel-execute:shell))
 ;; shell:1 ends here
 
@@ -1921,7 +1942,7 @@
 ;; For [[https://github.com/mcandre/vimrc-mode][vimrc]]:
 
 
-;; [[file:~/.emacs.d/README.org::*vimrc-mode][vimrc-mode:1]]
+;; [[file:README.org::*vimrc-mode][vimrc-mode:1]]
 (use-package vimrc-mode
     :commands (org-babel-execute:vimrc)
     :mode "\\.vim\\(rc\\)?\\'")
@@ -1932,7 +1953,7 @@
 ;; For [[https://github.com/seanfarley/xonsh-mode][xonsh]], again with ~org-babel-execute:xonsh~ coming from [[https://emacs.stackexchange.com/users/20061/zeta][Zeta's]] answer [[https://emacs.stackexchange.com/a/61442][here]]:
 
 
-;; [[file:~/.emacs.d/README.org::*xonsh-mode][xonsh-mode:1]]
+;; [[file:README.org::*xonsh-mode][xonsh-mode:1]]
 (use-package xonsh-mode
     :commands (org-babel-execute:xonsh)
     :mode ("\\.xonshrc\\'" "\\.xsh\\'")
@@ -1953,12 +1974,32 @@
             ""))))
 ;; xonsh-mode:1 ends here
 
+;; text-mode
+
+;; For ~text~, again with ~org-babel-execute:text~ coming from [[https://emacs.stackexchange.com/users/20061/zeta][Zeta's]] answer [[https://emacs.stackexchange.com/a/61442][here]]:
+
+
+;; [[file:README.org::*text-mode][text-mode:1]]
+(use-package text-mode
+    :commands (org-babel-execute:text)
+    :mode ("\\.txt\\'")
+    :init/defun*
+        (org-babel-execute:text (body params)
+            "Return a block of text with org-babel."
+            (message "returning text source code block")
+            (let ((in-file (org-babel-temp-file "t" ".txt")))
+            (with-temp-file in-file (insert body))
+            (org-babel-eval (format "%s %s"
+                                    (if meq/var/windows "type" "cat")
+                                    (org-babel-process-file-name in-file)) ""))))
+;; text-mode:1 ends here
+
 ;; doc
 
 ;; Set up documentation super major-mode [[https://github.com/shadowrylander/doc][doc]]:
 
 
-;; [[file:~/.emacs.d/README.org::*doc][doc:1]]
+;; [[file:README.org::*doc][doc:1]]
 (use-package doc
     :commands (meq/dired-create-doc-markdown meq/dired-create-and-open-doc-markdown)
     :gsetq (meq/var/doc-snippets-dir (meq/ued-lib "doc" "snippets"))
@@ -1971,7 +2012,7 @@
 ;; Set up novel's super major-mode [[https://github.com/shadowrylander/fell][fell]]:
 
 
-;; [[file:~/.emacs.d/README.org::*fell][fell:1]]
+;; [[file:README.org::*fell][fell:1]]
 (use-package fell
     :commands (meq/dired-create-fell-markdown meq/dired-create-and-open-fell-markdown)
     :gsetq (meq/var/fell-snippets-dir (meq/ued-lib "fell" "snippets"))
@@ -1986,7 +2027,7 @@
 ;; - Here's the [[https://git.sr.ht/~bzg/org-contrib][contrib repo]]
 
 
-;; [[file:~/.emacs.d/README.org::*org-mode][org-mode:1]]
+;; [[file:README.org::*org-mode][org-mode:1]]
 (eval `(use-package org
 ;; org-mode:1 ends here
 
@@ -1996,11 +2037,11 @@
 ;; or with the extension ~.org~, are opened:
 
 
-;; [[file:~/.emacs.d/README.org::*org-mode][org-mode:2]]
+;; [[file:README.org::*org-mode][org-mode:2]]
 :mode ,(meq/titan-append-modes "org" '("\\.org\\'" . org-mode))
 ;; org-mode:2 ends here
 
-;; [[file:~/.emacs.d/README.org::*org-mode][org-mode:4]]
+;; [[file:README.org::*org-mode][org-mode:4]]
 :use-package-postconfig (org-contrib)
 ;; org-mode:4 ends here
 
@@ -2011,7 +2052,7 @@
 ;; on saving the file.
 
 
-;; [[file:~/.emacs.d/README.org::*org-mode][org-mode:5]]
+;; [[file:README.org::*org-mode][org-mode:5]]
 (ox-pandoc :upnsd-postconfig (riot :if (not (meq/item-in-cla "--anti-riot")))
     :deino (deino-ob-export-as (:color blue) "o e a"
             ("`" nil "cancel")
@@ -2045,7 +2086,7 @@
 ;; I have advised the ~org-pandoc-export~ function to allow derived modes of ~org-mode~ as well, to account for my super major-modes, such as [[https://github.com/shadowrylander/titan][~titan~]], [[https://github.com/shadowrylander/fell][~fell~]], [[https://github.com/shadowrylander/doc][~doc~]], etc.
 
 
-;; [[file:~/.emacs.d/README.org::*org-mode][org-mode:6]]
+;; [[file:README.org::*org-mode][org-mode:6]]
 :config/defun* (meq/org-pandoc-export-advice (format a s v b e &optional buf-or-open)
     "General interface for Pandoc Export.
     If BUF-OR-OPEN is nil, output to file.  0, then open the file.
@@ -2066,7 +2107,7 @@
 ;; Set up [[https://github.com/joaotavora/yasnippet][yasnippet]] by [[https://github.com/joaotavora][João Távora]], with the ~deino~ coming from [[https://github.com/abo-abo/hydra/wiki/YASnippet][here]]:
 
 
-;; [[file:~/.emacs.d/README.org::*org-mode][org-mode:7]]
+;; [[file:README.org::*org-mode][org-mode:7]]
 (yasnippet :config (add-to-list 'yas-snippet-dirs (meq/ued "snippets") t)
     :deino (deino-yasnippet (:color blue :hint nil) "y"
         "
@@ -2091,16 +2132,26 @@
         ("a" yas-reload-all)))
 ;; org-mode:7 ends here
 
-;; [[file:~/.emacs.d/README.org::*org-mode][org-mode:8]]
-:config (load (meq/ued-settings "org-tangle-functions"))
+;; [[file:README.org::*org-mode][org-mode:8]]
+:config (load (meq/ued-settings "org-export-functions"))
+        ;; (setq toggle-debug-on-error t)
     ;; (setq auto-mode-alist (append auto-mode-alist (meq/titan-append-modes org ("\\.org\\'" . org-mode))))
+;; org-mode:8 ends here
+
+;; [[file:README.org::*org-mode][org-mode:9]]
+(defun meq/org-html-export-to-as-html (func &rest args) (let (org-confirm-babel-evaluate) (apply func args)))
+(advice-add #'org-html-export-to-html :around #'meq/org-html-export-to-as-html)
+(advice-add #'org-html-export-as-html :around #'meq/org-html-export-to-as-html)
+;; org-mode:9 ends here
+
+;; [[file:README.org::*org-mode][org-mode:10]]
 :meta (org-mode-map)
 :meta-rename (org-mode-map "ESC" "org-metadir")
 :minoru (org-src-mode deino-edit-spc (:color blue) "o s"
         ("`" nil "cancel")
         ("i" meq/narrow-or-widen-dwim "narrow")
         ("x" org-edit-special "org edit special")
-;; org-mode:8 ends here
+;; org-mode:10 ends here
 
 
 
@@ -2110,13 +2161,13 @@
 ;; - ~org-edit-src-abort~ on [[https://github.com/bzg/org-mode/blob/main/lisp/org-src.el#L1207][Line 1207]]
 
 
-;; [[file:~/.emacs.d/README.org::*org-mode][org-mode:9]]
+;; [[file:README.org::*org-mode][org-mode:11]]
 ("s" org-edit-src-save "save")
 ("e" org-edit-src-exit "exit")
 ("a" org-edit-src-abort "abort"))
-;; org-mode:9 ends here
+;; org-mode:11 ends here
 
-;; [[file:~/.emacs.d/README.org::*org-mode][org-mode:10]]
+;; [[file:README.org::*org-mode][org-mode:12]]
 :uru (org-mode nil deino-org (:color blue) "o o"
         "A deino for org-mode!"
         ("`" nil "cancel")
@@ -2135,18 +2186,17 @@
     (org-roam-directory org-directory)
     (org-descriptive-links nil)
     (org-startup-folded t)
-    (org-src-fontify-natively t)
     ;; (org-src-window-setup 'current-window)
     ;; (org-cycle-emulate-tab 'whitestart)
     (org-support-shift-select t)
     ;; (org-src-tab-acts-natively t)
-;; org-mode:10 ends here
+;; org-mode:12 ends here
 
 
 
 ;; Upon exiting ~org-src-mode~ I don't want any indentation added to my code blocks, so I use [[https://emacs.stackexchange.com/users/29861/doltes][doltes's]] answer [[https://emacs.stackexchange.com/a/60638/31428][here]]:
 
 
-;; [[file:~/.emacs.d/README.org::*org-mode][org-mode:11]]
+;; [[file:README.org::*org-mode][org-mode:13]]
 (org-edit-src-content-indentation 0)))
-;; org-mode:11 ends here
+;; org-mode:13 ends here

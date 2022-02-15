@@ -1992,6 +1992,21 @@ Adapted From: https://sam217pa.github.io/2016/09/23/keybindings-strategies-in-em
                 ("`"   nil "cancel"))))
 #+end_src
 
+*** pyvenv
+
+Adapted from [[https://blog.fredrikmeyer.net//2020/08/26/emacs-python-venv.html][here]], [[https://emacs.stackexchange.com/users/22272/user5293][user5293's]] answer [[https://emacs.stackexchange.com/a/52673/31428][here]], [[https://emacs.stackexchange.com/users/5187/pandikunta-anand-reddy][Pandikunta Anand Reddy's]] answer [[https://emacs.stackexchange.com/a/18086/31428][here]]:
+
+#+begin_src emacs-lisp
+(meq/up pyvenv :hook (after-init . pyvenv-mode)
+               :config (pyvenv-activate (meq/ued ".local" "venv"))
+               :gsetq (meq/var/python "python3")
+                      (meq/var/hy "hy")
+                      (pyvenv-post-activate-hooks (list (lambda () (setq python-shell-interpreter (concat pyvenv-virtual-env "bin/python3")
+                                                                         org-babel-hy-command (pyvenv-virtual-env "bin/hy")))))
+                      (pyvenv-post-deactivate-hooks (list (lambda () (setq python-shell-interpreter meq/var/python
+                                                                           org-babel-hy-command meq/var/hy)))))
+#+end_src
+
 *** restart-emacs
 :PROPERTIES:
 :header-args:emacs-lisp+: :tangle yes
@@ -2065,6 +2080,12 @@ Cool [[https://github.com/iqbalansari/restart-emacs][package]] by [[https://gith
 :header-args:emacs-lisp+: :tangle yes
 :END:
 
+**** emacs-lisp
+
+#+begin_src emacs-lisp
+(meq/up emacs-lisp-mode :use-package-preconfig  (lispy) (sly))
+#+end_src
+
 **** titan
 
 Set up my super major-mode [[https://github.com/shadowrylander/titan][titan]]:
@@ -2095,9 +2116,9 @@ For [[https://github.com/hylang/hy-mode][hy]], plus [[https://github.com/brantou
 
 #+begin_src emacs-lisp
 (use-package hy-mode
+    :commands (org-babel-execute:hy)
     :mode ("\\.hy\\'")
-    :use-package-preconfig (lispy) (sly)
-        (ob-hy :commands (org-babel-execute:hy)))
+    :use-package-preconfig (ob-hy :commands (org-babel-execute:hy)))
 #+end_src
 
 **** systemd-mode
@@ -2188,6 +2209,25 @@ For [[https://github.com/seanfarley/xonsh-mode][xonsh]], again with ~org-babel-e
                     (if (eq args nil) "" args)
                     (org-babel-process-file-name in-file))
             ""))))
+#+end_src
+
+**** text-mode
+
+For ~text~, again with ~org-babel-execute:text~ coming from [[https://emacs.stackexchange.com/users/20061/zeta][Zeta's]] answer [[https://emacs.stackexchange.com/a/61442][here]]:
+
+#+begin_src emacs-lisp
+(use-package text-mode
+    :commands (org-babel-execute:text)
+    :mode ("\\.txt\\'")
+    :init/defun*
+        (org-babel-execute:text (body params)
+            "Return a block of text with org-babel."
+            (message "returning text source code block")
+            (let ((in-file (org-babel-temp-file "t" ".txt")))
+            (with-temp-file in-file (insert body))
+            (org-babel-eval (format "%s %s"
+                                    (if meq/var/windows "type" "cat")
+                                    (org-babel-process-file-name in-file)) ""))))
 #+end_src
 
 **** doc
@@ -2320,8 +2360,18 @@ Set up [[https://github.com/joaotavora/yasnippet][yasnippet]] by [[https://githu
 #+end_src
 
 #+begin_src emacs-lisp
-    :config (load (meq/ued-settings "org-tangle-functions"))
+    :config (load (meq/ued-settings "org-export-functions"))
+            ;; (setq toggle-debug-on-error t)
         ;; (setq auto-mode-alist (append auto-mode-alist (meq/titan-append-modes org ("\\.org\\'" . org-mode))))
+#+end_src
+
+#+begin_src emacs-lisp
+            (defun meq/org-html-export-to-as-html (func &rest args) (let (org-confirm-babel-evaluate) (apply func args)))
+            (advice-add #'org-html-export-to-html :around #'meq/org-html-export-to-as-html)
+            (advice-add #'org-html-export-as-html :around #'meq/org-html-export-to-as-html)
+#+end_src
+
+#+begin_src emacs-lisp
     :meta (org-mode-map)
     :meta-rename (org-mode-map "ESC" "org-metadir")
     :minoru (org-src-mode deino-edit-spc (:color blue) "o s"
@@ -2360,7 +2410,6 @@ The following commands are from [[https://github.com/bzg/org-mode/blob/main/lisp
         (org-roam-directory org-directory)
         (org-descriptive-links nil)
         (org-startup-folded t)
-        (org-src-fontify-natively t)
         ;; (org-src-window-setup 'current-window)
         ;; (org-cycle-emulate-tab 'whitestart)
         (org-support-shift-select t)
