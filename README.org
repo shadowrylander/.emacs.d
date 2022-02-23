@@ -311,7 +311,7 @@ Then create a shell tangle function based on the above:
 
 #+begin_src emacs-lisp
 (defun meq/call-tangle (file)
-    (setv tangle-script (concat user-emacs-directory "settings" meq/var/slash "org-tangle.sh"))
+    (setq tangle-script (concat user-emacs-directory "settings" meq/var/slash "org-tangle.sh"))
     (meq/call "chmod" "*making-tangle-script-executable*" "+x" tangle-script)
     (meq/call tangle-script "*literally-configuring*" file))
 #+end_src
@@ -2405,7 +2405,9 @@ The following commands are from [[https://github.com/bzg/org-mode/blob/main/lisp
             ("s" org-edit-special "org edit special")
             ("e" deino-ob-export/body "export")
             ("g" meq/go-to-parent "go to parent")
-            ("l" org-toggle-link-display "toggle link display"))
+            ("l" org-toggle-link-display "toggle link display")
+            ("c" meq/org-custom-id-get-create "create uuid for heading CUSTOM_ID property")
+            ("i" org-id-get-create "create uuid for heading ID property"))
     :gsetq
         ;; I'm using ox-pandoc
         ;; (org-export-backends '(md gfm latex odt org))

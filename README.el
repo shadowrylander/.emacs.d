@@ -2180,7 +2180,9 @@
         ("s" org-edit-special "org edit special")
         ("e" deino-ob-export/body "export")
         ("g" meq/go-to-parent "go to parent")
-        ("l" org-toggle-link-display "toggle link display"))
+        ("l" org-toggle-link-display "toggle link display")
+        ("c" meq/org-custom-id-get-create "create uuid for heading CUSTOM_ID property")
+        ("i" org-id-get-create "create uuid for heading ID property"))
 :gsetq
     ;; I'm using ox-pandoc
     ;; (org-export-backends '(md gfm latex odt org))
