@@ -310,7 +310,10 @@ Create a version of [[https://github.com/emacscollective/borg/blob/master/borg.e
 Then create a shell tangle function based on the above:
 
 #+begin_src emacs-lisp
-(defun meq/call-tangle (file) (meq/call (concat user-emacs-directory "settings" meq/var/slash "org-tangle.sh") "*literally-configuring*" file))
+(defun meq/call-tangle (file)
+    (setv tangle-script (concat user-emacs-directory "settings" meq/var/slash "org-tangle.sh"))
+    (meq/call "chmod" "*making-tangle-script-executable*" "+x" tangle-script)
+    (meq/call tangle-script "*literally-configuring*" file))
 #+end_src
 
 Modify [[https://code.orgmode.org/bzg/org-mode/src/master/lisp/org.el#L222][~org-babel-load-file~]] to use the above function instead:

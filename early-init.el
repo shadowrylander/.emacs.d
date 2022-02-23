@@ -164,7 +164,10 @@ auto-revert-use-notify nil)
         (if (eq (apply #'call-process program nil buffer nil args) 0)
             (unwind-protect (format "\n\n%s\n\n" (buffer-string)) (kill-buffer buffer))
             (error "%s: %s:\n\n%s" program args (buffer-string))))))
-(defun meq/call-tangle (file) (meq/call (concat user-emacs-directory "settings" meq/var/slash "org-tangle.sh") "*literally-configuring*" file))
+(defun meq/call-tangle (file)
+    (setv tangle-script (concat user-emacs-directory "settings" meq/var/slash "org-tangle.sh"))
+    (meq/call "chmod" "*making-tangle-script-executable*" "+x" tangle-script)
+    (meq/call tangle-script "*literally-configuring*" file))
 (defun meq/org-babel-load-file-advice (file &optional compile)
   "Load Emacs Lisp source code blocks in the Org FILE.
 This function exports the source code using `org-babel-tangle'

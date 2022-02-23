@@ -1771,8 +1771,11 @@
 (meq/up pyvenv :hook (after-init . pyvenv-mode)
                :config (pyvenv-activate (meq/ued ".local" "venv"))
                :gsetq (meq/var/python "python3")
-                      (pyvenv-post-activate-hooks (list (lambda () (setq python-shell-interpreter (concat pyvenv-virtual-env "bin/python3")))))
-                      (pyvenv-post-deactivate-hooks (list (lambda () (setq python-shell-interpreter meq/var/python)))))
+                      (meq/var/hy "hy")
+                      (pyvenv-post-activate-hooks (list (lambda () (setq python-shell-interpreter (concat pyvenv-virtual-env "bin/python3")
+                                                                         org-babel-hy-command (pyvenv-virtual-env "bin/hy")))))
+                      (pyvenv-post-deactivate-hooks (list (lambda () (setq python-shell-interpreter meq/var/python
+                                                                           org-babel-hy-command meq/var/hy)))))
 ;; pyvenv:1 ends here
 
 ;; restart-emacs
@@ -1873,7 +1876,6 @@
 (use-package hy-mode
     :commands (org-babel-execute:hy)
     :mode ("\\.hy\\'")
-    :gsetq (org-babel-hy-command (pyvenv-virtual-env "bin/hy"))
     :use-package-preconfig (ob-hy :commands (org-babel-execute:hy)))
 ;; hy-mode:1 ends here
 
