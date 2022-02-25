@@ -433,6 +433,10 @@
         branch = master
         path = lib/no-littering
         url = https://github.com/emacscollective/no-littering.git
+[submodule "ob-hy"]
+        path = lib/ob-hy
+        url = https://github.com/allison-casey/ob-hy.git
+        branch = master
 [submodule "objed"]
         shallow = true
         branch = master
@@ -474,6 +478,9 @@
         branch = master
         path = lib/org-contrib
         url = https://git.sr.ht/~bzg/org-contrib
+[submodule "orgstrap"]
+        path = lib/orgstrap
+        url = https://github.com/tgbugs/orgstrap.git
 [submodule "ox-gfm"]
         shallow = true
         branch = master
@@ -529,6 +536,11 @@
         branch = master
         path = lib/projectile
         url = https://github.com/bbatsov/projectile.git
+[submodule "pyvenv"]
+        shallow = true
+        branch = master
+        path = lib/pyvenv
+        url = https://github.com/jorgenschaefer/pyvenv.git
 [submodule "quelpa"]
         shallow = true
         branch = master
@@ -589,6 +601,10 @@
         branch = master
         path = lib/s
         url = https://github.com/magnars/s.el.git
+[submodule "settings"]
+        path = settings
+        url = https://github.com/sylvorg/settings.git
+        branch = main
 [submodule "shrink-path"]
         shallow = true
         branch = master
@@ -754,16 +770,3 @@
         branch = master
         path = lib/zoxide
         url = https://gitlab.com/Vonfry/zoxide.el.git
-[submodule "pyvenv"]
-        shallow = true
-        branch = master
-        path = lib/pyvenv
-        url = https://github.com/jorgenschaefer/pyvenv.git
-[submodule "ob-hy"]
-	path = lib/ob-hy
-	url = https://github.com/allison-casey/ob-hy.git
-	branch = master
-[submodule "settings"]
-	path = settings
-	url = https://github.com/sylvorg/settings.git
-	branch = main

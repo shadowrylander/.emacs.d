@@ -96,6 +96,18 @@ then also activate the clone using `borg-activate'."
             result))
       (funcall func barg))))
 (advice-add #'borg-drones :around #'meq/borg-drones-advice)
+(defun meq/borg--maybe-absorb-gitdir (pkg)
+  (let* ((ver (nth 2 (split-string (car (process-lines "git" "version")) " ")))
+         (ver (and (string-match "\\`[0-9]+\\(\\.[0-9]+\\)*" ver)
+                   (match-string 0 ver))))
+    (if (version< ver "2.12.0")
+        (let ((default-directory (borg-worktree pkg))
+              (gitdir (borg-gitdir pkg)))
+          (make-directory gitdir t)
+          (borg--call-git pkg "init" "--separate-git-dir" gitdir)
+          (borg--link-gitdir pkg))
+      (borg--call-git pkg "-C" borg-top-level-directory "submodule" "absorbgitdirs" "--" (borg-worktree pkg)))))
+(advice-add #'borg--maybe-absorb-gitdir :override #'meq/borg--maybe-absorb-gitdir)
 (defun meq/borg-assimilate-advice (package url &optional partially)
   "Assimilate the package named PACKAGE from URL.
 If `epkg' is available, then only read the name of the package
@@ -122,8 +134,8 @@ build and activate the drone."
         (or
           (borg-get package "path")
           (concat (string-remove-prefix borg-user-emacs-directory borg-drones-directory) meq/var/slash package)))
-      (borg--sort-submodule-sections ".gitmodules")
-      (borg--call-git package "add" ".gitmodules")
+      (borg--sort-submodule-sections (concat borg-top-level-directory ".gitmodules"))
+      (borg--call-git package "-C" borg-top-level-directory "add")
       (borg--maybe-absorb-gitdir package))
   (unless partially
     (borg-build package)

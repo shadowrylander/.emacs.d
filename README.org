@@ -189,6 +189,23 @@ When assimilating packages, return packages which have not been assimilated yet;
 (advice-add #'borg-drones :around #'meq/borg-drones-advice)
 #+end_src
 
+
+
+#+begin_src emacs-lisp
+(defun meq/borg--maybe-absorb-gitdir (pkg)
+  (let* ((ver (nth 2 (split-string (car (process-lines "git" "version")) " ")))
+         (ver (and (string-match "\\`[0-9]+\\(\\.[0-9]+\\)*" ver)
+                   (match-string 0 ver))))
+    (if (version< ver "2.12.0")
+        (let ((default-directory (borg-worktree pkg))
+              (gitdir (borg-gitdir pkg)))
+          (make-directory gitdir t)
+          (borg--call-git pkg "init" "--separate-git-dir" gitdir)
+          (borg--link-gitdir pkg))
+      (borg--call-git pkg "-C" borg-top-level-directory "submodule" "absorbgitdirs" "--" (borg-worktree pkg)))))
+(advice-add #'borg--maybe-absorb-gitdir :override #'meq/borg--maybe-absorb-gitdir)
+#+end_src
+
 Assimilate packages by ~submodule add~ing them with a depth of 1:
 
 #+begin_src emacs-lisp
@@ -218,8 +235,8 @@ build and activate the drone."
         (or
           (borg-get package "path")
           (concat (string-remove-prefix borg-user-emacs-directory borg-drones-directory) meq/var/slash package)))
-      (borg--sort-submodule-sections ".gitmodules")
-      (borg--call-git package "add" ".gitmodules")
+      (borg--sort-submodule-sections (concat borg-top-level-directory ".gitmodules"))
+      (borg--call-git package "-C" borg-top-level-directory "add")
       (borg--maybe-absorb-gitdir package))
   (unless partially
     (borg-build package)
