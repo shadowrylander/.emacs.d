@@ -178,7 +178,10 @@ auto-revert-use-notify nil)
             (error "%s: %s:\n\n%s" program args (buffer-string))))))
 (defun meq/call-tangle (file)
     (setq tangle-script (concat user-emacs-directory "settings" meq/var/slash "org-tangle.sh"))
-    (meq/call "chmod" "*making-tangle-script-executable*" "+x" tangle-script)
+
+    ;; TODO
+    ;; (meq/call "chmod" "*making-tangle-script-executable*" "+x" tangle-script)
+
     (meq/call tangle-script "*literally-configuring*" file))
 (defun meq/org-babel-load-file-advice (file &optional compile)
   "Load Emacs Lisp source code blocks in the Org FILE.

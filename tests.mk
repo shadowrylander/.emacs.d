@@ -12,14 +12,12 @@ clean:
 
 pre-test: clean-all subinit
 
-init: subinit
+super-subinit: subinit
 |git -C $(mkfileDir) submodule update --init --depth 1 --recursive --remote --force
-|$(cleanAll)
-|echo > $(mkfileDir)/first-run-done
 
-ylv-init: subinit
-|$(cleanAll)
-|echo > $(mkfileDir)/first-run-done
+init: super-subinit clean-all tangle
+
+soft-init: subinit clean-all tangle
 
 no-config-test: pre-test
 |emacs -Q

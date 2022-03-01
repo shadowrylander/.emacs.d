@@ -189,7 +189,7 @@ When assimilating packages, return packages which have not been assimilated yet;
 (advice-add #'borg-drones :around #'meq/borg-drones-advice)
 #+end_src
 
-
+Use ~submodule absorbgitdirs~ relative to borg's top level directory:
 
 #+begin_src emacs-lisp
 (defun meq/borg--maybe-absorb-gitdir (pkg)
@@ -329,7 +329,10 @@ Then create a shell tangle function based on the above:
 #+begin_src emacs-lisp
 (defun meq/call-tangle (file)
     (setq tangle-script (concat user-emacs-directory "settings" meq/var/slash "org-tangle.sh"))
-    (meq/call "chmod" "*making-tangle-script-executable*" "+x" tangle-script)
+
+    ;; TODO
+    ;; (meq/call "chmod" "*making-tangle-script-executable*" "+x" tangle-script)
+
     (meq/call tangle-script "*literally-configuring*" file))
 #+end_src
 
@@ -2022,7 +2025,7 @@ Adapted from [[https://blog.fredrikmeyer.net//2020/08/26/emacs-python-venv.html]
                :gsetq (meq/var/python "python3")
                       (meq/var/hy "hy")
                       (pyvenv-post-activate-hooks (list (lambda () (setq python-shell-interpreter (concat pyvenv-virtual-env "bin/python3")
-                                                                         org-babel-hy-command (pyvenv-virtual-env "bin/hy")))))
+                                                                         org-babel-hy-command (concat pyvenv-virtual-env "bin/hy")))))
                       (pyvenv-post-deactivate-hooks (list (lambda () (setq python-shell-interpreter meq/var/python
                                                                            org-babel-hy-command meq/var/hy)))))
 #+end_src

@@ -1769,11 +1769,11 @@
 
 ;; [[file:README.org::*pyvenv][pyvenv:1]]
 (meq/up pyvenv :hook (after-init . pyvenv-mode)
-               :config (pyvenv-activate (meq/ued ".local" "venv"))
+               :config (pyvenv-activate (meq/ued ".local" "venv")) (advice-add #'org-babel-execute-buffer :before #'(lambda (&rest args) (message python-shell-interpreter)))
                :gsetq (meq/var/python "python3")
                       (meq/var/hy "hy")
                       (pyvenv-post-activate-hooks (list (lambda () (setq python-shell-interpreter (concat pyvenv-virtual-env "bin/python3")
-                                                                         org-babel-hy-command (pyvenv-virtual-env "bin/hy")))))
+                                                                         org-babel-hy-command (concat pyvenv-virtual-env "bin/hy")))))
                       (pyvenv-post-deactivate-hooks (list (lambda () (setq python-shell-interpreter meq/var/python
                                                                            org-babel-hy-command meq/var/hy)))))
 ;; pyvenv:1 ends here
