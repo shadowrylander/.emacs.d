@@ -281,74 +281,27 @@ This is taken from [[https://functor.tokyo/blog/2018-02-20-show-packages-install
                                                                     pkgs))))
                                 (mapcar #'car meq/var/package-managers))
                             (list (list :pipx (meq/get-pipx-packages)))))
-        :pipx (list :apps '(black black-macchiato
-                            poetry ;; pyls-black
+        :pipx (list :apps '(black
                             (jupyterlab jupyter-lab))
                     :libs (let* ((hy '(("https://github.com/hylang/hy/archive/master/hy.tar.gz" hy))))
                             (list :xonsh (-flatten-n 1 (list hy)) :hy (-flatten-n 1 (list hy)))))
-        :pkg '(gitea libffi libzmq llvm python rust)
+        :pkg '(python)
         :pip '(pipx)
-        :base (-flatten-n 1 (list '(asdf-vm assh autojump autossh
-                                    bat bc byobu
-                                    cascadia-code coreutils ctop curl
-                                    (ddar ignore-this) direnv diskus dos2unix duf
-                                    elvish entr exa
-                                    fasd fd fff ffmpeg figlet filet fish fzf
-                                    gcc git gitoxide git-crypt git-fire git-lfs glances gotop
-                                    inetutils
+        :base (-flatten-n 1 (list '((ddar ignore-this)
                                     (jupyter jupyter-notebook)
-                                    libffi lolcat lorri
-                                    micro mkpasswd monkeysphere mosh mtr
-                                    neo-cowsay neovim niv nix-direnv nnn nodePackages.prettier nox
-                                    pandoc par2cmdline peru pfetch python39Packages.pipx pypy python310
-                                    ranger (ripgrep rg) rsync
-                                    sd shellcheck (silver-searcher ag) spacevim starship sysstat
-                                    thefuck tmux tmuxp tree
-                                    uutils-coreutils
-                                    vim
-                                    wget wtf
-                                    xfce.thunar xz
-                                    zenith zsh)
+                                    (ripgrep rg)
+                                    (silver-searcher ag)
+                                    zsh)
                                 (mapcar #'(lambda (pkg) (interactive)
                                             (meq/concat-pkg "gitAndTools." pkg))
                                     '(git-extras git-hub gitflow gh hub lab))))
-        :extras '(acpilight
-                    btrfs-progs ;; bcachefs-tools
-                    copyq
-                    darling-dmg
-                    exfat
-                    gptfdisk
-                    ntfs3g nixos-shell
-                    parted pmutils
-                    snapper
-                    libguestfs
-                    ;; thermald
-                    udftools
-                    vagrant
-                    win-qemu
-                    xclip
-                    yubico-pam yubico-piv-tool yubikey-manager yubikey-agent
-                    yubikey-personalization yubioath-desktop)
-        :not-in-terminal '(alacritty atom
-                            firefox
-                            gnome3.gnome-disk-utility gparted
-                            keybase-gui kitty
-                            libsForQt5.qtstyleplugin-kvantum
-                            shadowfox
-                            vlc vscode
-                            ;; woeusb
-                            xclip
-                            yubikey-manager-qt yubikey-personalization-gui)
-        :not-minimal (-flatten-n 1 (list '(extra-container
-                                            ;; haskellPackages.hocker
-                                            refind)
+        :extras '()
+        :not-in-terminal '()
+        :not-minimal (-flatten-n 1 (list '()
                                         (mapcar #'(lambda (pkg) (interactive)
                                                     (meq/concat-pkg "nix-prefetch-" pkg))
                                             '(github docker scripts))))
-        :neither '(gnome3.gnome-boxes gnome3.gnome-tweaks
-                    google-chrome google-chrome-beta google-chrome-dev
-                    vivaldi vivaldi-ffmpeg-codecs vivaldi-widevine
-                    vscodium)))
+        :neither '()))
 (defun meq/gfp (pkgs) (cl-getf meq/var/packages pkgs))
 #+end_src
 
