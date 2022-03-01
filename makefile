@@ -5,7 +5,11 @@
 mkfilePath := $(abspath $(lastword $(MAKEFILE_LIST)))
 mkfileDir := $(dir $(mkfilePath))
 
+<<<<<<< HEAD
 pre-init:
+=======
+init:
+>>>>>>> 6cce877568cfdc57bc518e92f55fd82a5c987a06
 |-fd . $(mkfileDir) -HIt d -t e -x rm -rf
 
 tangle-setup:
@@ -22,7 +26,13 @@ tangle: tangle-setup
     -HIe sh\
     -x chmod +x
 
+<<<<<<< HEAD
 subinit: pre-init
+=======
+subinit: init
+|-git clone --depth 1 https://github.com/emacsmirror/epkgs.git $(mkfileDir)/epkgs
+|-git clone --depth 1 https://github.com/emacsmirror/epkgs.git $(mkfileDir)/var/epkgs
+>>>>>>> 6cce877568cfdc57bc518e92f55fd82a5c987a06
 |git -C $(mkfileDir) submodule sync --recursive
 # |git -C $(mkfileDir) submodule foreach 'git -C $$toplevel config submodule.$$name.ignore all'
 

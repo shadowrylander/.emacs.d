@@ -2,7 +2,10 @@
 .DEFAULT_GOAL := emacs
 test := -emacs --bg-daemon=test
 killTest := -emacsclient -s test -e "(kill-emacs)"
+<<<<<<< HEAD
 cleanAll := -fd . $(mkfileDir) -HIe elc -x rm
+=======
+>>>>>>> 6cce877568cfdc57bc518e92f55fd82a5c987a06
 
 clean-all:
 |$(cleanAll)
@@ -12,6 +15,7 @@ clean:
 
 pre-test: clean-all subinit
 
+<<<<<<< HEAD
 super-subinit: subinit
 |git -C $(mkfileDir) submodule update --init --depth 1 --recursive --remote --force
 
@@ -19,6 +23,8 @@ init: super-subinit clean-all tangle
 
 soft-init: subinit clean-all tangle
 
+=======
+>>>>>>> 6cce877568cfdc57bc518e92f55fd82a5c987a06
 no-config-test: pre-test
 |emacs -Q
 

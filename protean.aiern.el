@@ -206,6 +206,268 @@
 ;; EXWM:14 ends here
 
 ;; Bootstrap
+<<<<<<< HEAD
+=======
+;; :PROPERTIES:
+;; :header-args:emacs-lisp+: :tangle yes
+;; :END:
+
+
+;; [[file:protean.aiern.org::*Bootstrap][Bootstrap:1]]
+(when (or meq/var/bootstrap meq/var/force-bootstrap)
+;; Bootstrap:1 ends here
+
+;; [[file:protean.aiern.org::*Bootstrap][Bootstrap:2]]
+(defvar meq/var/not-in-terminal (meq/item-in-cla "--not-in-terminal"))
+(defvar meq/var/not-minimal (meq/item-in-cla "--not-minimal"))
+(defvar meq/var/neither (meq/item-in-cla "--neither"))
+;; Bootstrap:2 ends here
+
+;; [[file:protean.aiern.org::*Bootstrap][Bootstrap:3]]
+(defvar meq/var/nix-env-channel (meq/if-two-items-in-cla
+                                    "--channel"
+                                    t
+                                    ;; (if meq/var/nixos "nixos" "nixpkgs")
+                                    "master"))
+(defvar meq/var/package-managers
+    `(("pkg" . (:manager "pkg" :install "install" :query "list-installed" :separator "/"))
+        ("nix-env" . (:manager "nix-env" :install ("--install" "--attr") :query "--query" :separator "-" :channel ,meq/var/nix-env-channel))
+        ("pip" . (:manager "pip" :install "install" :query "list --pre" :separator " "))))
+(defvar meq/var/default-package-manager (if meq/var/phone "pkg" "nix-env"))
+(defun meq/pm-details (pm detail) (cl-getf (cdr (assoc pm meq/var/package-managers)) detail))
+;; Bootstrap:3 ends here
+
+
+
+;; This is taken from [[https://functor.tokyo/blog/2018-02-20-show-packages-installed-on-nixos][here]]:
+
+
+;; [[file:protean.aiern.org::*Bootstrap][Bootstrap:4]]
+(defun meq/get-packages (pm)
+    (mapcar #'(lambda (pkg) (interactive) (string-trim (string-join
+                                    (butlast (split-string pkg (meq/pm-details pm :separator)))
+                                    (meq/pm-details pm :separator))))
+    (butlast (split-string (shell-command-to-string (string-join (list (meq/pm-details pm :manager)
+                                                        (meq/pm-details pm :query)) " ")) "\n"))))
+;; Bootstrap:4 ends here
+
+;; [[file:protean.aiern.org::*Bootstrap][Bootstrap:5]]
+(require 'a)
+(defun meq/get-pipx-packages nil
+    (let* ((pipx-list (shell-command-to-string "pipx list --json"))
+            (json-array-type 'list)
+            (json-false) (json-null)
+            (pipx-alist (ignore-errors (json-parse-string pipx-list :object-type 'alist)))
+            (venvs (when pipx-alist (cdr (assoc 'venvs pipx-alist))))
+            (apps (when venvs (a-keys venvs)))
+            (get-vaxed (lambda (app) (interactive) (when venvs
+                (a-keys (cdr (assoc 'injected_packages (cdr (assoc 'metadata (cdr (assoc app venvs)))))))))))
+        (list :apps (when apps (mapcar #'symbol-name apps))
+            :libs (when apps (-flatten-n 1 (mapcar #'(lambda (app) (interactive) (list
+                                    (meq/inconcat ":" (symbol-name app))
+                                    (mapcar #'symbol-name (funcall get-vaxed app)))) apps))))))
+;; Bootstrap:5 ends here
+
+;; [[file:protean.aiern.org::*Bootstrap][Bootstrap:6]]
+(defun meq/concat-pkg (attr pkg*)
+    (let* ((pkg-is-list (listp pkg*)) (pkg (meq/rs pkg* t)))
+        (if pkg-is-list `(,(concat attr pkg) ,@pkg*) (concat attr pkg))))
+
+(defvar meq/var/packages
+    (list :installed (-flatten-n 2 (list (mapcar #'(lambda (pm) (interactive)
+                                                        (let* ((pkgs (meq/get-packages pm)))
+                                                            (list
+                                                                (meq/inconcat ":" pm)
+                                                                (if (string-prefix-p "pip" pm)
+                                                                    (nthcdr 2 pkgs)
+                                                                    pkgs))))
+                                (mapcar #'car meq/var/package-managers))
+                            (list (list :pipx (meq/get-pipx-packages)))))
+        :pipx (list :apps '(black black-macchiato
+                            poetry ;; pyls-black
+                            (jupyterlab jupyter-lab))
+                    :libs (let* ((hy '(("https://github.com/hylang/hy/archive/master/hy.tar.gz" hy))))
+                            (list :xonsh (-flatten-n 1 (list hy)) :hy (-flatten-n 1 (list hy)))))
+        :pkg '(gitea libffi libzmq llvm python rust)
+        :pip '(pipx)
+        :base (-flatten-n 1 (list '(asdf-vm assh autojump autossh
+                                    bat bc byobu
+                                    cascadia-code coreutils ctop curl
+                                    (ddar ignore-this) direnv diskus dos2unix duf
+                                    elvish entr exa
+                                    fasd fd fff ffmpeg figlet filet fish fzf
+                                    gcc git gitoxide git-crypt git-fire git-lfs glances gotop
+                                    inetutils
+                                    (jupyter jupyter-notebook)
+                                    libffi lolcat lorri
+                                    micro mkpasswd monkeysphere mosh mtr
+                                    neo-cowsay neovim niv nix-direnv nnn nodePackages.prettier nox
+                                    pandoc par2cmdline peru pfetch python39Packages.pipx pypy python310
+                                    ranger (ripgrep rg) rsync
+                                    sd shellcheck (silver-searcher ag) spacevim starship sysstat
+                                    thefuck tmux tmuxp tree
+                                    uutils-coreutils
+                                    vim
+                                    wget wtf
+                                    xfce.thunar xz
+                                    zenith zsh)
+                                (mapcar #'(lambda (pkg) (interactive)
+                                            (meq/concat-pkg "gitAndTools." pkg))
+                                    '(git-extras git-hub gitflow gh hub lab))))
+        :extras '(acpilight
+                    btrfs-progs ;; bcachefs-tools
+                    copyq
+                    darling-dmg
+                    exfat
+                    gptfdisk
+                    ntfs3g nixos-shell
+                    parted pmutils
+                    snapper
+                    libguestfs
+                    ;; thermald
+                    udftools
+                    vagrant
+                    win-qemu
+                    xclip
+                    yubico-pam yubico-piv-tool yubikey-manager yubikey-agent
+                    yubikey-personalization yubioath-desktop)
+        :not-in-terminal '(alacritty atom
+                            firefox
+                            gnome3.gnome-disk-utility gparted
+                            keybase-gui kitty
+                            libsForQt5.qtstyleplugin-kvantum
+                            shadowfox
+                            vlc vscode
+                            ;; woeusb
+                            xclip
+                            yubikey-manager-qt yubikey-personalization-gui)
+        :not-minimal (-flatten-n 1 (list '(extra-container
+                                            ;; haskellPackages.hocker
+                                            refind)
+                                        (mapcar #'(lambda (pkg) (interactive)
+                                                    (meq/concat-pkg "nix-prefetch-" pkg))
+                                            '(github docker scripts))))
+        :neither '(gnome3.gnome-boxes gnome3.gnome-tweaks
+                    google-chrome google-chrome-beta google-chrome-dev
+                    vivaldi vivaldi-ffmpeg-codecs vivaldi-widevine
+                    vscodium)))
+(defun meq/gfp (pkgs) (cl-getf meq/var/packages pkgs))
+;; Bootstrap:6 ends here
+
+
+
+;; # TODO: Vastly simplify this monstrosity
+
+
+;; [[file:protean.aiern.org::*Bootstrap][Bootstrap:7]]
+(defun meq/pipx-package-installed* (pkg)
+    (not (-all? #'not (mapcar #'(lambda (pkg*) (interactive)
+                        (let* ((pkg (meq/rs pkg*)))
+                            (or
+                                (member pkg (cl-getf (cl-getf (meq/gfp :installed) :pipx) :apps))
+                                (executable-find pkg))))
+        (meq/rl pkg)))))
+(defun meq/pipx-package-installed (pkg &optional app)
+    (if app
+        (let* ((app-installed (meq/pipx-package-installed* app)))
+            (when app-installed
+                (not (-all? #'not (mapcar #'(lambda (pkg*) (interactive)
+                        (let* ((pkg (meq/rs pkg*)))
+                            (member (meq/rs pkg) (cl-getf (cl-getf (cl-getf
+                                (meq/gfp :installed) :pipx) :libs) (meq/inconcat ":" (meq/rs app))))))
+                (meq/rl pkg))))))
+        (meq/pipx-package-installed* pkg)))
+(defun meq/package-installed (pkg pm)
+    (not (-all? #'not (mapcar #'(lambda (pkg**) (interactive)
+                        (let* ((pkg* (meq/rs pkg**))
+                                (pkg (if (and
+                                            (string= pm "nix-env")
+                                            (s-contains? "." pkg*))
+                                        (car (last (split-string pkg* "\\.")))
+                                        pkg*)))
+                            (or (member pkg (cl-getf (meq/gfp :installed) (meq/inconcat ":" pm))) (executable-find pkg))))
+        (meq/rl pkg)))))
+(defun meq/install-pipx-package (pkg* &optional injection-env*)
+    (let* ((pkg (meq/rs pkg*))
+            (injection-env (when injection-env* (meq/rs injection-env*)))
+            (pkg-buffer-name (format "*Installing %s%s With pipx*" pkg (if injection-env*
+                                                                        (concat " in " injection-env)
+                                                                        "")))
+            (injection-env-buffer-name (when injection-env* (format "*Installing %s With pipx*" injection-env)))
+            (pkg*-list (list pkg*))
+            (pkg-installed (apply #'meq/pipx-package-installed (if injection-env*
+                                                                    (-snoc pkg*-list injection-env*)
+                                                                    pkg*-list)))
+            (injection-env-installed (when injection-env* (meq/pipx-package-installed injection-env*))))
+
+        (when injection-env*
+            (if (and injection-env-installed (not meq/var/force-bootstrap))
+                (message "Not %s; already installed" injection-env-buffer-name)
+                (if (member "ignore-this" (mapcar #'meq/rs (meq/rl injection-env*)))
+                    (message "Not %s; ignored" injection-env-buffer-name)
+                    (message injection-env-buffer-name)
+                    (meq/call "pipx" injection-env-buffer-name "install" "--force" injection-env)
+                    (message "%s...done" injection-env-buffer-name))))
+        (if (and pkg-installed (not meq/var/force-bootstrap))
+            (message "Not %s; already installed" pkg-buffer-name)
+            (if (member "ignore-this" (mapcar #'meq/rs (meq/rl pkg*)))
+                (message "Not %s; ignored" pkg-buffer-name)
+                (message pkg-buffer-name)
+                (apply #'meq/call "pipx" pkg-buffer-name (if injection-env*
+                    (list "inject" "--force" injection-env pkg)
+                    (list "install" "--force" pkg)))
+                (message "%s...done" pkg-buffer-name)))))
+(defun meq/install-package (pkg** &optional pm*)
+    (let* ((pm (or pm* meq/var/default-package-manager))
+            (pkg* (meq/rs pkg**))
+            (pkg (if (string= pm "nix-env") (concat (meq/pm-details pm :channel) "." pkg*) pkg*))
+            (buffer-name (format "*Installing %s With %s*" pkg pm)))
+        (if (and (meq/package-installed pkg** pm) (not meq/var/force-bootstrap))
+            (message "Not %s; already installed" buffer-name)
+            (if (member "ignore-this" (mapcar #'meq/rs (meq/rl pkg**)))
+                (message "Not %s; ignored" buffer-name)
+                (message buffer-name)
+                (let* ((install (meq/pm-details pm :install)))
+                    (apply #'meq/call (meq/pm-details pm :manager) buffer-name (append (meq/rl install)
+                                                        (remove nil (list pkg (when (string= pm "nix-env") "--show-trace"))))))
+                (message "%s...done" buffer-name)))))
+;; Bootstrap:7 ends here
+
+;; [[file:protean.aiern.org::*Bootstrap][Bootstrap:8]]
+(defun meq/wrapped-call (buffer-name &rest args)
+    (message buffer-name)
+    (apply #'meq/call (pop args) (format "*%s*" buffer-name) args)
+    (message "%s...done" buffer-name))
+;; Bootstrap:8 ends here
+
+;; [[file:protean.aiern.org::*Bootstrap][Bootstrap:9]]
+(cond (meq/var/phone (let* ((pm* "pkg")
+                            (install (meq/pm-details pm* :install))
+                            (pm (meq/pm-details pm* :manager)))
+                        (meq/wrapped-call "Adding root repo" pm install "root-repo")
+                        (meq/wrapped-call "Updating pkgs" pm "update" "-y")
+                        (mapc #'meq/install-package (meq/gfp :pkg))
+                        (mapc #'(lambda (pkg) (interactive) (meq/install-package pkg "pip")) (meq/gfp :pip))))
+    (meq/var/wsl (mapc #'meq/install-package (meq/gfp :base)))
+    (t (progn
+            (mapc #'meq/install-package (-flatten-n 1 (list
+                                                    (meq/gfp :base)
+                                                    (meq/gfp :extras))))
+            (when meq/var/not-in-terminal (mapc #'meq/install-package (meq/gfp :not-in-terminal)))
+            (when meq/var/not-minimal (mapc #'meq/install-package (meq/gfp :not-minimal)))
+            (when meq/var/neither (mapc #'meq/install-package (meq/gfp :neither))))))
+
+(message (meq/call "pipx" "*Ensuring Pipx Path*" "ensurepath"))
+(mapc #'meq/install-pipx-package (cl-getf (meq/gfp :pipx) :apps))
+(let* ((libs (cl-getf (meq/gfp :pipx) :libs)))
+    (mapc #'(lambda (lib*) (interactive)
+        (mapc #'(lambda (lib) (interactive)
+            (meq/install-pipx-package
+                lib (meq/keyword-to-symbol-name lib*))) (cl-getf libs lib*))) (map-keys libs))))
+;; Bootstrap:9 ends here
+
+;; Startup
+>>>>>>> 6cce877568cfdc57bc518e92f55fd82a5c987a06
 ;; :PROPERTIES:
 ;; :header-args:emacs-lisp+: :tangle yes
 ;; :END:

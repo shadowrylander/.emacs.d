@@ -702,8 +702,17 @@
 
 ;; [[file:README.org::*aiern][aiern:1]]
 (meq/up aiern
+<<<<<<< HEAD
     :gsetq (aiern-undo-system 'undo-fu aiern-move-beyond-eol t)
     :hook (after-init . (lambda nil (interactive) (meq/add-to-ignored-modal-modes aiern (setq state (list aiern-default-state)))))
+=======
+    :gsetq (aiern-undo-system 'undo-fu)
+    :hook (after-init . (lambda nil (interactive)
+        (setq state (list aiern-default-state))
+        (aiern-mode 1)
+        (push 'aiern-mode meq/var/ignored-modal-modes)
+        (push "aiern" meq/var/ignored-modal-prefixes)))
+>>>>>>> 6cce877568cfdc57bc518e92f55fd82a5c987a06
 ;; aiern:1 ends here
 
 
