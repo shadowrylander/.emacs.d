@@ -21,3 +21,4 @@ var/org/persist/*
 /auto-save-list
 /eln-cache
 /straight
+/eln-cache
