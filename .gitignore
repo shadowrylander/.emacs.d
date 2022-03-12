@@ -20,3 +20,4 @@ var/org/persist/*
 /first-run-done
 /auto-save-list
 /eln-cache
+/straight
