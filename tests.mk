@@ -13,7 +13,7 @@ clean:
 pre-test: clean-all subinit
 
 super-subinit: subinit
-|git -C $(mkfileDir) submodule update --init --depth 1 --recursive --remote --force
+|git -C $(mkfileDir) submodule update --init --recursive --remote --force
 
 init: super-subinit clean-all tangle
 
