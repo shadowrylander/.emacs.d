@@ -1,14 +1,4 @@
-;; themes
-
-;; #+call: hash() :exports none
-
-;; #+RESULTS:
-;; : 20210601221052630320600
-
-;; #+name: 20210601221052630320600
-
-;; [[file:~/.emacs.d/promethean.aiern.org::20210601221052630320600][20210601221052630320600]]
-`(default ((,class (:background ,shade0 :foreground ,shade7))))
+  `(default ((,class (:background ,shade0 :foreground ,shade7))))
   `(font-lock-builtin-face ((,class (:foreground ,accent5))))
   `(font-lock-comment-face ((,class (:foreground ,shade3))))
   `(font-lock-negation-char-face ((,class (:foreground ,accent4))))
@@ -202,4 +192,3 @@
 (when load-file-name
   (add-to-list 'custom-theme-load-path
     (file-name-as-directory (file-name-directory load-file-name))))
-;; 20210601221052630320600 ends here

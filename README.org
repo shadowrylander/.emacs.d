@@ -1,5 +1,4 @@
-#+setupfile: ./settings/TANGLE.org
-#+include: ./settings/README.org
+#+property: header-args:emacs-lisp+ :tangle yes
 
 * early-init.el
 :PROPERTIES:
@@ -97,8 +96,11 @@ This sets up various system-related variables, all fairly descriptive on their o
 Set the borg package directory:
 
 #+begin_src emacs-lisp
-(setq borg-drones-directory-prefix (concat "lib" meq/var/slash))
-(setq borg-drones-directory (concat user-emacs-directory borg-drones-directory-prefix))
+(setq ;; borg-user-emacs-directory user-emacs-directory
+    borg-drones-directory-prefix (concat "lib" meq/var/slash)
+    borg-drones-directory (concat user-emacs-directory borg-drones-directory-prefix)
+    ;; borg-gitmodules-file (expand-file-name ".gitmodules" user-emacs-directory)
+    )
 #+end_src
 
 [[https://github.com/emacscollective/borg][We Are Borg.]]
@@ -109,7 +111,7 @@ Set the borg package directory:
 (defun meq/require-and-load (pkg)
     (add-to-list 'load-path (concat user-emacs-directory "lib" meq/var/slash pkg) t)
     (require (intern pkg)))
-(mapc 'meq/require-and-load '("emacsql" "emacsql-sqlite" "closql"))
+(mapc 'meq/require-and-load '("compat" "emacsql" "emacsql-sqlite" "closql"))
 
 (add-to-list 'load-path (concat user-emacs-directory "lib" meq/var/slash "epkg" meq/var/slash "lisp") t)
 (require 'epkg)
@@ -327,13 +329,7 @@ Create a version of [[https://github.com/emacscollective/borg/blob/master/borg.e
 Then create a shell tangle function based on the above:
 
 #+begin_src emacs-lisp
-(defun meq/call-tangle (file)
-    (setq tangle-script (concat user-emacs-directory "settings" meq/var/slash "org-tangle.sh"))
-
-    ;; TODO
-    ;; (meq/call "chmod" "*making-tangle-script-executable*" "+x" tangle-script)
-
-    (meq/call tangle-script "*literally-configuring*" file))
+(defun meq/call-tangle (file) (meq/call tangle-script "*literally-configuring*" file))
 #+end_src
 
 Modify [[https://code.orgmode.org/bzg/org-mode/src/master/lisp/org.el#L222][~org-babel-load-file~]] to use the above function instead:

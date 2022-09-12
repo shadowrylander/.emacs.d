@@ -1,4 +1,3 @@
-;; [[file:README.org::*early-init.el][early-init.el:2]]
 ;;; $EMACSDIR/early-init.el -*- lexical-binding: t; -*- no-byte-compile: t -*-
 (defvar user-emacs-directory (file-name-directory (or load-file-name buffer-file-name)))
 (setq meq/var/initial-directory default-directory)
@@ -28,12 +27,14 @@
 (defvar meq/var/phone (ignore-errors (string-match-p (regexp-quote "Android") (shell-command-to-string "uname -a"))))
 (defvar meq/var/wsl (ignore-errors (string-match-p (regexp-quote "microsoft-standard-WSL") (shell-command-to-string "uname -a"))))
 (defvar meq/var/nixos (ignore-errors (string-match-p (regexp-quote "nixos") (shell-command-to-string "uname -a"))))
-(setq borg-drones-directory-prefix (concat "lib" meq/var/slash))
-(setq borg-drones-directory (concat user-emacs-directory borg-drones-directory-prefix))
+(setq borg-user-emacs-directory user-emacs-directory
+    borg-drones-directory-prefix (concat "lib" meq/var/slash)
+    borg-drones-directory (concat user-emacs-directory borg-drones-directory-prefix)
+    borg-gitmodules-file (expand-file-name ".gitmodules" user-emacs-directory))
 (defun meq/require-and-load (pkg)
     (add-to-list 'load-path (concat user-emacs-directory "lib" meq/var/slash pkg) t)
     (require (intern pkg)))
-(mapc 'meq/require-and-load '("emacsql" "emacsql-sqlite" "closql"))
+(mapc 'meq/require-and-load '("compat" "emacsql" "emacsql-sqlite" "closql"))
 
 (add-to-list 'load-path (concat user-emacs-directory "lib" meq/var/slash "epkg" meq/var/slash "lisp") t)
 (require 'epkg)
@@ -161,7 +162,7 @@ build and activate the drone."
 (global-auto-revert-mode t) (auto-revert-mode t)
 (setq global-auto-revert-non-file-buffers t
       auto-revert-verbose nil
-auto-revert-use-notify nil)
+      auto-revert-use-notify nil)
 (if (file-exists-p (concat user-emacs-directory "lib" meq/var/slash "org"))
   (if (file-exists-p (concat user-emacs-directory "lib" meq/var/slash "org" meq/var/slash "lisp" meq/var/slash "org-loaddefs.el"))
     (borg-activate "org")
@@ -207,4 +208,3 @@ byte-compiled before it is loaded."
 (advice-add #'org-babel-load-file :override #'meq/org-babel-load-file-advice)
 (defun meq/reload-early-init nil (interactive) (org-babel-load-file (concat user-emacs-directory "README.org") t))
 (meq/reload-early-init)
-;; early-init.el:2 ends here

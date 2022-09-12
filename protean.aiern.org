@@ -1,5 +1,4 @@
-#+setupfile: ./settings/TANGLE.org
-#+include: ./settings/README.org
+#+property: header-args:emacs-lisp+ :tangle yes
 
 * init.el
 :PROPERTIES:
