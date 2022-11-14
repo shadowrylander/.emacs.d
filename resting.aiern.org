@@ -1,6 +1,3 @@
-#+setupfile: ./README.org
-#+include: ./README.org
-
 # ##################################################################################################
 
 # Adapted From: https://writequit.org/denver-emacs/presentations/files/example.org.html

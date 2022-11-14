@@ -59,27 +59,6 @@
 
     (add-to-list 'native-comp-eln-load-path (meq/ued-local "eln-cache/")))
 
-(let* ((gitmodules (borg-drones t t))
-        (command)
-
-        ;; Adapted From:
-        ;; Answer: https://superuser.com/a/927832/1154755
-        ;; User: https://superuser.com/users/265996/jackson
-        (inhibit-message t))
-    (mapc #'(lambda (pkg) (interactive)
-                (apply #'borg-assimilate pkg))
-        ;; Adapted From:
-        ;; Answer: https://stackoverflow.com/a/9366300/10827766
-        ;; User: https://stackoverflow.com/users/267442/spec
-        (remove nil (mapcar #'(lambda (pkg) (interactive)
-            (list (car pkg) (cl-getf (cdr pkg) 'url))) gitmodules))))
-
-(mapc #'borg-update-autoloads (mapcar #'car (borg-drones t)))
-
-;; (setq borg-rewrite-urls-alist '(("git@github.com:" . "https://github.com/")
-;;                                 ("git@gitlab.com:" . "https://gitlab.com/")))
-(borg-initialize)
-
 (require 'meq)
 
 (setq custom-file (meq/ued "custom.el"))
@@ -104,7 +83,8 @@
     :config (use-package leaf-keywords :demand t))
 
 (use-package use-package-extras :demand t
-    :config (meq/up use-package-ensure-system-package))
+    ;; :config (meq/up use-package-ensure-system-package)
+    )
 
 (meq/up hydra
     :custom (hydra-hint-display-type 'lv)
@@ -141,7 +121,9 @@
 
     :custom (alloy-implicit-naked t))
 
-(meq/up uru :config (with-eval-after-load 'prime (prime "u u" uru "uru") (prime "u m" minoru "minoru")))
+(meq/up prime)
+
+(meq/up uru :prime ("u u" uru "uru") ("u m" minoru "minoru"))
 
 (meq/up which-key :deino (deino/which-key (:color blue :columns 4) "w"
         ("`" nil "cancel")
@@ -176,9 +158,67 @@
 
 (meq/up cosmoem
 
-    :config (with-eval-after-load 'prime
-                (prime ", m" map-of-infinity/body "map-of-infinity")
-                (meq/which-key-change-ryo "," "damascus"))
+    :prime (", m" map-of-infinity/body "map-of-infinity")
+    :config (meq/which-key-change-ryo "," "damascus")
+
+    :gsetq (meq/var/all-keymaps-map nil)
+            (meq/var/alamode-aiern-was-on (member "aiern" meq/var/ignored-modal-prefixes))
+            (meq/var/alamode-evil-was-on (member "evil" meq/var/ignored-modal-prefixes))
+    :config/defun* (meq/toggle-inner (mode prefix mode-on map &optional use-cosmoem force) (interactive)
+                    (meq/disable-all-modal-modes nil (not mode-on))
+                    (if mode-on
+                        (when force (meq/which-key--show-popup map force))
+                        (funcall mode 1)
+                        (when (featurep 'which-key)
+                            (if use-cosmoem
+                                (ignore-errors (funcall (meq/inconcat "meq/" prefix "-cosmoem-show")))
+                                (meq/which-key-show-top-level map)))))
+                (meq/execute-with-current-bindings-inner (mode prefix mode-on map &optional use-cosmoem called-interactively)
+                    (interactive "d")
+                    (unless mode-on
+                        (letrec ((caller this-command)
+                                (buffer (current-buffer))
+                                (cleanup
+                                    (lambda ()
+                                    ;; Perform cleanup in original buffer even if the command
+                                    ;; switched buffers.
+                                    (if (buffer-live-p buffer)
+                                        (with-current-buffer buffer
+                                            (unwind-protect
+                                                (progn
+                                                    (setq overriding-terminal-local-map meq/var/alamode-backup-terminal-local-map)
+                                                    (funcall mode -1)
+                                                    (when meq/var/alamode-aiern-was-on (aiern-mode 1))
+                                                    (when meq/var/alamode-evil-was-on (evil-mode 1))
+                                                    (meq/which-key-show-top-level))
+                                                (remove-hook 'post-command-hook post-hook)))
+                                        (remove-hook 'post-command-hook post-hook))))
+                                (kill-transient-map (lambda nil (interactive)
+                                                        (set-transient-map map 'meq/god-prefix-command-p cleanup)))
+                                (post-hook (lambda nil (unless (and
+                                                                (eq this-command caller)
+                                                                ;; If we've entered the minibuffer, this implies
+                                                                ;; a non-prefix command was run, even if
+                                                                ;; `this-command' has not changed.  For example,
+                                                                ;; `execute-extended-command' behaves this way.
+                                                                (not (window-minibuffer-p)))
+                                                            (funcall kill-transient-map)))))
+                            (add-hook 'post-command-hook post-hook)
+                            ;; Pass the current prefix argument along to the next command.
+                            (setq prefix-arg current-prefix-arg)
+                            ;; Technically we don't need to activate %p mode since the
+                            ;; transient keymap is already in place, but it's useful to provide
+                            ;; a mode line lighter and run any hook functions the user has set
+                            ;; up.  This could be made configurable in the future.
+                            (funcall mode 1)
+                            (when (featurep 'which-key) (meq/which-key-show-top-level map))
+                            (setq meq/var/alamode-backup-terminal-local-map overriding-terminal-local-map)
+                            (setq deino-enabled-temporarily t
+                                overriding-terminal-local-map (symbol-value map))
+                            (when (string= prefix "god")
+                                (when (meq/fbatp aiern-mode) (setq meq/var/alamode-aiern-was-on t) (aiern-mode -1))
+                                (when (meq/fbatp evil-mode) (setq meq/var/alamode-evil-was-on t) (evil-mode -1)))
+                            (message (format "Switched to %s mode for the next command ..." prefix)))))
 
     :deino (map-of-infinity nil ", m"
         ("`" nil "cancel")
@@ -196,7 +236,61 @@
 
         (all-keymaps (:color blue) ", k" ("`" nil "cancel")))
 
-(meq/up sorrow :config (with-eval-after-load 'prime (primer+ "t" "toggles"))
+(meq/up sorrow :primer+ ("t" "toggles")
+
+    :config
+        ;;;###autoload
+        (defdeino+ toggles (:color blue) ("s" meq/toggle-sorrow "sorrow"))
+        
+        ;;;###autoload
+        (defdeino+ all-keymaps (:color blue) ("s" meq/sorrow-show-top-level "sorrow"))
+        
+        ;;;###autoload
+        (defminorua 4 sorrow-mode deino-ala-sorrow nil "; m s" ("`" nil "cancel"))
+        
+        ;;;###autoload
+        (cosmoem-def
+            :show-funs #'meq/sorrow-cosmoem-show
+            :hide-funs #'meq/sorrow-cosmoem-hide
+            :toggle-funs #'meq/sorrow-cosmoem-toggle
+            :keymap 'sorrow-mode-map
+            ;; :transient t
+        )
+        
+        ;;;###autoload
+        (prime "t s" meq/toggle-sorrow-cosmoem "sorrow")
+        
+        ;; Cosmoem dummy toggle function
+        ;;;###autoload
+        (defun meq/sorrow-cosmoem-toggle nil (interactive))
+        
+        ;;;###autoload
+        (defun meq/sorrow-show-top-level nil (interactive)
+            (setq meq/var/all-keymaps-map 'sorrow-mode-map)
+            (when (featurep 'sorrow) (meq/which-key-show-top-level 'sorrow-mode-map)))
+        
+        ;;;###autoload
+        (defun meq/toggle-sorrow (ua) (interactive "p")
+            (when (featurep 'sorrow) (if (= ua 4)
+                (funcall 'meq/toggle-inner 'sorrow-mode "sorrow" (meq/fbatp sorrow-mode) 'sorrow-mode-map nil t)
+                (funcall 'meq/toggle-inner 'sorrow-mode "sorrow" (meq/fbatp sorrow-mode) 'sorrow-mode-map))))
+        
+        ;;;###autoload
+        (defun meq/toggle-sorrow-cosmoem (ua) (interactive "p")
+            (when (featurep 'sorrow) (if (= ua 4)
+                (funcall 'meq/toggle-inner 'sorrow-mode "sorrow" (meq/fbatp sorrow-mode) 'sorrow-mode-map t t)
+                (funcall 'meq/toggle-inner 'sorrow-mode "sorrow" (meq/fbatp sorrow-mode) 'sorrow-mode-map t))))
+        
+        ;;;###autoload
+        (defun meq/sorrow-execute-with-current-bindings (&optional called-interactively) (interactive "d")
+            (when (featurep 'sorrow) (funcall 'meq/execute-with-current-bindings-inner 'sorrow-mode "sorrow" (meq/fbatp sorrow-mode) 'sorrow-mode-map nil called-interactively)))
+        
+        ;;;###autoload
+        (defun meq/sorrow-cosmoem-execute-with-current-bindings (&optional called-interactively) (interactive "d")
+            (when (featurep 'sorrow) (funcall 'meq/execute-with-current-bindings-inner 'sorrow-mode "sorrow" (meq/fbatp sorrow-mode) 'sorrow-mode-map t called-interactively)))
+        
+        (with-eval-after-load 'sorrow (add-to-list 'meq/var/modal-modes 'sorrow-mode) (add-to-list 'meq/var/modal-prefixes "sorrow"))
+
     ;; From: https://github.com/shadowrylander/sorrow#which-key-integration
     (push '((nil . "sorrow:.*:") . (nil . "")) which-key-replacement-alist))
 
@@ -223,8 +317,6 @@
 (meq/up lode)
 
 (meq/up meta)
-
-(meq/up prime)
 
 (meq/up aiern
     :gsetq (aiern-undo-system 'undo-fu aiern-move-beyond-eol t)
@@ -264,6 +356,58 @@
         ;;         (funcall 'meq/toggle-inner 'aiern-mode "aiern-ex" (meq/fbatp aiern-mode) 'aiern-ex-keymap t t)
         ;;         (funcall 'meq/toggle-inner 'aiern-mode "aiern-ex" (meq/fbatp aiern-mode) 'aiern-ex-keymap t)))
 
+        ;;;###autoload
+        (defdeino+ toggles (:color blue) ("a" meq/toggle-aiern "aiern"))
+        
+        ;;;###autoload
+        (defdeino+ all-keymaps (:color blue) ("a" meq/aiern-show-top-level "aiern"))
+        
+        ;;;###autoload
+        (defminorua 4 aiern-mode deino-ala-aiern nil "; m a" ("`" nil "cancel"))
+        
+        ;;;###autoload
+        (cosmoem-def
+            :show-funs #'meq/aiern-cosmoem-show
+            :hide-funs #'meq/aiern-cosmoem-hide
+            :toggle-funs #'meq/aiern-cosmoem-toggle
+            :keymap 'aiern-normal-state-map
+            ;; :transient t
+        )
+        
+        ;;;###autoload
+        (prime "t a" meq/toggle-aiern-cosmoem "aiern")
+        
+        ;; Cosmoem dummy toggle function
+        ;;;###autoload
+        (defun meq/aiern-cosmoem-toggle nil (interactive))
+        
+        ;;;###autoload
+        (defun meq/aiern-show-top-level nil (interactive)
+            (setq meq/var/all-keymaps-map 'aiern-normal-state-map)
+            (when (featurep 'aiern) (meq/which-key-show-top-level 'aiern-normal-state-map)))
+        
+        ;;;###autoload
+        (defun meq/toggle-aiern (ua) (interactive "p")
+            (when (featurep 'aiern) (if (= ua 4)
+                (funcall 'meq/toggle-inner 'aiern-mode "aiern" (meq/fbatp aiern-mode) 'aiern-normal-state-map nil t)
+                (funcall 'meq/toggle-inner 'aiern-mode "aiern" (meq/fbatp aiern-mode) 'aiern-normal-state-map))))
+        
+        ;;;###autoload
+        (defun meq/toggle-aiern-cosmoem (ua) (interactive "p")
+            (when (featurep 'aiern) (if (= ua 4)
+                (funcall 'meq/toggle-inner 'aiern-mode "aiern" (meq/fbatp aiern-mode) 'aiern-normal-state-map t t)
+                (funcall 'meq/toggle-inner 'aiern-mode "aiern" (meq/fbatp aiern-mode) 'aiern-normal-state-map t))))
+        
+        ;;;###autoload
+        (defun meq/aiern-execute-with-current-bindings (&optional called-interactively) (interactive "d")
+            (when (featurep 'aiern) (funcall 'meq/execute-with-current-bindings-inner 'aiern-mode "aiern" (meq/fbatp aiern-mode) 'aiern-normal-state-map nil called-interactively)))
+        
+        ;;;###autoload
+        (defun meq/aiern-cosmoem-execute-with-current-bindings (&optional called-interactively) (interactive "d")
+            (when (featurep 'aiern) (funcall 'meq/execute-with-current-bindings-inner 'aiern-mode "aiern" (meq/fbatp aiern-mode) 'aiern-normal-state-map t called-interactively)))
+        
+        (with-eval-after-load 'aiern (add-to-list 'meq/var/modal-modes 'aiern-mode) (add-to-list 'meq/var/modal-prefixes "aiern"))
+
     :sorrow ("l" :deino
                 '(aiern-exits (:color blue) "e"
                     ;; From: https://github.com/emacs-evil/evil/blob/master/evil-maps.el#L449
@@ -273,7 +417,7 @@
                     ("p" aiern-quit ":q")
                     ("o" aiern-write ":w")
                     ("O" aiern-write-all ":wa")
-                    ;; ("q" (funcall (alloy-simulate-key ":q! <RET>")) ":q!"))
+
                     ("q" (aiern-quit t) ":q!"))
                 :name "aiern exits"))
 
@@ -330,7 +474,7 @@
                             (or comment "")))
    :gsetq (counsel-linux-app-format-function #'meq/counsel-linux-app-format-function))
 
-(meq/upnsd damascus :use-package-postconfig (rainbow-mode :config (rainbow-mode 1)) (help-fns+)
+(meq/upnsd damascus :use-package-postconfig (rainbow-mode :config (rainbow-mode 1)) (help-fns+ :load-siluam-file-postconfig ("help+"))
 
     :deino (deino-universal/shortcuts (:color blue) "d u s"
             "A deino for universal shortcuts!"
@@ -349,10 +493,10 @@
             ("s" meq/sorrow-execute-with-current-bindings "sorrow execute")
             ("g" meq/god-execute-with-current-bindings "god execute")
             ("r" meq/ryo-execute-with-current-bindings "ruo execute")
-            ("`" nil "cancel")
+            ("`" nil "cancel"))
         (deino-universal/major-minor-modes (:color blue) "d u M"
             "A deino for major and minor modes!"
-            ("`" nil "cancel")))
+            ("`" nil "cancel"))
         (deino-universal/everything-else (:color blue) "d u e"
             "A deino for everything else!"
             ("`" nil "cancel")
@@ -381,7 +525,6 @@
             (naked "C-backspace") 'meq/delete-white-or-word
             (naked "RET") 'newline-and-indent)
 
-    :load-siluam-file-postconfig ("help+20")
     :gsetq
         (indent-tabs-mode nil
             inhibit-startup-screen t
@@ -438,7 +581,7 @@
         (add-hook 'after-change-major-mode-hook 'meq/remove-scratch-buffer)
 
         (add-hook 'minibuffer-exit-hook
-            '(lambda nil
+            #'(lambda nil
                 (let ((buffer "*Completions*"))
                 (and (get-buffer buffer)
                         (kill-buffer buffer)))))
@@ -466,12 +609,66 @@
             ("F" (meq/dired-create-fell-markdown) "create fell file" :color red)
             ("D" (meq/dired-create-doc-markdown) "create doc file" :color red)))
 
+(use-package god-mode
+    :config (which-key-enable-god-mode-support)
+
+        ;;;###autoload
+        (defdeino+ toggles (:color blue) ("g" meq/toggle-god "god"))
+        
+        ;;;###autoload
+        (defdeino+ all-keymaps (:color blue) ("g" meq/god-show-top-level "god"))
+        
+        ;;;###autoload
+        (defminorua 4 god-local-mode deino-ala-god nil "; m g" ("`" nil "cancel"))
+        
+        ;;;###autoload
+        (cosmoem-def
+            :show-funs #'meq/god-cosmoem-show
+            :hide-funs #'meq/god-cosmoem-hide
+            :toggle-funs #'meq/god-cosmoem-toggle
+            :keymap 'global-map
+            ;; :transient t
+        )
+        
+        ;;;###autoload
+        (prime "t g" meq/toggle-god-cosmoem "god")
+        
+        ;; Cosmoem dummy toggle function
+        ;;;###autoload
+        (defun meq/god-cosmoem-toggle nil (interactive))
+        
+        ;;;###autoload
+        (defun meq/god-show-top-level nil (interactive)
+            (setq meq/var/all-keymaps-map 'global-map)
+            (when (featurep 'god-mode) (meq/which-key-show-top-level 'global-map)))
+        
+        ;;;###autoload
+        (defun meq/toggle-god (ua) (interactive "p")
+            (when (featurep 'god-mode) (if (= ua 4)
+                (funcall 'meq/toggle-inner 'god-local-mode "god" (meq/fbatp god-local-mode) 'global-map nil t)
+                (funcall 'meq/toggle-inner 'god-local-mode "god" (meq/fbatp god-local-mode) 'global-map))))
+        
+        ;;;###autoload
+        (defun meq/toggle-god-cosmoem (ua) (interactive "p")
+            (when (featurep 'god-mode) (if (= ua 4)
+                (funcall 'meq/toggle-inner 'god-local-mode "god" (meq/fbatp god-local-mode) 'global-map t t)
+                (funcall 'meq/toggle-inner 'god-local-mode "god" (meq/fbatp god-local-mode) 'global-map t))))
+        
+        ;;;###autoload
+        (defun meq/god-execute-with-current-bindings (&optional called-interactively) (interactive "d")
+            (when (featurep 'god-mode) (funcall 'meq/execute-with-current-bindings-inner 'god-local-mode "god" (meq/fbatp god-local-mode) 'global-map nil called-interactively)))
+        
+        ;;;###autoload
+        (defun meq/god-cosmoem-execute-with-current-bindings (&optional called-interactively) (interactive "d")
+            (when (featurep 'god-mode) (funcall 'meq/execute-with-current-bindings-inner 'god-local-mode "god" (meq/fbatp god-local-mode) 'global-map t called-interactively)))
+        
+        (with-eval-after-load 'god-mode (add-to-list 'meq/var/modal-modes 'god-local-mode) (add-to-list 'meq/var/modal-prefixes "god"))
+
+    :upnsd-postconfig (aiern-god-state) (evil-god-state))
+
 (use-package doom-aiern-modeline
     :hook (after-init . doom-aiern-modeline-mode)
-
     :use-package-preconfig (shrink-path)
-            (god-mode :upnsd-postconfig (aiern-god-state) (evil-god-state)
-                      :config (which-key-enable-god-mode-support))
 
     :gsetq
         ;; How tall the mode-line should be. It's only respected in GUI.
@@ -684,6 +881,59 @@
         ;;     (if (= ua 4)
         ;;         (funcall 'meq/toggle-inner 'evil-mode "evil-ex" (meq/fbatp evil-mode) 'evil-ex-keymap t t)
         ;;         (funcall 'meq/toggle-inner 'evil-mode "evil-ex" (meq/fbatp evil-mode) 'evil-ex-keymap t)))
+
+        ;;;###autoload
+        (defdeino+ toggles (:color blue) ("e" meq/toggle-evil "evil"))
+        
+        ;;;###autoload
+        (defdeino+ all-keymaps (:color blue) ("e" meq/evil-show-top-level "evil"))
+        
+        ;;;###autoload
+        (defminorua 4 evil-mode deino-ala-evil nil "; m e" ("`" nil "cancel"))
+        
+        ;;;###autoload
+        (cosmoem-def
+            :show-funs #'meq/evil-cosmoem-show
+            :hide-funs #'meq/evil-cosmoem-hide
+            :toggle-funs #'meq/evil-cosmoem-toggle
+            :keymap 'evil-normal-state-map
+            ;; :transient t
+        )
+        
+        ;;;###autoload
+        (prime "t e" meq/toggle-evil-cosmoem "evil")
+        
+        ;; Cosmoem dummy toggle function
+        ;;;###autoload
+        (defun meq/evil-cosmoem-toggle nil (interactive))
+        
+        ;;;###autoload
+        (defun meq/evil-show-top-level nil (interactive)
+            (setq meq/var/all-keymaps-map 'evil-normal-state-map)
+            (when (featurep 'evil) (meq/which-key-show-top-level 'evil-normal-state-map)))
+        
+        ;;;###autoload
+        (defun meq/toggle-evil (ua) (interactive "p")
+            (when (featurep 'evil) (if (= ua 4)
+                (funcall 'meq/toggle-inner 'evil-mode "evil" (meq/fbatp evil-mode) 'evil-normal-state-map nil t)
+                (funcall 'meq/toggle-inner 'evil-mode "evil" (meq/fbatp evil-mode) 'evil-normal-state-map))))
+        
+        ;;;###autoload
+        (defun meq/toggle-evil-cosmoem (ua) (interactive "p")
+            (when (featurep 'evil) (if (= ua 4)
+                (funcall 'meq/toggle-inner 'evil-mode "evil" (meq/fbatp evil-mode) 'evil-normal-state-map t t)
+                (funcall 'meq/toggle-inner 'evil-mode "evil" (meq/fbatp evil-mode) 'evil-normal-state-map t))))
+        
+        ;;;###autoload
+        (defun meq/evil-execute-with-current-bindings (&optional called-interactively) (interactive "d")
+            (when (featurep 'evil) (funcall 'meq/execute-with-current-bindings-inner 'evil-mode "evil" (meq/fbatp evil-mode) 'evil-normal-state-map nil called-interactively)))
+        
+        ;;;###autoload
+        (defun meq/evil-cosmoem-execute-with-current-bindings (&optional called-interactively) (interactive "d")
+            (when (featurep 'evil) (funcall 'meq/execute-with-current-bindings-inner 'evil-mode "evil" (meq/fbatp evil-mode) 'evil-normal-state-map t called-interactively)))
+        
+        (with-eval-after-load 'evil (add-to-list 'meq/var/modal-modes 'evil-mode) (add-to-list 'meq/var/modal-prefixes "evil"))
+
     )
 
 (meq/up olivetti :gsetq (olivetti-body-width 0.60))
@@ -799,8 +1049,6 @@
         ("E" ace-swap-window "ace-swap-window")
         ("W" ace-delete-window "ace-delete-window" :exit t)))
 
-(meq/upnsd alamode)
-
 (meq/upnsd cosmog :prime ("c" deino-cosmog/body "cosmog"))
 
 (meq/up helm
@@ -827,9 +1075,117 @@
   ("p" magit-process "process")
   ("`" nil "cancel")))
 
-(meq/up modalka)
+(meq/up modalka :config
 
-(meq/up objed)
+        ;;;###autoload
+        (defdeino+ toggles (:color blue) ("m" meq/toggle-modalka "modalka"))
+        
+        ;;;###autoload
+        (defdeino+ all-keymaps (:color blue) ("m" meq/modalka-show-top-level "modalka"))
+        
+        ;;;###autoload
+        (defminorua 4 modalka-mode deino-ala-modalka nil "; m m" ("`" nil "cancel"))
+        
+        ;;;###autoload
+        (cosmoem-def
+            :show-funs #'meq/modalka-cosmoem-show
+            :hide-funs #'meq/modalka-cosmoem-hide
+            :toggle-funs #'meq/modalka-cosmoem-toggle
+            :keymap 'modalka-mode-map
+            ;; :transient t
+        )
+        
+        ;;;###autoload
+        (prime "t m" meq/toggle-modalka-cosmoem "modalka")
+        
+        ;; Cosmoem dummy toggle function
+        ;;;###autoload
+        (defun meq/modalka-cosmoem-toggle nil (interactive))
+        
+        ;;;###autoload
+        (defun meq/modalka-show-top-level nil (interactive)
+            (setq meq/var/all-keymaps-map 'modalka-mode-map)
+            (when (featurep 'modalka) (meq/which-key-show-top-level 'modalka-mode-map)))
+        
+        ;;;###autoload
+        (defun meq/toggle-modalka (ua) (interactive "p")
+            (when (featurep 'modalka) (if (= ua 4)
+                (funcall 'meq/toggle-inner 'modalka-mode "modalka" (meq/fbatp modalka-mode) 'modalka-mode-map nil t)
+                (funcall 'meq/toggle-inner 'modalka-mode "modalka" (meq/fbatp modalka-mode) 'modalka-mode-map))))
+        
+        ;;;###autoload
+        (defun meq/toggle-modalka-cosmoem (ua) (interactive "p")
+            (when (featurep 'modalka) (if (= ua 4)
+                (funcall 'meq/toggle-inner 'modalka-mode "modalka" (meq/fbatp modalka-mode) 'modalka-mode-map t t)
+                (funcall 'meq/toggle-inner 'modalka-mode "modalka" (meq/fbatp modalka-mode) 'modalka-mode-map t))))
+        
+        ;;;###autoload
+        (defun meq/modalka-execute-with-current-bindings (&optional called-interactively) (interactive "d")
+            (when (featurep 'modalka) (funcall 'meq/execute-with-current-bindings-inner 'modalka-mode "modalka" (meq/fbatp modalka-mode) 'modalka-mode-map nil called-interactively)))
+        
+        ;;;###autoload
+        (defun meq/modalka-cosmoem-execute-with-current-bindings (&optional called-interactively) (interactive "d")
+            (when (featurep 'modalka) (funcall 'meq/execute-with-current-bindings-inner 'modalka-mode "modalka" (meq/fbatp modalka-mode) 'modalka-mode-map t called-interactively)))
+        
+        (with-eval-after-load 'modalka (add-to-list 'meq/var/modal-modes 'modalka-mode) (add-to-list 'meq/var/modal-prefixes "modalka"))
+
+    )
+
+(meq/up objed :config
+
+        ;;;###autoload
+        (defdeino+ toggles (:color blue) ("o" meq/toggle-objed "objed"))
+        
+        ;;;###autoload
+        (defdeino+ all-keymaps (:color blue) ("o" meq/objed-show-top-level "objed"))
+        
+        ;;;###autoload
+        (defminorua 4 objed-mode deino-ala-objed nil "; m o" ("`" nil "cancel"))
+        
+        ;;;###autoload
+        (cosmoem-def
+            :show-funs #'meq/objed-cosmoem-show
+            :hide-funs #'meq/objed-cosmoem-hide
+            :toggle-funs #'meq/objed-cosmoem-toggle
+            :keymap 'objed-map
+            ;; :transient t
+        )
+        
+        ;;;###autoload
+        (prime "t o" meq/toggle-objed-cosmoem "objed")
+        
+        ;; Cosmoem dummy toggle function
+        ;;;###autoload
+        (defun meq/objed-cosmoem-toggle nil (interactive))
+        
+        ;;;###autoload
+        (defun meq/objed-show-top-level nil (interactive)
+            (setq meq/var/all-keymaps-map 'objed-map)
+            (when (featurep 'objed) (meq/which-key-show-top-level 'objed-map)))
+        
+        ;;;###autoload
+        (defun meq/toggle-objed (ua) (interactive "p")
+            (when (featurep 'objed) (if (= ua 4)
+                (funcall 'meq/toggle-inner 'objed-mode "objed" (meq/fbatp objed-mode) 'objed-map nil t)
+                (funcall 'meq/toggle-inner 'objed-mode "objed" (meq/fbatp objed-mode) 'objed-map))))
+        
+        ;;;###autoload
+        (defun meq/toggle-objed-cosmoem (ua) (interactive "p")
+            (when (featurep 'objed) (if (= ua 4)
+                (funcall 'meq/toggle-inner 'objed-mode "objed" (meq/fbatp objed-mode) 'objed-map t t)
+                (funcall 'meq/toggle-inner 'objed-mode "objed" (meq/fbatp objed-mode) 'objed-map t))))
+        
+        ;;;###autoload
+        (defun meq/objed-execute-with-current-bindings (&optional called-interactively) (interactive "d")
+            (when (featurep 'objed) (funcall 'meq/execute-with-current-bindings-inner 'objed-mode "objed" (meq/fbatp objed-mode) 'objed-map nil called-interactively)))
+        
+        ;;;###autoload
+        (defun meq/objed-cosmoem-execute-with-current-bindings (&optional called-interactively) (interactive "d")
+            (when (featurep 'objed) (funcall 'meq/execute-with-current-bindings-inner 'objed-mode "objed" (meq/fbatp objed-mode) 'objed-map t called-interactively)))
+        
+        (with-eval-after-load 'objed (add-to-list 'meq/var/modal-modes 'objed-mode) (add-to-list 'meq/var/modal-prefixes "objed"))
+
+    )
 
 (meq/up projectile
     :use-package-preconfig (counsel-projectile :config (counsel-projectile-mode 1)) (helm-projectile)
@@ -895,10 +1251,128 @@
 
 (meq/up ryo-modal
     :config ;; From: https://github.com/Kungsgeten/ryo-modal#which-key-integration
-        (push '((nil . "ryo:.*:") . (nil . "")) which-key-replacement-alist))
+        (push '((nil . "ryo:.*:") . (nil . "")) which-key-replacement-alist)
+
+        ;;;###autoload
+        (defdeino+ toggles (:color blue) ("r" meq/toggle-ryo "ryo"))
+        
+        ;;;###autoload
+        (defdeino+ all-keymaps (:color blue) ("r" meq/ryo-show-top-level "ryo"))
+        
+        ;;;###autoload
+        (defminorua 4 ryo-modal-mode deino-ala-ryo nil "; m r" ("`" nil "cancel"))
+        
+        ;;;###autoload
+        (cosmoem-def
+            :show-funs #'meq/ryo-cosmoem-show
+            :hide-funs #'meq/ryo-cosmoem-hide
+            :toggle-funs #'meq/ryo-cosmoem-toggle
+            :keymap 'ryo-modal-mode-map
+            ;; :transient t
+        )
+        
+        ;;;###autoload
+        (prime "t r" meq/toggle-ryo-cosmoem "ryo")
+        
+        ;; Cosmoem dummy toggle function
+        ;;;###autoload
+        (defun meq/ryo-cosmoem-toggle nil (interactive))
+        
+        ;;;###autoload
+        (defun meq/ryo-show-top-level nil (interactive)
+            (setq meq/var/all-keymaps-map 'ryo-modal-mode-map)
+            (when (featurep 'ryo-modal) (meq/which-key-show-top-level 'ryo-modal-mode-map)))
+        
+        ;;;###autoload
+        (defun meq/toggle-ryo (ua) (interactive "p")
+            (when (featurep 'ryo-modal) (if (= ua 4)
+                (funcall 'meq/toggle-inner 'ryo-modal-mode "ryo" (meq/fbatp ryo-modal-mode) 'ryo-modal-mode-map nil t)
+                (funcall 'meq/toggle-inner 'ryo-modal-mode "ryo" (meq/fbatp ryo-modal-mode) 'ryo-modal-mode-map))))
+        
+        ;;;###autoload
+        (defun meq/toggle-ryo-cosmoem (ua) (interactive "p")
+            (when (featurep 'ryo-modal) (if (= ua 4)
+                (funcall 'meq/toggle-inner 'ryo-modal-mode "ryo" (meq/fbatp ryo-modal-mode) 'ryo-modal-mode-map t t)
+                (funcall 'meq/toggle-inner 'ryo-modal-mode "ryo" (meq/fbatp ryo-modal-mode) 'ryo-modal-mode-map t))))
+        
+        ;;;###autoload
+        (defun meq/ryo-execute-with-current-bindings (&optional called-interactively) (interactive "d")
+            (when (featurep 'ryo-modal) (funcall 'meq/execute-with-current-bindings-inner 'ryo-modal-mode "ryo" (meq/fbatp ryo-modal-mode) 'ryo-modal-mode-map nil called-interactively)))
+        
+        ;;;###autoload
+        (defun meq/ryo-cosmoem-execute-with-current-bindings (&optional called-interactively) (interactive "d")
+            (when (featurep 'ryo-modal) (funcall 'meq/execute-with-current-bindings-inner 'ryo-modal-mode "ryo" (meq/fbatp ryo-modal-mode) 'ryo-modal-mode-map t called-interactively)))
+        
+        (with-eval-after-load 'ryo-modal (add-to-list 'meq/var/modal-modes 'ryo-modal-mode) (add-to-list 'meq/var/modal-prefixes "ryo"))
+
+    )
+
+(meq/up vterm :use-package-postconfig (multi-vterm)
+    :if (not (member system-type '(windows-nt ms-dos)))
+    :gsetq
+        ;; From: https://www.reddit.com/r/emacs/comments/pjtm91/vterm_a_little_bit_slow/hbz40xb?utm_medium=android_app&utm_source=share&context=3
+        (vterm-timer-delay 0.01)
+
+        (vterm-always-compile-module t)
+        (vterm-shell (meq/ued "vterm-start.sh"))
+        (vterm-kill-buffer-on-exit t))
 
 (meq/up xah-fly-keys
     :commands xah-fly-keys
+    :config
+
+        ;;;###autoload
+        (defdeino+ toggles (:color blue) ("x" meq/toggle-xah "xah"))
+        
+        ;;;###autoload
+        (defdeino+ all-keymaps (:color blue) ("x" meq/xah-show-top-level "xah"))
+        
+        ;;;###autoload
+        (defminorua 4 xah-fly-keys deino-ala-xah nil "; m x" ("`" nil "cancel"))
+        
+        ;;;###autoload
+        (cosmoem-def
+            :show-funs #'meq/xah-cosmoem-show
+            :hide-funs #'meq/xah-cosmoem-hide
+            :toggle-funs #'meq/xah-cosmoem-toggle
+            :keymap 'xah-fly-command-map
+            ;; :transient t
+        )
+        
+        ;;;###autoload
+        (prime "t x" meq/toggle-xah-cosmoem "xah")
+        
+        ;; Cosmoem dummy toggle function
+        ;;;###autoload
+        (defun meq/xah-cosmoem-toggle nil (interactive))
+        
+        ;;;###autoload
+        (defun meq/xah-show-top-level nil (interactive)
+            (setq meq/var/all-keymaps-map 'xah-fly-command-map)
+            (when (featurep 'xah-fly-keys) (meq/which-key-show-top-level 'xah-fly-command-map)))
+        
+        ;;;###autoload
+        (defun meq/toggle-xah (ua) (interactive "p")
+            (when (featurep 'xah-fly-keys) (if (= ua 4)
+                (funcall 'meq/toggle-inner 'xah-fly-keys "xah" (meq/fbatp xah-fly-keys) 'xah-fly-command-map nil t)
+                (funcall 'meq/toggle-inner 'xah-fly-keys "xah" (meq/fbatp xah-fly-keys) 'xah-fly-command-map))))
+        
+        ;;;###autoload
+        (defun meq/toggle-xah-cosmoem (ua) (interactive "p")
+            (when (featurep 'xah-fly-keys) (if (= ua 4)
+                (funcall 'meq/toggle-inner 'xah-fly-keys "xah" (meq/fbatp xah-fly-keys) 'xah-fly-command-map t t)
+                (funcall 'meq/toggle-inner 'xah-fly-keys "xah" (meq/fbatp xah-fly-keys) 'xah-fly-command-map t))))
+        
+        ;;;###autoload
+        (defun meq/xah-execute-with-current-bindings (&optional called-interactively) (interactive "d")
+            (when (featurep 'xah-fly-keys) (funcall 'meq/execute-with-current-bindings-inner 'xah-fly-keys "xah" (meq/fbatp xah-fly-keys) 'xah-fly-command-map nil called-interactively)))
+        
+        ;;;###autoload
+        (defun meq/xah-cosmoem-execute-with-current-bindings (&optional called-interactively) (interactive "d")
+            (when (featurep 'xah-fly-keys) (funcall 'meq/execute-with-current-bindings-inner 'xah-fly-keys "xah" (meq/fbatp xah-fly-keys) 'xah-fly-command-map t called-interactively)))
+        
+        (with-eval-after-load 'xah-fly-keys (add-to-list 'meq/var/modal-modes 'xah-fly-keys) (add-to-list 'meq/var/modal-prefixes "xah"))
+
     :sorrow ("m" :deino
                 '(modal-modes (:color blue) "m"
                     "A modal deino!"
@@ -908,9 +1382,65 @@
 (setq show-paren-delay 0)
 (add-hook 'after-init-hook #'show-paren-mode)
 
-(meq/up emacs-lisp-mode :use-package-preconfig  (lispy) (sly))
+(meq/up lispy :config
 
-(meq/up titan :gsetq (meq/var/titan-snippets-dir (meq/ued-lib "titan" "snippets")))
+        ;;;###autoload
+        (defdeino+ toggles (:color blue) ("l" meq/toggle-lispy "lispy"))
+        
+        ;;;###autoload
+        (defdeino+ all-keymaps (:color blue) ("l" meq/lispy-show-top-level "lispy"))
+        
+        ;;;###autoload
+        (defminorua 4 lispy-mode deino-ala-lispy nil "; m l" ("`" nil "cancel"))
+        
+        ;;;###autoload
+        (cosmoem-def
+            :show-funs #'meq/lispy-cosmoem-show
+            :hide-funs #'meq/lispy-cosmoem-hide
+            :toggle-funs #'meq/lispy-cosmoem-toggle
+            :keymap 'lispy-mode-map
+            ;; :transient t
+        )
+        
+        ;;;###autoload
+        (prime "t l" meq/toggle-lispy-cosmoem "lispy")
+        
+        ;; Cosmoem dummy toggle function
+        ;;;###autoload
+        (defun meq/lispy-cosmoem-toggle nil (interactive))
+        
+        ;;;###autoload
+        (defun meq/lispy-show-top-level nil (interactive)
+            (setq meq/var/all-keymaps-map 'lispy-mode-map)
+            (when (featurep 'lispy) (meq/which-key-show-top-level 'lispy-mode-map)))
+        
+        ;;;###autoload
+        (defun meq/toggle-lispy (ua) (interactive "p")
+            (when (featurep 'lispy) (if (= ua 4)
+                (funcall 'meq/toggle-inner 'lispy-mode "lispy" (meq/fbatp lispy-mode) 'lispy-mode-map nil t)
+                (funcall 'meq/toggle-inner 'lispy-mode "lispy" (meq/fbatp lispy-mode) 'lispy-mode-map))))
+        
+        ;;;###autoload
+        (defun meq/toggle-lispy-cosmoem (ua) (interactive "p")
+            (when (featurep 'lispy) (if (= ua 4)
+                (funcall 'meq/toggle-inner 'lispy-mode "lispy" (meq/fbatp lispy-mode) 'lispy-mode-map t t)
+                (funcall 'meq/toggle-inner 'lispy-mode "lispy" (meq/fbatp lispy-mode) 'lispy-mode-map t))))
+        
+        ;;;###autoload
+        (defun meq/lispy-execute-with-current-bindings (&optional called-interactively) (interactive "d")
+            (when (featurep 'lispy) (funcall 'meq/execute-with-current-bindings-inner 'lispy-mode "lispy" (meq/fbatp lispy-mode) 'lispy-mode-map nil called-interactively)))
+        
+        ;;;###autoload
+        (defun meq/lispy-cosmoem-execute-with-current-bindings (&optional called-interactively) (interactive "d")
+            (when (featurep 'lispy) (funcall 'meq/execute-with-current-bindings-inner 'lispy-mode "lispy" (meq/fbatp lispy-mode) 'lispy-mode-map t called-interactively)))
+        
+        (with-eval-after-load 'lispy (add-to-list 'meq/var/modal-modes 'lispy-mode) (add-to-list 'meq/var/modal-prefixes "lispy"))
+
+    )
+
+(meq/up sly)
+
+(meq/up titan-templates :gsetq (meq/var/titan-snippets-dir (meq/ued-lib "titan" "snippets")))
 
 (use-package caddyfile-mode :mode ("\\caddyfile\\'"))
 
@@ -986,18 +1516,6 @@
                                     (if meq/var/windows "type" "cat")
                                     (org-babel-process-file-name in-file)) ""))))
 
-(use-package doc
-    :commands (meq/dired-create-doc-markdown meq/dired-create-and-open-doc-markdown)
-    :gsetq (meq/var/doc-snippets-dir (meq/ued-lib "doc" "snippets"))
-    :uru (doc-org-mode nil deino-doc-org (:color blue :inherit (deino-org-usually/heads)) "t d o"
-            ("d" (meq/insert-snippet "org titan template") "template")))
-
-(use-package fell
-    :commands (meq/dired-create-fell-markdown meq/dired-create-and-open-fell-markdown)
-    :gsetq (meq/var/fell-snippets-dir (meq/ued-lib "fell" "snippets"))
-    :uru (fell-org-mode nil deino-fell-org (:color blue :inherit (deino-org-usually/heads)) "t f o"
-            ("f" (meq/insert-snippet "org titan template") "template")))
-
 (eval `(use-package org
 
     :mode ,(meq/titan-append-modes "org" '("\\.org\\'" . org-mode))
@@ -1068,13 +1586,22 @@
                 ("m" yas/minor-mode)
                 ("a" yas-reload-all)))
 
-    :config (load (meq/ued-settings "org-export-functions"))
-            ;; (setq toggle-debug-on-error t)
-        ;; (setq auto-mode-alist (append auto-mode-alist (meq/titan-append-modes org ("\\.org\\'" . org-mode))))
-
+    :config (load (executable-find "org-export-functions.el"))
+            (setq toggle-debug-on-error t)
+            ;; (setq auto-mode-alist (append auto-mode-alist (meq/titan-append-modes org ("\\.org\\'" . org-mode))))
             (defun meq/org-html-export-to-as-html (func &rest args) (let (org-confirm-babel-evaluate) (apply func args)))
             (advice-add #'org-html-export-to-html :around #'meq/org-html-export-to-as-html)
             (advice-add #'org-html-export-as-html :around #'meq/org-html-export-to-as-html)
+
+            (mapc #'(lambda (key) (define-key org-mode-map (kbd key) nil))
+                '("ESC <left>"
+                  "ESC <right>"
+                  "ESC <up>"
+                  "ESC <down>"
+                  "ESC S-<left>"
+                  "ESC S-<right>"
+                  "ESC S-<up>"
+                  "ESC S-<down>"))
 
     :meta (org-mode-map)
     :meta-rename (org-mode-map "ESC" "org-metadir")
@@ -1113,3 +1640,15 @@
         ;; (org-src-tab-acts-natively t)
 
         (org-edit-src-content-indentation 0)))
+
+(use-package doc-templates
+    :commands (meq/dired-create-doc-markdown meq/dired-create-and-open-doc-markdown)
+    :gsetq (meq/var/doc-snippets-dir (meq/ued-lib "doc" "snippets"))
+    :uru (doc-org-mode nil deino-doc-org (:color blue :inherit (deino-org-usually/heads)) "t d o"
+            ("d" (meq/insert-snippet "org titan template") "template")))
+
+(use-package fell-templates
+    :commands (meq/dired-create-fell-markdown meq/dired-create-and-open-fell-markdown)
+    :gsetq (meq/var/fell-snippets-dir (meq/ued-lib "fell" "snippets"))
+    :uru (fell-org-mode nil deino-fell-org (:color blue :inherit (deino-org-usually/heads)) "t f o"
+            ("f" (meq/insert-snippet "org titan template") "template")))

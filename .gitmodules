@@ -6,27 +6,19 @@
         url = git@github.com:abo-abo/ace-window.git
 [submodule "aiern"]
         path = lib/aiern
-        url = git@github.com:shadowrylander/aiern.git
+        url = git@github.com:syvlorg/aiern.git
 [submodule "aiern-aiernhide-state"]
         path = lib/aiern-aiernhide-state
-        url = git@github.com:shadowrylander/aiern-aiernhide-state.git
+        url = git@github.com:syvlorg/aiern-aiernhide-state.git
 [submodule "aiern-god-state"]
         path = lib/aiern-god-state
-        url = git@github.com:shadowrylander/aiern-god-state.git
-[submodule "alamode"]
-        path = lib/alamode
-        url = git@github.com:shadowrylander/alamode.git
-        build-step = chmod +x ./settings/org-tangle.sh
-        build-step = ./settings/org-tangle.sh .
-        build-step = borg-update-autoloads
-        build-step = borg-byte-compile
-        build-step = borg-makeinfo
+        url = git@github.com:syvlorg/aiern-god-state.git
 [submodule "all-the-icons"]
         path = lib/all-the-icons
         url = git@github.com:domtronn/all-the-icons.el.git
 [submodule "alloy"]
         path = lib/alloy
-        url = git@github.com:shadowrylander/alloy.git
+        url = git@github.com:syvlorg/alloy.git
 [submodule "asoc"]
         path = lib/asoc
         url = git@github.com:troyp/asoc.el.git
@@ -56,10 +48,10 @@
         url = git@github.com:company-mode/company-mode.git
 [submodule "cosmoem"]
         path = lib/cosmoem
-        url = git@gitlab.com:shadowrylander/cosmoem.git
+        url = git@github.com:syvlorg/cosmoem.git
 [submodule "cosmog"]
         path = lib/cosmog
-        url = git@github.com:shadowrylander/cosmog.git
+        url = git@github.com:syvlorg/cosmog.git
         build-step = chmod +x ./settings/org-tangle.sh
         build-step = ./settings/org-tangle.sh .
         build-step = borg-update-autoloads
@@ -73,7 +65,7 @@
         url = git@github.com:magnars/dash.el.git
 [submodule "deino"]
         path = lib/deino
-        url = git@github.com:shadowrylander/deino.git
+        url = git@github.com:syvlorg/deino.git
 [submodule "dired+"]
         path = lib/dired+
         url = git@github.com:emacsmirror/dired-plus.git
@@ -92,20 +84,12 @@
 [submodule "dmenu"]
         path = lib/dmenu
         url = git@github.com:lujun9972/el-dmenu.git
-[submodule "doc"]
-        path = lib/doc
-        url = git@github.com:shadowrylander/doc.git
-        build-step = chmod +x ./settings/org-tangle.sh
-        build-step = ./settings/org-tangle.sh .
-        build-step = borg-update-autoloads
-        build-step = borg-byte-compile
-        build-step = borg-makeinfo
 [submodule "dockerfile-mode"]
         path = lib/dockerfile-mode
         url = git@github.com:spotify/dockerfile-mode.git
 [submodule "doom-aiern-modeline"]
         path = lib/doom-aiern-modeline
-        url = git@github.com:shadowrylander/doom-aiern-modeline.git
+        url = git@github.com:syvlorg/doom-aiern-modeline.git
 [submodule "doom-themes"]
         path = lib/doom-themes
         url = git@github.com:hlissner/emacs-doom-themes.git
@@ -120,7 +104,7 @@
         url = git@github.com:emacs-evil/evil.git
 [submodule "evil-evilified-state"]
         path = lib/evil-evilified-state
-        url = git@github.com:shadowrylander/evil-evilified-state.git
+        url = git@github.com:syvlorg/evil-evilified-state.git
 [submodule "evil-god-state"]
         path = lib/evil-god-state
         url = git@github.com:gridaphobe/evil-god-state.git
@@ -136,14 +120,6 @@
 [submodule "fasd"]
         path = lib/fasd
         url = https://framagit.org/steckerhalter/emacs-fasd.git
-[submodule "fell"]
-        path = lib/fell
-        url = git@github.com:shadowrylander/fell.git
-        build-step = chmod +x ./settings/org-tangle.sh
-        build-step = ./settings/org-tangle.sh .
-        build-step = borg-update-autoloads
-        build-step = borg-byte-compile
-        build-step = borg-makeinfo
 [submodule "flx"]
         path = lib/flx
         url = git@github.com:lewang/flx.git
@@ -162,9 +138,9 @@
 [submodule "helm-flx"]
         path = lib/helm-flx
         url = git@github.com:PythonNut/helm-flx.git
-[submodule "helm-ido-like-guide"]
-        path = lib/helm-ido-like-guide
-        url = git@github.com:shadowrylander/helm-ido-like-guide.git
+[submodule "helm-ido-like"]
+	path = lib/helm-ido-like
+        url = git@github.com:syvlorg/helm-ido-like.git
 [submodule "helm-projectile"]
         path = lib/helm-projectile
         url = git@github.com:bbatsov/helm-projectile.git
@@ -197,7 +173,7 @@
         url = git@github.com:abo-abo/swiper.git
 [submodule "janus"]
         path = lib/janus
-        url = git@github.com:shadowrylander/janus.git
+        url = git@github.com:syvlorg/janus.git
         build-step = chmod +x ./settings/org-tangle.sh
         build-step = ./settings/org-tangle.sh .
         build-step = borg-update-autoloads
@@ -211,7 +187,7 @@
         url = git@github.com:conao3/leaf.el.git
 [submodule "leaf-keywords"]
         path = lib/leaf-keywords
-        url = git@github.com:conao3/leaf-keywords.el.git
+        url = git@github.com:syvlorg/leaf-keywords.git
 [submodule "lib/borg"]
         path = lib/borg
         url = git@github.com:emacscollective/borg.git
@@ -229,7 +205,7 @@
         url = git@github.com:abo-abo/lispy.git
 [submodule "lode"]
         path = lib/lode
-        url = git@github.com:shadowrylander/lode.git
+        url = git@github.com:syvlorg/lode.git
         build-step = chmod +x ./settings/org-tangle.sh
         build-step = ./settings/org-tangle.sh .
         build-step = borg-update-autoloads
@@ -243,7 +219,7 @@
         url = git@github.com:jrblevin/markdown-mode.git
 [submodule "meq"]
         path = lib/meq
-        url = git@github.com:shadowrylander/meq.git
+        url = git@github.com:syvlorg/meq.git
         build-step = chmod +x ./settings/org-tangle.sh
         build-step = ./settings/org-tangle.sh .
         build-step = borg-update-autoloads
@@ -251,7 +227,7 @@
         build-step = borg-makeinfo
 [submodule "meta"]
         path = lib/meta
-        url = git@github.com:shadowrylander/meta.git
+        url = git@github.com:syvlorg/meta.git
         build-step = chmod +x ./settings/org-tangle.sh
         build-step = ./settings/org-tangle.sh .
         build-step = borg-update-autoloads
@@ -286,13 +262,13 @@
         url = git@github.com:rnkn/olivetti.git
 [submodule "one"]
         path = lib/one
-        url = git@github.com:shadowrylander/one.git
+        url = git@github.com:syvlorg/one.git
 [submodule "oneonone"]
         path = lib/oneonone
         url = git@github.com:emacsmirror/oneonone.git
-[submodule "oreo"]
-        path = lib/oreo
-        url = git@gitlab.com:shadowrylander/oreo.git
+[submodule "oreo-packages"]
+	path = lib/oreo-packages
+        url = git@github.com:syvlorg/oreo-packages.git
 [submodule "org"]
         path = lib/org
         url = https://git.savannah.gnu.org/git/emacs/org-mode.git
@@ -328,7 +304,7 @@
         url = git@github.com:raxod502/prescient.el.git
 [submodule "prime"]
         path = lib/prime
-        url = git@github.com:shadowrylander/prime.git
+        url = git@github.com:syvlorg/prime.git
         build-step = chmod +x ./settings/org-tangle.sh
         build-step = ./settings/org-tangle.sh .
         build-step = borg-update-autoloads
@@ -372,7 +348,7 @@
         url = git@github.com:emacsmirror/ring-plus.git
 [submodule "riot"]
         path = lib/riot
-        url = git@github.com:shadowrylander/riot.git
+        url = git@github.com:syvlorg/riot.git
         build-step = chmod +x ./settings/org-tangle.sh
         build-step = ./settings/org-tangle.sh .
         build-step = borg-update-autoloads
@@ -398,21 +374,13 @@
         url = git@github.com:nonsequitur/smex.git
 [submodule "sorrow"]
         path = lib/sorrow
-        url = git@github.com:shadowrylander/sorrow.git
+        url = git@github.com:syvlorg/sorrow.git
 [submodule "sr-speedbar"]
         path = lib/sr-speedbar
         url = git@github.com:emacsorphanage/sr-speedbar.git
 [submodule "systemd"]
         path = lib/systemd
         url = git@github.com:holomorph/systemd-mode.git
-[submodule "titan"]
-        path = lib/titan
-        url = git@github.com:shadowrylander/titan.git
-        build-step = chmod +x ./settings/org-tangle.sh
-        build-step = ./settings/org-tangle.sh .
-        build-step = borg-update-autoloads
-        build-step = borg-byte-compile
-        build-step = borg-makeinfo
 [submodule "transient"]
         path = lib/transient
         url = git@github.com:magit/transient.git
@@ -427,7 +395,7 @@
         url = git@gitlab.com:tsc25/undo-tree.git
 [submodule "uru"]
         path = lib/uru
-        url = git@github.com:shadowrylander/uru.git
+        url = git@github.com:syvlorg/uru.git
         build-step = chmod +x ./settings/org-tangle.sh
         build-step = ./settings/org-tangle.sh .
         build-step = borg-update-autoloads
@@ -438,7 +406,7 @@
         url = git@github.com:jwiegley/use-package.git
 [submodule "use-package-deino"]
         path = lib/use-package-deino
-        url = git@github.com:shadowrylander/use-package-deino.git
+        url = git@github.com:syvlorg/use-package-deino.git
         build-step = chmod +x ./settings/org-tangle.sh
         build-step = ./settings/org-tangle.sh .
         build-step = borg-update-autoloads
@@ -446,7 +414,7 @@
         build-step = borg-makeinfo
 [submodule "use-package-extras"]
         path = lib/use-package-extras
-        url = git@github.com:shadowrylander/use-package-extras.git
+        url = git@github.com:syvlorg/use-package-extras.git
         build-step = chmod +x ./settings/org-tangle.sh
         build-step = ./settings/org-tangle.sh .
         build-step = borg-update-autoloads
@@ -457,7 +425,7 @@
         url = git@gitlab.com:to1ne/use-package-hydra.git
 [submodule "use-package-oreo"]
         path = lib/use-package-oreo
-        url = git@github.com:shadowrylander/use-package-oreo.git
+        url = git@github.com:syvlorg/use-package-oreo.git
 [submodule "var/epkgs"]
         path = var/epkgs
         url = git@github.com:emacscollective/epkgs.git
@@ -506,3 +474,15 @@
 [submodule "lib/compat"]
 	path = lib/compat
 	url = git@github.com:phikal/compat.el.git
+[submodule "titan-templates"]
+	path = lib/titan-templates
+	url = git@github.com:syvlorg/titan-templates.git
+[submodule "fell-templates"]
+	path = lib/fell-templates
+	url = git@github.com:syvlorg/fell-templates.git
+[submodule "doc-templates"]
+	path = lib/doc-templates
+	url = git@github.com:syvlorg/doc-templates.git
+[submodule "settings"]
+	path = settings
+	url = git@github.com:sylvorg/settings.git

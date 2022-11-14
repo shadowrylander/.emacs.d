@@ -69,20 +69,6 @@ Check if we're bootstrapping the system, and whether we want reinstall the packa
 (defvar meq/var/force-bootstrap (meq/*item-in-cla "--force-bootstrap"))
 #+end_src
 
-Disable [[https://www.emacswiki.org/emacs/InstallingPackages][~package.el~]] on startup: 
-
-#+begin_src emacs-lisp
-(setq package-enable-at-startup nil)
-#+end_src
-
-Old methods of package management, including [[https://www.emacswiki.org/emacs/InstallingPackages][~package.el~]], [[https://github.com/raxod502/straight.el][~straight.el~]] by [[https://github.com/raxod502][Radon Rosborough]], and [[https://github.com/quelpa/quelpa][~quelpa~]]:
-
-#+begin_src emacs-lisp :noweb-ref no
-(load (concat user-emacs-directory "siluam/package-config.el"))
-(load (concat user-emacs-directory "siluam/straight-config.el"))
-(load (concat user-emacs-directory "siluam/quelpa.el"))
-#+end_src
-
 This sets up various system-related variables, all fairly descriptive on their own:
 
 #+begin_src emacs-lisp
@@ -93,180 +79,36 @@ This sets up various system-related variables, all fairly descriptive on their o
 (defvar meq/var/nixos (ignore-errors (string-match-p (regexp-quote "nixos") (shell-command-to-string "uname -a"))))
 #+end_src
 
-Set the borg package directory:
+Are we borg?
 
 #+begin_src emacs-lisp
-(setq ;; borg-user-emacs-directory user-emacs-directory
-    borg-drones-directory-prefix (concat "lib" meq/var/slash)
-    borg-drones-directory (concat user-emacs-directory borg-drones-directory-prefix)
-    ;; borg-gitmodules-file (expand-file-name ".gitmodules" user-emacs-directory)
-    )
+(defvar meq/var/we-are-borg (or (getenv "WEAREBORG") (meq/*item-in-cla "--we-are-borg")))
 #+end_src
 
-[[https://github.com/emacscollective/borg][We Are Borg.]]
+Disable [[https://www.emacswiki.org/emacs/InstallingPackages][~package.el~]] on startup: 
+
+#+begin_src emacs-lisp
+(setq package-enable-at-startup nil)
+#+end_src
+
+Methods of package management, including:
+- [[https://www.emacswiki.org/emacs/InstallingPackages][~package.el~]]
+- [[https://github.com/radian-software/straight.el][~straight.el~]] by [[https://github.com/raxod502][Radon Rosborough]] / [[https://github.com/radian-software][Radian LLC]]
+- [[https://github.com/quelpa/quelpa][~quelpa~]]
+- [[https://nixos.org/][~nix~]]
+- [[https://github.com/emacscollective/borg][We Are Borg.]]
 
 [[./borg.gif]]
 
 #+begin_src emacs-lisp
-(defun meq/require-and-load (pkg)
-    (add-to-list 'load-path (concat user-emacs-directory "lib" meq/var/slash pkg) t)
-    (require (intern pkg)))
-(mapc 'meq/require-and-load '("compat" "emacsql" "emacsql-sqlite" "closql"))
-
-(add-to-list 'load-path (concat user-emacs-directory "lib" meq/var/slash "epkg" meq/var/slash "lisp") t)
-(require 'epkg)
-
-(add-to-list 'load-path (concat user-emacs-directory "lib" meq/var/slash "borg") t)
-(require 'borg)
-
-;; (unless (or
-;;           meq/var/phone
-;;           ;; meq/var/windows
-;;           ) (meq/require-and-load "epkg"))
-;; (meq/require-and-load "borg")
-#+end_src
-
-Make the ~borg~ git command buffer and any potential errors more descriptive:
-
-#+begin_src emacs-lisp
-;; (defun meq/borg--call-git-advice (pkg &rest args)
-;;   (let ((process-connection-type nil)
-;;         (buffer (generate-new-buffer
-;;                  (concat " *Borg Git" (and pkg (concat " " pkg)) "*"))))
-;;     (if (eq (apply #'call-process "git" nil buffer nil args) 0)
-;;         (kill-buffer buffer)
-;;       (with-current-buffer buffer
-;;         (special-mode))
-;;       (pop-to-buffer buffer)
-;;       (error "Borg Git: %s %s:\n\n%s" pkg args (buffer-string)))))
-(defun meq/borg--call-git-advice (pkg &rest args)
-  (let ((process-connection-type nil)
-        (buffer (generate-new-buffer
-                 (concat " *Borg Git" (and pkg (concat " " pkg)) "*"))))
-    (with-current-buffer buffer
-        (pop-to-buffer buffer)
-        (if (eq (apply #'call-process "git" nil buffer nil args) 0)
-            (unwind-protect (format "\n\n%s\n\n" (buffer-string)) (kill-buffer buffer))
-            (error "Borg Git: %s %s:\n\n%s" pkg args (buffer-string))))))
-(advice-add #'borg--call-git :override #'meq/borg--call-git-advice)
-#+end_src
-
-Always execute the build-steps of a package outlined in the ~.gitmodules~ file:
-
-#+begin_src emacs-lisp
-(defun meq/borg-build-advice (clone &optional activate)
-  "Build the clone named CLONE.
-Interactively, or when optional ACTIVATE is non-nil,
-then also activate the clone using `borg-activate'."
-  (interactive (list (borg-read-clone "Build drone: ") t))
-  (borg--build-noninteractive clone)
-  (when activate (borg-activate clone)))
-(advice-add #'borg-build :override #'meq/borg-build-advice)
-#+end_src
-
-When assimilating packages, return packages which have not been assimilated yet; otherwise, return packages which have:
-
-#+begin_src emacs-lisp
-(defun meq/borg-drones-advice (func &rest args)
-  (let* ((barg (pop args))
-          (assimilating (pop args)))
-    (seq-filter #'(lambda (pkg*) (interactive)
-      (let* ((pkg (car pkg*))
-              (path* (cl-getf (cdr pkg*) 'path))
-              (path (cond ((listp path*) (car path*))
-                          ((stringp path*) path*)))
-              (exists (file-exists-p (borg-worktree pkg)))
-              (no-back-slash (not (string-match-p (regexp-quote "\\") pkg)))
-              (no-forward-slash (not (string-match-p (regexp-quote "/") pkg)))
-              (xane (xor assimilating exists)
-                    ;; (or
-                    ;;     (and assimilating (not exists))
-                    ;;     (and exists (not assimilating)))
-                    )
-              (same-borg-prefix (string= (string-remove-suffix pkg path)
-                                    (string-remove-prefix borg-user-emacs-directory borg-drones-directory)))
-              (result (and no-back-slash no-forward-slash xane same-borg-prefix)))
-            result))
-      (funcall func barg))))
-(advice-add #'borg-drones :around #'meq/borg-drones-advice)
-#+end_src
-
-Use ~submodule absorbgitdirs~ relative to borg's top level directory:
-
-#+begin_src emacs-lisp
-(defun meq/borg--maybe-absorb-gitdir (pkg)
-  (let* ((ver (nth 2 (split-string (car (process-lines "git" "version")) " ")))
-         (ver (and (string-match "\\`[0-9]+\\(\\.[0-9]+\\)*" ver)
-                   (match-string 0 ver))))
-    (if (version< ver "2.12.0")
-        (let ((default-directory (borg-worktree pkg))
-              (gitdir (borg-gitdir pkg)))
-          (make-directory gitdir t)
-          (borg--call-git pkg "init" "--separate-git-dir" gitdir)
-          (borg--link-gitdir pkg))
-      (borg--call-git pkg "-C" borg-top-level-directory "submodule" "absorbgitdirs" "--" (borg-worktree pkg)))))
-(advice-add #'borg--maybe-absorb-gitdir :override #'meq/borg--maybe-absorb-gitdir)
-#+end_src
-
-Assimilate packages by ~submodule add~ing them with a depth of 1:
-
-#+begin_src emacs-lisp
-(defun meq/borg-assimilate-advice (package url &optional partially)
-  "Assimilate the package named PACKAGE from URL.
-If `epkg' is available, then only read the name of the package
-in the minibuffer and use the url stored in the Epkg database.
-If `epkg' is unavailable, the package is not in the database, or
-with a prefix argument, then also read the url in the minibuffer.
-With a negative prefix argument only add the submodule but don't
-build and activate the drone."
-  (interactive
-   (nconc (borg-read-package "Assimilate package: " current-prefix-arg)
-          (list (< (prefix-numeric-value current-prefix-arg) 0))))
-  (message "Assimilating %s..." package)
-  (unless (equal (borg-get package "s8472") "true")
-      (borg--maybe-reuse-gitdir package)
-      (borg--call-git
-        package
-        "-C" borg-top-level-directory
-        "submodule"
-        "add"
-        "-f"
-        "--depth" "1"
-        "--name" package
-        url
-        (or
-          (borg-get package "path")
-          (concat (string-remove-prefix borg-user-emacs-directory borg-drones-directory) meq/var/slash package)))
-      (borg--sort-submodule-sections (concat borg-top-level-directory ".gitmodules"))
-      (borg--call-git package "-C" borg-top-level-directory "add")
-      (borg--maybe-absorb-gitdir package))
-  (unless partially
-    (borg-build package)
-    (borg-activate package))
-  (borg--refresh-magit)
-  (message "Assimilating %s...done" package))
-(advice-add #'borg-assimilate :override #'meq/borg-assimilate-advice)
-#+end_src
-
-Update all assimilated packages if necessary:
-
-#+begin_src emacs-lisp
-(defvar meq/var/update (meq/*item-in-cla "--update"))
-(when meq/var/update (mapc #'borg-build (mapcar #'car (borg-drones t))))
-#+end_src
-
-Update assimilated packages */WITHOUT/* [[https://orgmode.org/][ORG]] if necessary:
-
-#+begin_src emacs-lisp
-(defvar meq/var/update-norg (meq/*item-in-cla "--update-norg"))
-(when meq/var/update-norg (mapc #'borg-build (remove "org" (mapcar #'car (borg-drones t)))))
-#+end_src
-
-Update the specified assimilated package if necessary:
-
-#+begin_src emacs-lisp
-(defvar meq/var/update-this (meq/*two-items-in-list "--update-this"))
-(when meq/var/update-this (borg-build meq/var/update-this))
+(setq meq/var/package-manager (if meq/var/we-are-borg "borg" "nix"))
+(load (concat user-emacs-directory "siluam/"
+    (pcase meq/var/package-manager
+        ("package" "package-config.el")
+        ("straight" "straight-config.el")
+        ("quelpa" "quelpa.el")
+        ("borg" "borg-cube.el")
+        (_ "nix-config.el"))))
 #+end_src
 
 Avoid stale ~*.elc~ files using [[https://emacs.stackexchange.com/a/186/31428][this answer]], by [[https://emacs.stackexchange.com/users/50/malabarba][Malabarba]]:
@@ -278,11 +120,16 @@ Avoid stale ~*.elc~ files using [[https://emacs.stackexchange.com/a/186/31428][t
 Set up startup optimization packages, including [[https://github.com/emacscollective/packed][~packed~]], [[https://github.com/emacscollective/auto-compile][~auto-compile~]], [[https://github.com/emacscollective/no-littering][~no-littering~]], and [[https://github.com/emacsmirror/gcmh][~gcmh~]]:
 
 #+begin_src emacs-lisp
-(mapc #'(lambda (pkg*) (interactive)
-  (let* ((pkg (symbol-name pkg*)))
-    (ignore-errors (borg-activate pkg))
-    (unless (require pkg* nil t)
-        (borg-assimilate pkg (borg-get pkg "url"))))) '(packed auto-compile no-littering gcmh))
+(mapc #'(lambda (pkg) (interactive)
+  (let* ((pkg-name (symbol-name pkg)))
+    (when meq/var/we-are-borg (ignore-errors (borg-activate pkg-name)))
+    (unless (require pkg nil t)
+        (pcase meq/var/package-manager
+            ("package" (progn (add-to-list 'package-selected-packages pkg) (package-install pkg)))
+            ("straight" (straight-use-package pkg))
+            ("quelpa" (quelpa pkg))
+            ("borg" (borg-assimilate pkg-name (borg-get pkg-name "url")))))
+    (require pkg))) '(auto-compile no-littering gcmh))
 (auto-compile-on-load-mode)
 (auto-compile-on-save-mode)
 (gcmh-mode 1)
@@ -305,11 +152,6 @@ Don't notify us about auto-reversion, from [[https://stackoverflow.com/a/5436950
 We Are ~Org~:
 
 #+begin_src emacs-lisp
-(if (file-exists-p (concat user-emacs-directory "lib" meq/var/slash "org"))
-  (if (file-exists-p (concat user-emacs-directory "lib" meq/var/slash "org" meq/var/slash "lisp" meq/var/slash "org-loaddefs.el"))
-    (borg-activate "org")
-    (borg-build "org" t))
-  (borg-assimilate "org" (borg-get "org" "url")))
 (require 'org-loaddefs)
 #+end_src
 
@@ -329,7 +171,7 @@ Create a version of [[https://github.com/emacscollective/borg/blob/master/borg.e
 Then create a shell tangle function based on the above:
 
 #+begin_src emacs-lisp
-(defun meq/call-tangle (file) (meq/call tangle-script "*literally-configuring*" file))
+(defun meq/call-tangle (file) (meq/call "org-tangle" "*literally-configuring*" file))
 #+end_src
 
 Modify [[https://code.orgmode.org/bzg/org-mode/src/master/lisp/org.el#L222][~org-babel-load-file~]] to use the above function instead:
@@ -529,41 +371,6 @@ Set the right directory to store the native comp cache
 :header-args:emacs-lisp+: :tangle yes
 :END:
 
-Assimilate the packages from my ~.gitmodules~ file:
-
-# with the help of [[https://stackoverflow.com/a/28686228/10827766][this]], by [[https://stackoverflow.com/users/596361/mirzhan-irkegulov][Mirzhan Irkegulov]]:
-
-#+begin_src emacs-lisp
-(let* ((gitmodules (borg-drones t t))
-        (command)
-
-        ;; Adapted From:
-        ;; Answer: https://superuser.com/a/927832/1154755
-        ;; User: https://superuser.com/users/265996/jackson
-        (inhibit-message t))
-    (mapc #'(lambda (pkg) (interactive)
-                (apply #'borg-assimilate pkg))
-        ;; Adapted From:
-        ;; Answer: https://stackoverflow.com/a/9366300/10827766
-        ;; User: https://stackoverflow.com/users/267442/spec
-        (remove nil (mapcar #'(lambda (pkg) (interactive)
-            (list (car pkg) (cl-getf (cdr pkg) 'url))) gitmodules))))
-#+end_src
-
-Update the autoload files for the drines:
-
-#+begin_src emacs-lisp
-(mapc #'borg-update-autoloads (mapcar #'car (borg-drones t)))
-#+end_src
-
-Wake up the borg:
-
-#+begin_src emacs-lisp
-(setq borg-rewrite-urls-alist '(("git@github.com:" . "https://github.com/")
-                                ("git@gitlab.com:" . "https://gitlab.com/")))
-(borg-initialize)
-#+end_src
-
 /Finally/ activate my function library:
 
 #+begin_src emacs-lisp
@@ -594,7 +401,7 @@ As adapted from [[https://emacs.stackexchange.com/users/2731/ebpa][ebpa's]] answ
 (setq custom-safe-themes t)
 #+end_src
 
-By the way, I get most of my themes from [[themer.dev][https://themer.dev/]].
+By the way, I get most of my themes from [[https://themer.dev/][themer.dev]].
 
 ** Packages
 :PROPERTIES:
@@ -717,7 +524,8 @@ And then [[https://github.com/shadowrylander/use-package-extras][use-package-ext
 
 #+begin_src emacs-lisp
 (use-package use-package-extras :demand t
-    :config (meq/up use-package-ensure-system-package))
+    ;; :config (meq/up use-package-ensure-system-package)
+    )
 #+end_src
 
 *** hydra
@@ -812,6 +620,17 @@ And finally, this allows ~alloy~ to assume ~kbd~ is being used, or in this case,
     :custom (alloy-implicit-naked t))
 #+end_src
 
+*** prime
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
+
+Set up [[https://github.com/shadowrylander/prime][prime]] by yours truely:
+
+#+begin_src emacs-lisp
+(meq/up prime)
+#+end_src
+
 *** uru
 :PROPERTIES:
 :header-args:emacs-lisp+: :tangle yes
@@ -820,7 +639,7 @@ And finally, this allows ~alloy~ to assume ~kbd~ is being used, or in this case,
 This sets up my package [[https://github.com/shadowrylander/uru][uru]], which activates ~deinos~ based on the current major-mode, as mentioned in [[https://codeberg.org/dr.ops/medusa/src/branch/main/medusa.org#headline-4][magic medusa hydra]], by [[https://codeberg.org/dr.ops][Andy Drop]]:
 
 #+begin_src emacs-lisp
-(meq/up uru :config (with-eval-after-load 'prime (prime "u u" uru "uru") (prime "u m" minoru "minoru")))
+(meq/up uru :prime ("u u" uru "uru") ("u m" minoru "minoru"))
 #+end_src
 
 *** which-key
@@ -868,6 +687,69 @@ The incredible [[https://github.com/justbur/emacs-which-key][emacs-which-key]] b
 :header-args:emacs-lisp+: :tangle yes
 :END:
 
+#+name: 8eae8e4e-adf4-45cc-ae3f-ac61384d6b75
+#+begin_src emacs-lisp :var map="" :var mode="" :var prefix="" :var short="" :var package="" :exports none :tangle no
+;; Adapted From:
+;; Answer: https://emacs.stackexchange.com/a/7381/31428
+;; User: https://emacs.stackexchange.com/users/719/adobe
+(format-spec ";;;###autoload
+(defdeino+ toggles (:color blue) (\"%s\" meq/toggle-%p \"%p\"))
+
+;;;###autoload
+(defdeino+ all-keymaps (:color blue) (\"%s\" meq/%p-show-top-level \"%p\"))
+
+;;;###autoload
+(defminorua 4 %n deino-ala-%p nil \"; m %s\" (\"`\" nil \"cancel\"))
+
+;;;###autoload
+(cosmoem-def
+    :show-funs #'meq/%p-cosmoem-show
+    :hide-funs #'meq/%p-cosmoem-hide
+    :toggle-funs #'meq/%p-cosmoem-toggle
+    :keymap '%m
+    ;; :transient t
+)
+
+;;;###autoload
+(prime \"t %s\" meq/toggle-%p-cosmoem \"%p\")
+
+;; Cosmoem dummy toggle function
+;;;###autoload
+(defun meq/%p-cosmoem-toggle nil (interactive))
+
+;;;###autoload
+(defun meq/%p-show-top-level nil (interactive)
+    (setq meq/var/all-keymaps-map '%m)
+    (when (featurep '%f) (meq/which-key-show-top-level '%m)))
+
+;;;###autoload
+(defun meq/toggle-%p (ua) (interactive \"p\")
+    (when (featurep '%f) (if (= ua 4)
+        (funcall 'meq/toggle-inner '%n \"%p\" (meq/fbatp %n) '%m nil t)
+        (funcall 'meq/toggle-inner '%n \"%p\" (meq/fbatp %n) '%m))))
+
+;;;###autoload
+(defun meq/toggle-%p-cosmoem (ua) (interactive \"p\")
+    (when (featurep '%f) (if (= ua 4)
+        (funcall 'meq/toggle-inner '%n \"%p\" (meq/fbatp %n) '%m t t)
+        (funcall 'meq/toggle-inner '%n \"%p\" (meq/fbatp %n) '%m t))))
+
+;;;###autoload
+(defun meq/%p-execute-with-current-bindings (&optional called-interactively) (interactive \"d\")
+    (when (featurep '%f) (funcall 'meq/execute-with-current-bindings-inner '%n \"%p\" (meq/fbatp %n) '%m nil called-interactively)))
+
+;;;###autoload
+(defun meq/%p-cosmoem-execute-with-current-bindings (&optional called-interactively) (interactive \"d\")
+    (when (featurep '%f) (funcall 'meq/execute-with-current-bindings-inner '%n \"%p\" (meq/fbatp %n) '%m t called-interactively)))
+
+(with-eval-after-load '%f (add-to-list 'meq/var/modal-modes '%n) (add-to-list 'meq/var/modal-prefixes \"%p\"))" `(
+    (?m . ,map)
+    (?n . ,mode)
+    (?p . ,prefix)
+    (?s . ,short)
+    (?f . ,package)))
+#+end_src
+
 [[https://bulbapedia.bulbagarden.net/wiki/Nebby][Nebby]]
 [[./nebby.webp]]
 
@@ -878,9 +760,72 @@ Meet the [[https://gitlab.com/shadowrylander/cosmoem][cosmoem]] named [[https://
 #+end_src
 
 #+begin_src emacs-lisp
-    :config (with-eval-after-load 'prime
-                (prime ", m" map-of-infinity/body "map-of-infinity")
-                (meq/which-key-change-ryo "," "damascus"))
+    :prime (", m" map-of-infinity/body "map-of-infinity")
+    :config (meq/which-key-change-ryo "," "damascus")
+#+end_src
+
+This sets up a few things to create a ~deino~ of ~cosmoem~ maps, adapted from [[https://gitlab.com/jjzmajic/cosmoem.el/-/blob/master/cosmoem.el#L83][here]]
+and [[https://github.com/emacsorphanage/god-mode/blob/master/god-mode.el#L392][here]]:
+
+#+begin_src emacs-lisp
+    :gsetq (meq/var/all-keymaps-map nil)
+            (meq/var/alamode-aiern-was-on (member "aiern" meq/var/ignored-modal-prefixes))
+            (meq/var/alamode-evil-was-on (member "evil" meq/var/ignored-modal-prefixes))
+    :config/defun* (meq/toggle-inner (mode prefix mode-on map &optional use-cosmoem force) (interactive)
+                    (meq/disable-all-modal-modes nil (not mode-on))
+                    (if mode-on
+                        (when force (meq/which-key--show-popup map force))
+                        (funcall mode 1)
+                        (when (featurep 'which-key)
+                            (if use-cosmoem
+                                (ignore-errors (funcall (meq/inconcat "meq/" prefix "-cosmoem-show")))
+                                (meq/which-key-show-top-level map)))))
+                (meq/execute-with-current-bindings-inner (mode prefix mode-on map &optional use-cosmoem called-interactively)
+                    (interactive "d")
+                    (unless mode-on
+                        (letrec ((caller this-command)
+                                (buffer (current-buffer))
+                                (cleanup
+                                    (lambda ()
+                                    ;; Perform cleanup in original buffer even if the command
+                                    ;; switched buffers.
+                                    (if (buffer-live-p buffer)
+                                        (with-current-buffer buffer
+                                            (unwind-protect
+                                                (progn
+                                                    (setq overriding-terminal-local-map meq/var/alamode-backup-terminal-local-map)
+                                                    (funcall mode -1)
+                                                    (when meq/var/alamode-aiern-was-on (aiern-mode 1))
+                                                    (when meq/var/alamode-evil-was-on (evil-mode 1))
+                                                    (meq/which-key-show-top-level))
+                                                (remove-hook 'post-command-hook post-hook)))
+                                        (remove-hook 'post-command-hook post-hook))))
+                                (kill-transient-map (lambda nil (interactive)
+                                                        (set-transient-map map 'meq/god-prefix-command-p cleanup)))
+                                (post-hook (lambda nil (unless (and
+                                                                (eq this-command caller)
+                                                                ;; If we've entered the minibuffer, this implies
+                                                                ;; a non-prefix command was run, even if
+                                                                ;; `this-command' has not changed.  For example,
+                                                                ;; `execute-extended-command' behaves this way.
+                                                                (not (window-minibuffer-p)))
+                                                            (funcall kill-transient-map)))))
+                            (add-hook 'post-command-hook post-hook)
+                            ;; Pass the current prefix argument along to the next command.
+                            (setq prefix-arg current-prefix-arg)
+                            ;; Technically we don't need to activate %p mode since the
+                            ;; transient keymap is already in place, but it's useful to provide
+                            ;; a mode line lighter and run any hook functions the user has set
+                            ;; up.  This could be made configurable in the future.
+                            (funcall mode 1)
+                            (when (featurep 'which-key) (meq/which-key-show-top-level map))
+                            (setq meq/var/alamode-backup-terminal-local-map overriding-terminal-local-map)
+                            (setq deino-enabled-temporarily t
+                                overriding-terminal-local-map (symbol-value map))
+                            (when (string= prefix "god")
+                                (when (meq/fbatp aiern-mode) (setq meq/var/alamode-aiern-was-on t) (aiern-mode -1))
+                                (when (meq/fbatp evil-mode) (setq meq/var/alamode-evil-was-on t) (evil-mode -1)))
+                            (message (format "Switched to %s mode for the next command ..." prefix)))))
 #+end_src
 
 This ~deino~ leads to a bunch of other useful ~deinos~, as well as a few useful functions:
@@ -923,7 +868,17 @@ A ~deino~ for all my modal-mode keymaps:
 Finally, [[https://github.com/shadowrylander/sorrow][sorrow]], forked from [[https://github.com/Kungsgeten/ryo-modal][ryo-modal]] by [[https://github.com/Kungsgeten][Erik Sjöstrand]]:
 
 #+begin_src emacs-lisp
-(meq/up sorrow :config (with-eval-after-load 'prime (primer+ "t" "toggles"))
+(meq/up sorrow :primer+ ("t" "toggles")
+#+end_src
+
+Here is the setup for the ~deino~ of ~cosmoem~ maps referred to in the ~cosmoem use-package~ definition:
+
+#+begin_src emacs-lisp
+    :config
+        <<8eae8e4e-adf4-45cc-ae3f-ac61384d6b75(map="sorrow-mode-map", mode="sorrow-mode", prefix="sorrow", short="s", package="sorrow")>>
+#+end_src
+
+#+begin_src emacs-lisp
     ;; From: https://github.com/shadowrylander/sorrow#which-key-integration
     (push '((nil . "sorrow:.*:") . (nil . "")) which-key-replacement-alist))
 #+end_src
@@ -983,21 +938,10 @@ Set up [[https://github.com/shadowrylander/lode][lode]] by yours truely:
 :header-args:emacs-lisp+: :tangle yes
 :END:
 
-Set up [[https://github.com/shadowrylander/lode][meta]] by yours truely:
+Set up [[https://github.com/shadowrylander/meta][meta]] by yours truely:
 
 #+begin_src emacs-lisp
 (meq/up meta)
-#+end_src
-
-*** prime
-:PROPERTIES:
-:header-args:emacs-lisp+: :tangle yes
-:END:
-
-Set up [[https://github.com/shadowrylander/lode][prime]] by yours truely:
-
-#+begin_src emacs-lisp
-(meq/up prime)
 #+end_src
 
 *** aiern
@@ -1063,6 +1007,12 @@ in this case being ~aiern-normal-state-map~ and ~aiern-insert-state-map~:
         ;;         (funcall 'meq/toggle-inner 'aiern-mode "aiern-ex" (meq/fbatp aiern-mode) 'aiern-ex-keymap t)))
 #+end_src
 
+Here is the setup for the ~deino~ of ~cosmoem~ maps referred to in the ~cosmoem use-package~ definition:
+
+#+begin_src emacs-lisp
+        <<8eae8e4e-adf4-45cc-ae3f-ac61384d6b75(map="aiern-normal-state-map", mode="aiern-mode", prefix="aiern", short="a", package="aiern")>>
+#+end_src
+
 And here are the ~aiern~ bindings set in the ~sorrow~ modal-mode:
 
 #+begin_src emacs-lisp
@@ -1075,7 +1025,15 @@ And here are the ~aiern~ bindings set in the ~sorrow~ modal-mode:
                     ("p" aiern-quit ":q")
                     ("o" aiern-write ":w")
                     ("O" aiern-write-all ":wa")
-                    ;; ("q" (funcall (alloy-simulate-key ":q! <RET>")) ":q!"))
+#+end_src
+
+Deprecated; kept for documentation purposes:
+
+#+begin_src emacs-lisp :tangle no
+                    ("q" (funcall (alloy-simulate-key ":q! <RET>")) ":q!"))
+#+end_src
+
+#+begin_src emacs-lisp
                     ("q" (aiern-quit t) ":q!"))
                 :name "aiern exits"))
 #+end_src
@@ -1181,7 +1139,7 @@ From the [[https://github.com/abo-abo/swiper][swiper]] package by [[https://gith
 Set up the base of this config, including the [[https://github.com/emacsmirror/rainbow-mode][rainbow-mode]] package:
 
 #+begin_src emacs-lisp
-(meq/upnsd damascus :use-package-postconfig (rainbow-mode :config (rainbow-mode 1)) (help-fns+)
+(meq/upnsd damascus :use-package-postconfig (rainbow-mode :config (rainbow-mode 1)) (help-fns+ :load-siluam-file-postconfig ("help+"))
 #+end_src
 
 Define some universal deinos:
@@ -1204,10 +1162,10 @@ Define some universal deinos:
             ("s" meq/sorrow-execute-with-current-bindings "sorrow execute")
             ("g" meq/god-execute-with-current-bindings "god execute")
             ("r" meq/ryo-execute-with-current-bindings "ruo execute")
-            ("`" nil "cancel")
+            ("`" nil "cancel"))
         (deino-universal/major-minor-modes (:color blue) "d u M"
             "A deino for major and minor modes!"
-            ("`" nil "cancel")))
+            ("`" nil "cancel"))
         (deino-universal/everything-else (:color blue) "d u e"
             "A deino for everything else!"
             ("`" nil "cancel")
@@ -1263,7 +1221,6 @@ This hook and function combo would allow me to save files without query, taken f
 Load the latest help package, and set a few self-describing variables:
 
 #+begin_src emacs-lisp
-    :load-siluam-file-postconfig ("help+20")
     :gsetq
         (indent-tabs-mode nil
             inhibit-startup-screen t
@@ -1365,7 +1322,7 @@ Removes *Completions* from buffer after you've opened a file.
 
 #+begin_src emacs-lisp
         (add-hook 'minibuffer-exit-hook
-            '(lambda nil
+            #'(lambda nil
                 (let ((buffer "*Completions*"))
                 (and (get-buffer buffer)
                         (kill-buffer buffer)))))
@@ -1449,6 +1406,28 @@ Zettelkasten files for my novel and documentation:
             ("D" (meq/dired-create-doc-markdown) "create doc file" :color red)))
 #+end_src
 
+*** god-mode
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
+
+#+begin_src emacs-lisp
+(use-package god-mode
+    :config (which-key-enable-god-mode-support)
+#+end_src
+
+Here is the setup for the ~deino~ of ~cosmoem~ maps referred to in the ~cosmoem use-package~ definition:
+
+#+begin_src emacs-lisp
+        <<8eae8e4e-adf4-45cc-ae3f-ac61384d6b75(map="global-map", mode="god-local-mode", prefix="god", short="g", package="god-mode")>>
+#+end_src
+
+This sets up [[https://github.com/emacsorphanage/god-mode][god-mode]], [[https://github.com/gridaphobe/evil-god-state][evil-god-state]] by [[https://github.com/gridaphobe][Eric Seidel]], and my fork of it [[https://github.com/shadowrylander/aiern-god-state][aiern-god-state]]:
+
+#+begin_src emacs-lisp
+    :upnsd-postconfig (aiern-god-state) (evil-god-state))
+#+end_src
+
 *** doom-aiern-modeline
 :PROPERTIES:
 :header-args:emacs-lisp+: :tangle yes
@@ -1459,14 +1438,7 @@ This sets up [[https://github.com/shadowrylander/doom-aiern-modeline][my fork]] 
 #+begin_src emacs-lisp
 (use-package doom-aiern-modeline
     :hook (after-init . doom-aiern-modeline-mode)
-#+end_src
-
-Then this sets up [[https://github.com/emacsorphanage/god-mode][god-mode]], [[https://github.com/gridaphobe/evil-god-state][evil-god-state]] by [[https://github.com/gridaphobe][Eric Seidel]], and my fork of it [[https://github.com/shadowrylander/aiern-god-state][aiern-god-state]]
-
-#+begin_src emacs-lisp
     :use-package-preconfig (shrink-path)
-            (god-mode :upnsd-postconfig (aiern-god-state) (evil-god-state)
-                      :config (which-key-enable-god-mode-support))
 #+end_src
 
 Most of the following is adapted from [[https://github.com/seagle0128/doom-aiern-modeline#customize][here]]:
@@ -1706,6 +1678,15 @@ This allows me to disable ~evil-insert-state~:
         ;;     (if (= ua 4)
         ;;         (funcall 'meq/toggle-inner 'evil-mode "evil-ex" (meq/fbatp evil-mode) 'evil-ex-keymap t t)
         ;;         (funcall 'meq/toggle-inner 'evil-mode "evil-ex" (meq/fbatp evil-mode) 'evil-ex-keymap t)))
+#+end_src
+
+Here is the setup for the ~deino~ of ~cosmoem~ maps referred to in the ~cosmoem use-package~ definition:
+
+#+begin_src emacs-lisp
+        <<8eae8e4e-adf4-45cc-ae3f-ac61384d6b75(map="evil-normal-state-map", mode="evil-mode", prefix="evil", short="e", package="evil")>>
+#+end_src
+
+#+begin_src emacs-lisp
     )
 #+end_src
 
@@ -1877,15 +1858,6 @@ The ~sorrow~ config below is adapted from
         ("W" ace-delete-window "ace-delete-window" :exit t)))
 #+end_src
 
-*** alamode
-:PROPERTIES:
-:header-args:emacs-lisp+: :tangle yes
-:END:
-
-#+begin_src emacs-lisp
-(meq/upnsd alamode)
-#+end_src
-
 *** cosmog
 :PROPERTIES:
 :header-args:emacs-lisp+: :tangle yes
@@ -1943,7 +1915,17 @@ Adapted From: https://github.com/asok/.emacs.d/blob/master/inits/init-hydra.el#L
 :END:
 
 #+begin_src emacs-lisp
-(meq/up modalka)
+(meq/up modalka :config
+#+end_src
+
+Here is the setup for the ~deino~ of ~cosmoem~ maps referred to in the ~cosmoem use-package~ definition:
+
+#+begin_src emacs-lisp
+        <<8eae8e4e-adf4-45cc-ae3f-ac61384d6b75(map="modalka-mode-map", mode="modalka-mode", prefix="modalka", short="m", package="modalka")>>
+#+end_src
+
+#+begin_src emacs-lisp
+    )
 #+end_src
 
 *** objed
@@ -1952,7 +1934,17 @@ Adapted From: https://github.com/asok/.emacs.d/blob/master/inits/init-hydra.el#L
 :END:
 
 #+begin_src emacs-lisp
-(meq/up objed)
+(meq/up objed :config
+#+end_src
+
+Here is the setup for the ~deino~ of ~cosmoem~ maps referred to in the ~cosmoem use-package~ definition:
+
+#+begin_src emacs-lisp
+        <<8eae8e4e-adf4-45cc-ae3f-ac61384d6b75(map="objed-map", mode="objed-mode", prefix="objed", short="o", package="objed")>>
+#+end_src
+
+#+begin_src emacs-lisp
+    )
 #+end_src
 
 *** projectile
@@ -2012,6 +2004,9 @@ Adapted From: https://sam217pa.github.io/2016/09/23/keybindings-strategies-in-em
 #+end_src
 
 *** pyvenv
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 Adapted from [[https://blog.fredrikmeyer.net//2020/08/26/emacs-python-venv.html][here]], [[https://emacs.stackexchange.com/users/22272/user5293][user5293's]] answer [[https://emacs.stackexchange.com/a/52673/31428][here]], [[https://emacs.stackexchange.com/users/5187/pandikunta-anand-reddy][Pandikunta Anand Reddy's]] answer [[https://emacs.stackexchange.com/a/18086/31428][here]]:
 
@@ -2049,12 +2044,22 @@ Cool [[https://github.com/iqbalansari/restart-emacs][package]] by [[https://gith
 #+begin_src emacs-lisp
 (meq/up ryo-modal
     :config ;; From: https://github.com/Kungsgeten/ryo-modal#which-key-integration
-        (push '((nil . "ryo:.*:") . (nil . "")) which-key-replacement-alist))
+        (push '((nil . "ryo:.*:") . (nil . "")) which-key-replacement-alist)
+#+end_src
+
+Here is the setup for the ~deino~ of ~cosmoem~ maps referred to in the ~cosmoem use-package~ definition:
+
+#+begin_src emacs-lisp
+        <<8eae8e4e-adf4-45cc-ae3f-ac61384d6b75(map="ryo-modal-mode-map", mode="ryo-modal-mode", prefix="ryo", short="r", package="ryo-modal")>>
+#+end_src
+
+#+begin_src emacs-lisp
+    )
 #+end_src
 
 *** vterm
 :PROPERTIES:
-:header-args:emacs-lisp+: :tangle no
+:header-args:emacs-lisp+: :tangle yes
 :END:
 
 #+begin_src emacs-lisp
@@ -2077,6 +2082,16 @@ Cool [[https://github.com/iqbalansari/restart-emacs][package]] by [[https://gith
 #+begin_src emacs-lisp
 (meq/up xah-fly-keys
     :commands xah-fly-keys
+    :config
+#+end_src
+
+Here is the setup for the ~deino~ of ~cosmoem~ maps referred to in the ~cosmoem use-package~ definition:
+
+#+begin_src emacs-lisp
+        <<8eae8e4e-adf4-45cc-ae3f-ac61384d6b75(map="xah-fly-command-map", mode="xah-fly-keys", prefix="xah", short="x", package="xah-fly-keys")>>
+#+end_src
+
+#+begin_src emacs-lisp
     :sorrow ("m" :deino
                 '(modal-modes (:color blue) "m"
                     "A modal deino!"
@@ -2094,23 +2109,45 @@ Cool [[https://github.com/iqbalansari/restart-emacs][package]] by [[https://gith
 (add-hook 'after-init-hook #'show-paren-mode)
 #+end_src
 
-*** Major Modes
+*** lispy
 :PROPERTIES:
 :header-args:emacs-lisp+: :tangle yes
 :END:
 
-**** emacs-lisp
+#+begin_src emacs-lisp
+(meq/up lispy :config
+#+end_src
+
+Here is the setup for the ~deino~ of ~cosmoem~ maps referred to in the ~cosmoem use-package~ definition:
 
 #+begin_src emacs-lisp
-(meq/up emacs-lisp-mode :use-package-preconfig  (lispy) (sly))
+        <<8eae8e4e-adf4-45cc-ae3f-ac61384d6b75(map="lispy-mode-map", mode="lispy-mode", prefix="lispy", short="l", package="lispy")>>
 #+end_src
+
+#+begin_src emacs-lisp
+    )
+#+end_src
+
+*** sly
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
+
+#+begin_src emacs-lisp
+(meq/up sly)
+#+end_src
+
+*** Major Modes
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
 
 **** titan
 
 Set up my super major-mode [[https://github.com/shadowrylander/titan][titan]]:
 
 #+begin_src emacs-lisp
-(meq/up titan :gsetq (meq/var/titan-snippets-dir (meq/ued-lib "titan" "snippets")))
+(meq/up titan-templates :gsetq (meq/var/titan-snippets-dir (meq/ued-lib "titan" "snippets")))
 #+end_src
 
 **** caddyfile-mode
@@ -2249,30 +2286,6 @@ For ~text~, again with ~org-babel-execute:text~ coming from [[https://emacs.stac
                                     (org-babel-process-file-name in-file)) ""))))
 #+end_src
 
-**** doc
-
-Set up documentation super major-mode [[https://github.com/shadowrylander/doc][doc]]:
-
-#+begin_src emacs-lisp
-(use-package doc
-    :commands (meq/dired-create-doc-markdown meq/dired-create-and-open-doc-markdown)
-    :gsetq (meq/var/doc-snippets-dir (meq/ued-lib "doc" "snippets"))
-    :uru (doc-org-mode nil deino-doc-org (:color blue :inherit (deino-org-usually/heads)) "t d o"
-            ("d" (meq/insert-snippet "org titan template") "template")))
-#+end_src
-
-**** fell
-
-Set up novel's super major-mode [[https://github.com/shadowrylander/fell][fell]]:
-
-#+begin_src emacs-lisp
-(use-package fell
-    :commands (meq/dired-create-fell-markdown meq/dired-create-and-open-fell-markdown)
-    :gsetq (meq/var/fell-snippets-dir (meq/ued-lib "fell" "snippets"))
-    :uru (fell-org-mode nil deino-fell-org (:color blue :inherit (deino-org-usually/heads)) "t f o"
-            ("f" (meq/insert-snippet "org titan template") "template")))
-#+end_src
-
 **** org-mode
 
 The one and only [[https://orgmode.org/][org-mode]], with [[https://orgmode.org/worg/org-contrib/][org-contrib]]:
@@ -2379,15 +2392,26 @@ Set up [[https://github.com/joaotavora/yasnippet][yasnippet]] by [[https://githu
 #+end_src
 
 #+begin_src emacs-lisp
-    :config (load (meq/ued-settings "org-export-functions"))
-            ;; (setq toggle-debug-on-error t)
-        ;; (setq auto-mode-alist (append auto-mode-alist (meq/titan-append-modes org ("\\.org\\'" . org-mode))))
-#+end_src
-
-#+begin_src emacs-lisp
+    :config (load (executable-find "org-export-functions.el"))
+            (setq toggle-debug-on-error t)
+            ;; (setq auto-mode-alist (append auto-mode-alist (meq/titan-append-modes org ("\\.org\\'" . org-mode))))
             (defun meq/org-html-export-to-as-html (func &rest args) (let (org-confirm-babel-evaluate) (apply func args)))
             (advice-add #'org-html-export-to-html :around #'meq/org-html-export-to-as-html)
             (advice-add #'org-html-export-as-html :around #'meq/org-html-export-to-as-html)
+#+end_src
+
+Needed for ~:meta~ and ~:meta-rename~ for some reason; why is this necessary?
+
+#+begin_src emacs-lisp
+            (mapc #'(lambda (key) (define-key org-mode-map (kbd key) nil))
+                '("ESC <left>"
+                  "ESC <right>"
+                  "ESC <up>"
+                  "ESC <down>"
+                  "ESC S-<left>"
+                  "ESC S-<right>"
+                  "ESC S-<up>"
+                  "ESC S-<down>"))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -2441,4 +2465,28 @@ Upon exiting ~org-src-mode~ I don't want any indentation added to my code blocks
 
 #+begin_src emacs-lisp
         (org-edit-src-content-indentation 0)))
+#+end_src
+
+**** doc
+
+Set up documentation super major-mode [[https://github.com/shadowrylander/doc][doc]]:
+
+#+begin_src emacs-lisp
+(use-package doc-templates
+    :commands (meq/dired-create-doc-markdown meq/dired-create-and-open-doc-markdown)
+    :gsetq (meq/var/doc-snippets-dir (meq/ued-lib "doc" "snippets"))
+    :uru (doc-org-mode nil deino-doc-org (:color blue :inherit (deino-org-usually/heads)) "t d o"
+            ("d" (meq/insert-snippet "org titan template") "template")))
+#+end_src
+
+**** fell
+
+Set up novel's super major-mode [[https://github.com/shadowrylander/fell][fell]]:
+
+#+begin_src emacs-lisp
+(use-package fell-templates
+    :commands (meq/dired-create-fell-markdown meq/dired-create-and-open-fell-markdown)
+    :gsetq (meq/var/fell-snippets-dir (meq/ued-lib "fell" "snippets"))
+    :uru (fell-org-mode nil deino-fell-org (:color blue :inherit (deino-org-usually/heads)) "t f o"
+            ("f" (meq/insert-snippet "org titan template") "template")))
 #+end_src

@@ -1,3 +1,4 @@
+(setq package-enable-at-startup t)
 (require 'package)
 (add-to-list 'package-archives (cons "melpa" "https://melpa.org/packages/") t)
 (setq package-selected-packages '(borg))

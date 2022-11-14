@@ -21,141 +21,32 @@
 (defun meq/*two-items-in-list (item) (unwind-protect (when (member item command-line-args) (meq/*get-next-in-cla item)) (delete item command-line-args)))
 (defvar meq/var/bootstrap (meq/*item-in-cla "--bootstrap"))
 (defvar meq/var/force-bootstrap (meq/*item-in-cla "--force-bootstrap"))
-(setq package-enable-at-startup nil)
 (defvar meq/var/windows (member system-type '(windows-nt ms-dos)))
 (defvar meq/var/slash (if meq/var/windows "\\" "/"))
 (defvar meq/var/phone (ignore-errors (string-match-p (regexp-quote "Android") (shell-command-to-string "uname -a"))))
 (defvar meq/var/wsl (ignore-errors (string-match-p (regexp-quote "microsoft-standard-WSL") (shell-command-to-string "uname -a"))))
 (defvar meq/var/nixos (ignore-errors (string-match-p (regexp-quote "nixos") (shell-command-to-string "uname -a"))))
-(setq borg-user-emacs-directory user-emacs-directory
-    borg-drones-directory-prefix (concat "lib" meq/var/slash)
-    borg-drones-directory (concat user-emacs-directory borg-drones-directory-prefix)
-    borg-gitmodules-file (expand-file-name ".gitmodules" user-emacs-directory))
-(defun meq/require-and-load (pkg)
-    (add-to-list 'load-path (concat user-emacs-directory "lib" meq/var/slash pkg) t)
-    (require (intern pkg)))
-(mapc 'meq/require-and-load '("compat" "emacsql" "emacsql-sqlite" "closql"))
-
-(add-to-list 'load-path (concat user-emacs-directory "lib" meq/var/slash "epkg" meq/var/slash "lisp") t)
-(require 'epkg)
-
-(add-to-list 'load-path (concat user-emacs-directory "lib" meq/var/slash "borg") t)
-(require 'borg)
-
-;; (unless (or
-;;           meq/var/phone
-;;           ;; meq/var/windows
-;;           ) (meq/require-and-load "epkg"))
-;; (meq/require-and-load "borg")
-;; (defun meq/borg--call-git-advice (pkg &rest args)
-;;   (let ((process-connection-type nil)
-;;         (buffer (generate-new-buffer
-;;                  (concat " *Borg Git" (and pkg (concat " " pkg)) "*"))))
-;;     (if (eq (apply #'call-process "git" nil buffer nil args) 0)
-;;         (kill-buffer buffer)
-;;       (with-current-buffer buffer
-;;         (special-mode))
-;;       (pop-to-buffer buffer)
-;;       (error "Borg Git: %s %s:\n\n%s" pkg args (buffer-string)))))
-(defun meq/borg--call-git-advice (pkg &rest args)
-  (let ((process-connection-type nil)
-        (buffer (generate-new-buffer
-                 (concat " *Borg Git" (and pkg (concat " " pkg)) "*"))))
-    (with-current-buffer buffer
-        (pop-to-buffer buffer)
-        (if (eq (apply #'call-process "git" nil buffer nil args) 0)
-            (unwind-protect (format "\n\n%s\n\n" (buffer-string)) (kill-buffer buffer))
-            (error "Borg Git: %s %s:\n\n%s" pkg args (buffer-string))))))
-(advice-add #'borg--call-git :override #'meq/borg--call-git-advice)
-(defun meq/borg-build-advice (clone &optional activate)
-  "Build the clone named CLONE.
-Interactively, or when optional ACTIVATE is non-nil,
-then also activate the clone using `borg-activate'."
-  (interactive (list (borg-read-clone "Build drone: ") t))
-  (borg--build-noninteractive clone)
-  (when activate (borg-activate clone)))
-(advice-add #'borg-build :override #'meq/borg-build-advice)
-(defun meq/borg-drones-advice (func &rest args)
-  (let* ((barg (pop args))
-          (assimilating (pop args)))
-    (seq-filter #'(lambda (pkg*) (interactive)
-      (let* ((pkg (car pkg*))
-              (path* (cl-getf (cdr pkg*) 'path))
-              (path (cond ((listp path*) (car path*))
-                          ((stringp path*) path*)))
-              (exists (file-exists-p (borg-worktree pkg)))
-              (no-back-slash (not (string-match-p (regexp-quote "\\") pkg)))
-              (no-forward-slash (not (string-match-p (regexp-quote "/") pkg)))
-              (xane (xor assimilating exists)
-                    ;; (or
-                    ;;     (and assimilating (not exists))
-                    ;;     (and exists (not assimilating)))
-                    )
-              (same-borg-prefix (string= (string-remove-suffix pkg path)
-                                    (string-remove-prefix borg-user-emacs-directory borg-drones-directory)))
-              (result (and no-back-slash no-forward-slash xane same-borg-prefix)))
-            result))
-      (funcall func barg))))
-(advice-add #'borg-drones :around #'meq/borg-drones-advice)
-(defun meq/borg--maybe-absorb-gitdir (pkg)
-  (let* ((ver (nth 2 (split-string (car (process-lines "git" "version")) " ")))
-         (ver (and (string-match "\\`[0-9]+\\(\\.[0-9]+\\)*" ver)
-                   (match-string 0 ver))))
-    (if (version< ver "2.12.0")
-        (let ((default-directory (borg-worktree pkg))
-              (gitdir (borg-gitdir pkg)))
-          (make-directory gitdir t)
-          (borg--call-git pkg "init" "--separate-git-dir" gitdir)
-          (borg--link-gitdir pkg))
-      (borg--call-git pkg "-C" borg-top-level-directory "submodule" "absorbgitdirs" "--" (borg-worktree pkg)))))
-(advice-add #'borg--maybe-absorb-gitdir :override #'meq/borg--maybe-absorb-gitdir)
-(defun meq/borg-assimilate-advice (package url &optional partially)
-  "Assimilate the package named PACKAGE from URL.
-If `epkg' is available, then only read the name of the package
-in the minibuffer and use the url stored in the Epkg database.
-If `epkg' is unavailable, the package is not in the database, or
-with a prefix argument, then also read the url in the minibuffer.
-With a negative prefix argument only add the submodule but don't
-build and activate the drone."
-  (interactive
-   (nconc (borg-read-package "Assimilate package: " current-prefix-arg)
-          (list (< (prefix-numeric-value current-prefix-arg) 0))))
-  (message "Assimilating %s..." package)
-  (unless (equal (borg-get package "s8472") "true")
-      (borg--maybe-reuse-gitdir package)
-      (borg--call-git
-        package
-        "-C" borg-top-level-directory
-        "submodule"
-        "add"
-        "-f"
-        "--depth" "1"
-        "--name" package
-        url
-        (or
-          (borg-get package "path")
-          (concat (string-remove-prefix borg-user-emacs-directory borg-drones-directory) meq/var/slash package)))
-      (borg--sort-submodule-sections (concat borg-top-level-directory ".gitmodules"))
-      (borg--call-git package "-C" borg-top-level-directory "add")
-      (borg--maybe-absorb-gitdir package))
-  (unless partially
-    (borg-build package)
-    (borg-activate package))
-  (borg--refresh-magit)
-  (message "Assimilating %s...done" package))
-(advice-add #'borg-assimilate :override #'meq/borg-assimilate-advice)
-(defvar meq/var/update (meq/*item-in-cla "--update"))
-(when meq/var/update (mapc #'borg-build (mapcar #'car (borg-drones t))))
-(defvar meq/var/update-norg (meq/*item-in-cla "--update-norg"))
-(when meq/var/update-norg (mapc #'borg-build (remove "org" (mapcar #'car (borg-drones t)))))
-(defvar meq/var/update-this (meq/*two-items-in-list "--update-this"))
-(when meq/var/update-this (borg-build meq/var/update-this))
+(defvar meq/var/we-are-borg (or (getenv "WEAREBORG") (meq/*item-in-cla "--we-are-borg")))
+(setq package-enable-at-startup nil)
+(setq meq/var/package-manager (if meq/var/we-are-borg "borg" "nix"))
+(load (concat user-emacs-directory "siluam/"
+    (pcase meq/var/package-manager
+        ("package" "package-config.el")
+        ("straight" "straight-config.el")
+        ("quelpa" "quelpa.el")
+        ("borg" "borg-cube.el")
+        (_ "nix-config.el"))))
 (setq load-prefer-newer t)
-(mapc #'(lambda (pkg*) (interactive)
-  (let* ((pkg (symbol-name pkg*)))
-    (ignore-errors (borg-activate pkg))
-    (unless (require pkg* nil t)
-        (borg-assimilate pkg (borg-get pkg "url"))))) '(packed auto-compile no-littering gcmh))
+(mapc #'(lambda (pkg) (interactive)
+  (let* ((pkg-name (symbol-name pkg)))
+    (when meq/var/we-are-borg (ignore-errors (borg-activate pkg-name)))
+    (unless (require pkg nil t)
+        (pcase meq/var/package-manager
+            ("package" (progn (add-to-list 'package-selected-packages pkg) (package-install pkg)))
+            ("straight" (straight-use-package pkg))
+            ("quelpa" (quelpa pkg))
+            ("borg" (borg-assimilate pkg-name (borg-get pkg-name "url")))))
+    (require pkg))) '(auto-compile no-littering gcmh))
 (auto-compile-on-load-mode)
 (auto-compile-on-save-mode)
 (gcmh-mode 1)
@@ -163,11 +54,6 @@ build and activate the drone."
 (setq global-auto-revert-non-file-buffers t
       auto-revert-verbose nil
       auto-revert-use-notify nil)
-(if (file-exists-p (concat user-emacs-directory "lib" meq/var/slash "org"))
-  (if (file-exists-p (concat user-emacs-directory "lib" meq/var/slash "org" meq/var/slash "lisp" meq/var/slash "org-loaddefs.el"))
-    (borg-activate "org")
-    (borg-build "org" t))
-  (borg-assimilate "org" (borg-get "org" "url")))
 (require 'org-loaddefs)
 (defun meq/call (program buffer-name &rest args)
   (let ((process-connection-type nil)
@@ -177,13 +63,7 @@ build and activate the drone."
         (if (eq (apply #'call-process program nil buffer nil args) 0)
             (unwind-protect (format "\n\n%s\n\n" (buffer-string)) (kill-buffer buffer))
             (error "%s: %s:\n\n%s" program args (buffer-string))))))
-(defun meq/call-tangle (file)
-    (setq tangle-script (concat user-emacs-directory "settings" meq/var/slash "org-tangle.sh"))
-
-    ;; TODO
-    ;; (meq/call "chmod" "*making-tangle-script-executable*" "+x" tangle-script)
-
-    (meq/call tangle-script "*literally-configuring*" file))
+(defun meq/call-tangle (file) (meq/call "org-tangle" "*literally-configuring*" file))
 (defun meq/org-babel-load-file-advice (file &optional compile)
   "Load Emacs Lisp source code blocks in the Org FILE.
 This function exports the source code using `org-babel-tangle'

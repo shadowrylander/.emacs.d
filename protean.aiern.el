@@ -1,3 +1,5 @@
+;;; $EMACSDIR/protean.aiern.el -*- lexical-binding: t; -*-
+
 (defvar meq/var/exwm nil)
 (when (get-buffer "*window-manager*")
   (kill-buffer "*window-manager*"))
@@ -520,3 +522,26 @@
         (mapc #'(lambda (lib) (interactive)
             (meq/install-pipx-package
                 lib (meq/keyword-to-symbol-name lib*))) (cl-getf libs lib*))) (map-keys libs))))
+
+(when (> (length command-line-args) 1) (let* ((last-dab (car (last command-line-args))))
+                                            (defvar meq/var/last-dab last-dab) ;; substitute-in-file-name
+                                            (delete last-dab command-line-args)))
+(let* ((testing (meq/ued "testing.aiern.org"))
+        (resting (meq/ued "resting.aiern.org"))
+        (early-init (meq/ued "early-init.org"))
+        (init (meq/ued "init.org"))
+        (early-aiern-init (meq/ued "early-init.aiern.org"))
+        (aiern-init (meq/ued "init.aiern.org")))
+    (if (bound-and-true-p meq/var/last-dab)
+        (pcase meq/var/last-dab
+            ("--fTest" (setq initial-buffer-choice testing))
+            ("--fRest" (setq initial-buffer-choice resting))
+            ("--fEarly" (setq initial-buffer-choice early-init))
+            ("--fAEarly" (setq initial-buffer-choice early-aiern-init))
+            ("--fInit" (setq initial-buffer-choice init))
+            ("--fAInit" (setq initial-buffer-choice aiern-init))
+            (t (setq initial-buffer-choice (f-full meq/var/last-dab))))
+        (setq initial-buffer-choice testing))
+    (eval `(add-hook 'kill-emacs-hook #'(lambda nil (interactive)
+        ;; Adapted From: http://ergoemacs.org/emacs/elisp_file_name_dir_name.html
+        (when (get-file-buffer ,testing) (delete-file ,testing) (copy-file ,resting ,testing))))))

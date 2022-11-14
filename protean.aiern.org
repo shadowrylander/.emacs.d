@@ -35,6 +35,15 @@ Finally, create the function to [re]load the primary init in this file and load 
 (meq/reload-first-init)
 #+end_src
 
+* Header
+:PROPERTIES:
+:header-args:emacs-lisp+: :tangle yes
+:END:
+
+#+begin_src emacs-lisp
+;;; $EMACSDIR/protean.aiern.el -*- lexical-binding: t; -*-
+#+end_src
+
 * EXWM
 :PROPERTIES:
 :header-args:emacs-lisp+: :tangle yes
@@ -675,7 +684,7 @@ This is taken from [[https://functor.tokyo/blog/2018-02-20-show-packages-install
 
 * Startup
 :PROPERTIES:
-:header-args:emacs-lisp+: :tangle no
+:header-args:emacs-lisp+: :tangle yes
 :END:
 
 #+begin_src emacs-lisp
