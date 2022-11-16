@@ -10,6 +10,7 @@
         "cosmoem",
         "cosmog",
         "titan-templates",
+
         "doc-templates",
         "doom-aiern-modeline",
         "evil-evilified-state",
@@ -27,5 +28,6 @@
         "use-package-deino",
         "use-package-extras",
         "use-package-oreo"
+
     ]
 }

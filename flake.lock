@@ -6647,11 +6647,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1668422299,
-        "narHash": "sha256-WyfYNqwAz9zNUog6mcQF02cjhEzF9ZXNlE+jo/Kbj+I=",
+        "lastModified": 1668642028,
+        "narHash": "sha256-Uz12+9dsZqMteuV8Nv1Jp+Tp+WDF/5bgWEu64NfyD5g=",
         "owner": "syvlorg",
         "repo": "use-package-extras",
-        "rev": "8ef6d8ce0361129bff091e90a251d6f8570b49f2",
+        "rev": "638ac12802d651c677360e7b533302481ca262da",
         "type": "github"
       },
       "original": {

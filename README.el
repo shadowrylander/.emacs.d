@@ -78,22 +78,23 @@
 
 (setq use-package-always-defer (meq/item-in-cla "--always-defer"))
 
-(use-package leaf :demand t
-    :init (defmacro meq/leaf (&rest args) `(leaf ,@args :require ,(cl-getf args :require t)))
-    :config (use-package leaf-keywords :demand t))
-
 (use-package use-package-extras :demand t
     ;; :config (meq/up use-package-ensure-system-package)
     )
+
+(meq/up leaf
+    :init (defmacro meq/leaf (&rest args) `(leaf ,@args :require ,(cl-getf args :require t)))
+    :upnsd-postconfig (leaf-keywords :demand t))
 
 (meq/up hydra
     :custom (hydra-hint-display-type 'lv)
     :bind (:map hydra-base-map ("~" . hydra--universal-argument))
 
-    :use-package-preconfig (janus) (use-package-hydra)
-    :use-package-postconfig (use-package-deino) (deino :custom (deino-hint-display-type 'lv)))
+    :use-package-preconfig (use-package-hydra)
+    :upnsd-preconfig (janus)
+    :upnsd-postconfig (deino :custom (deino-hint-display-type 'lv)) (use-package-deino))
 
-(meq/up alloy
+(meq/upnsd alloy
 
     :use-package-preconfig (command-log-mode)
         ;; Important: https://github.com/noctuid/general.el/issues/53#issuecomment-307262154
@@ -121,9 +122,9 @@
 
     :custom (alloy-implicit-naked t))
 
-(meq/up prime)
+(meq/upnsd prime)
 
-(meq/up uru :prime ("u u" uru "uru") ("u m" minoru "minoru"))
+(meq/upnsd uru :prime ("u u" uru "uru") ("u m" minoru "minoru"))
 
 (meq/up which-key :deino (deino/which-key (:color blue :columns 4) "w"
         ("`" nil "cancel")
@@ -156,10 +157,10 @@
 
         (which-key-side-window-max-height 0.25))
 
-(meq/up cosmoem
+(meq/upnsd cosmoem
 
     :prime (", m" map-of-infinity/body "map-of-infinity")
-    :config (meq/which-key-change-ryo "," "damascus")
+    :which-key-change-ryo ("," "damascus")
 
     :gsetq (meq/var/all-keymaps-map nil)
             (meq/var/alamode-aiern-was-on (member "aiern" meq/var/ignored-modal-prefixes))
@@ -236,7 +237,7 @@
 
         (all-keymaps (:color blue) ", k" ("`" nil "cancel")))
 
-(meq/up sorrow :primer+ ("t" "toggles")
+(meq/upnsd sorrow :primer+ ("t" "toggles")
 
     :config
         ;;;###autoload
@@ -314,17 +315,17 @@
               (undo-fu-session-incompatible-files '("/COMMIT_EDITMSG\\'" "/git-rebase-todo\\'"))
             :hook (after-init . global-undo-fu-session-mode)))
 
-(meq/up lode)
+(meq/upnsd lode)
 
-(meq/up meta)
+(meq/upnsd meta)
 
-(meq/up aiern
+(meq/upnsd aiern
     :gsetq (aiern-undo-system 'undo-fu aiern-move-beyond-eol t)
     :hook (after-init . (lambda nil (interactive) (meq/add-to-ignored-modal-modes aiern (setq state (list aiern-default-state)))))
 
     :use-package-preconfig (bind-map)
 
-    :use-package-postconfig (aiern-aiernhide-state)
+    :upnsd-postconfig (aiern-aiernhide-state)
 
     :meta-aiern (aiern-normal-state-map) (aiern-insert-state-map)
 
@@ -474,7 +475,9 @@
                             (or comment "")))
    :gsetq (counsel-linux-app-format-function #'meq/counsel-linux-app-format-function))
 
-(meq/upnsd damascus :use-package-postconfig (rainbow-mode :config (rainbow-mode 1)) (help-fns+ :load-siluam-file-postconfig ("help+"))
+(meq/upnsd damascus
+    :upnsd-postconfig (help-fns+ :load-siluam-file-postconfig ("help+"))
+    :use-package-postconfig (rainbow-mode :config (rainbow-mode 1))
 
     :deino (deino-universal/shortcuts (:color blue) "d u s"
             "A deino for universal shortcuts!"
@@ -835,7 +838,7 @@
 
 (meq/up evil :use-package-preconfig (bind-map)
 
-    :use-package-postconfig (evil-evilified-state)
+    :upnsd-postconfig (evil-evilified-state)
 
     :gsetq (evil-escape-key-sequence nil evil-undo-system 'undo-fu evil-move-beyond-eol t)
 
@@ -947,7 +950,7 @@
     ;; :upnsd-preconfig (xxh)
    )
 
-(meq/up vlf :gsetq (vlf-application 'always))
+(meq/upnsd vlf :gsetq (vlf-application 'always))
 
 (meq/up doom-themes
     :deino (deino-themes-light (:color blue) nil "A deino for light themes!" ("`" nil "cancel"))
@@ -962,7 +965,7 @@
         (doom-themes-enable-italic t)
         (meq/var/default-theme-override nil)
         (meq/var/default-default-theme 'dracula-purple-dark)
-    ;; :use-package-postconfig
+    ;; :upnsd-postconfig
     ;;     (doom-themes-ext-neotree :config (doom-themes-neotree-config))
     ;;     (doom-themes-ext-org :config (doom-themes-org-config))
     :config
@@ -1058,11 +1061,11 @@
                 ("s" helm-smex "helm smex"))
             (deino-window nil ("B" helm-mini "helm-mini")
                 ("f" helm-find-files "helm-find-files"))
+    :upnsd-postconfig (helm-ido-like)
     :use-package-postconfig ;; Adapted From: https://github.com/clemera/helm-ido-like-guide
         (helm-smex)
         (helm-flx)
-        (helm-swoop)
-        (helm-ido-like))
+        (helm-swoop))
 
 (meq/up magit :deino (deino-magit (:color blue :columns 8) "g"
   "It's just like magit!"
@@ -1440,7 +1443,7 @@
 
 (meq/up sly)
 
-(meq/up titan-templates :gsetq (meq/var/titan-snippets-dir (meq/ued-lib "titan" "snippets")))
+(meq/upnsd titan-templates :gsetq (meq/var/titan-snippets-dir (meq/ued-lib "titan" "snippets")))
 
 (use-package caddyfile-mode :mode ("\\caddyfile\\'"))
 
@@ -1449,7 +1452,7 @@
 (use-package hy-mode
     :commands (org-babel-execute:hy)
     :mode ("\\.hy\\'")
-    :use-package-preconfig (ob-hy :commands (org-babel-execute:hy)))
+    :upnsd-preconfig (ob-hy :commands (org-babel-execute:hy)))
 
 (use-package systemd-mode :mode ("\\.service\\'"))
 

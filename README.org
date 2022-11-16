@@ -512,20 +512,20 @@ And in my experience... Not a good idea; much too confusing. Use [[https://www.r
 
 **** extras
 
-This sets up [[https://github.com/conao3/leaf.el][leaf.el]] by [[https://github.com/conao3][Naoya Yamashita]]:
-
-#+begin_src emacs-lisp
-(use-package leaf :demand t
-    :init (defmacro meq/leaf (&rest args) `(leaf ,@args :require ,(cl-getf args :require t)))
-    :config (use-package leaf-keywords :demand t))
-#+end_src
-
-And then [[https://github.com/shadowrylander/use-package-extras][use-package-extras]] by yours truely:
+This sets up [[https://github.com/shadowrylander/use-package-extras][use-package-extras]] by yours truely:
 
 #+begin_src emacs-lisp
 (use-package use-package-extras :demand t
     ;; :config (meq/up use-package-ensure-system-package)
     )
+#+end_src
+
+And then [[https://github.com/conao3/leaf.el][leaf.el]] by [[https://github.com/conao3][Naoya Yamashita]]:
+
+#+begin_src emacs-lisp
+(meq/up leaf
+    :init (defmacro meq/leaf (&rest args) `(leaf ,@args :require ,(cl-getf args :require t)))
+    :upnsd-postconfig (leaf-keywords :demand t))
 #+end_src
 
 *** hydra
@@ -549,8 +549,9 @@ This bit sets up the following:
 [[https://github.com/abo-abo/hydra][hydra]] by [[https://github.com/abo-abo][Oleh Krehel]]
 
 #+begin_src emacs-lisp
-    :use-package-preconfig (janus) (use-package-hydra)
-    :use-package-postconfig (use-package-deino) (deino :custom (deino-hint-display-type 'lv)))
+    :use-package-preconfig (use-package-hydra)
+    :upnsd-preconfig (janus)
+    :upnsd-postconfig (deino :custom (deino-hint-display-type 'lv)) (use-package-deino))
 #+end_src
 
 *** alloy
@@ -561,7 +562,7 @@ This bit sets up the following:
 Here is the configuration for [[https://github.com/shadowrylander/alloy][alloy]], forked from [[https://github.com/noctuid/general.el][general.el]] by [[https://github.com/noctuid][Fox Kiester]]:
 
 #+begin_src emacs-lisp
-(meq/up alloy
+(meq/upnsd alloy
 #+end_src
 
 This sets up the following:
@@ -628,7 +629,7 @@ And finally, this allows ~alloy~ to assume ~kbd~ is being used, or in this case,
 Set up [[https://github.com/shadowrylander/prime][prime]] by yours truely:
 
 #+begin_src emacs-lisp
-(meq/up prime)
+(meq/upnsd prime)
 #+end_src
 
 *** uru
@@ -639,7 +640,7 @@ Set up [[https://github.com/shadowrylander/prime][prime]] by yours truely:
 This sets up my package [[https://github.com/shadowrylander/uru][uru]], which activates ~deinos~ based on the current major-mode, as mentioned in [[https://codeberg.org/dr.ops/medusa/src/branch/main/medusa.org#headline-4][magic medusa hydra]], by [[https://codeberg.org/dr.ops][Andy Drop]]:
 
 #+begin_src emacs-lisp
-(meq/up uru :prime ("u u" uru "uru") ("u m" minoru "minoru"))
+(meq/upnsd uru :prime ("u u" uru "uru") ("u m" minoru "minoru"))
 #+end_src
 
 *** which-key
@@ -756,12 +757,12 @@ The incredible [[https://github.com/justbur/emacs-which-key][emacs-which-key]] b
 Meet the [[https://gitlab.com/shadowrylander/cosmoem][cosmoem]] named [[https://bulbapedia.bulbagarden.net/wiki/Nebby][Nebby]], forked from [[https://gitlab.com/jjzmajic/hercules.el][hercules.el]] by [[https://gitlab.com/jjzmajic][jjzmajic]]:
 
 #+begin_src emacs-lisp
-(meq/up cosmoem
+(meq/upnsd cosmoem
 #+end_src
 
 #+begin_src emacs-lisp
     :prime (", m" map-of-infinity/body "map-of-infinity")
-    :config (meq/which-key-change-ryo "," "damascus")
+    :which-key-change-ryo ("," "damascus")
 #+end_src
 
 This sets up a few things to create a ~deino~ of ~cosmoem~ maps, adapted from [[https://gitlab.com/jjzmajic/cosmoem.el/-/blob/master/cosmoem.el#L83][here]]
@@ -868,7 +869,7 @@ A ~deino~ for all my modal-mode keymaps:
 Finally, [[https://github.com/shadowrylander/sorrow][sorrow]], forked from [[https://github.com/Kungsgeten/ryo-modal][ryo-modal]] by [[https://github.com/Kungsgeten][Erik Sjöstrand]]:
 
 #+begin_src emacs-lisp
-(meq/up sorrow :primer+ ("t" "toggles")
+(meq/upnsd sorrow :primer+ ("t" "toggles")
 #+end_src
 
 Here is the setup for the ~deino~ of ~cosmoem~ maps referred to in the ~cosmoem use-package~ definition:
@@ -930,7 +931,7 @@ Set up [[https://github.com/emacsmirror/undo-fu][undo-fu]] and [[https://github.
 Set up [[https://github.com/shadowrylander/lode][lode]] by yours truely:
 
 #+begin_src emacs-lisp
-(meq/up lode)
+(meq/upnsd lode)
 #+end_src
 
 *** meta
@@ -941,7 +942,7 @@ Set up [[https://github.com/shadowrylander/lode][lode]] by yours truely:
 Set up [[https://github.com/shadowrylander/meta][meta]] by yours truely:
 
 #+begin_src emacs-lisp
-(meq/up meta)
+(meq/upnsd meta)
 #+end_src
 
 *** aiern
@@ -953,7 +954,7 @@ Set up [[https://github.com/shadowrylander/meta][meta]] by yours truely:
 such that it isn't disabled by ~meq/disable-all-modal-modes~:
 
 #+begin_src emacs-lisp
-(meq/up aiern
+(meq/upnsd aiern
     :gsetq (aiern-undo-system 'undo-fu aiern-move-beyond-eol t)
     :hook (after-init . (lambda nil (interactive) (meq/add-to-ignored-modal-modes aiern (setq state (list aiern-default-state)))))
 #+end_src
@@ -967,7 +968,7 @@ Both ~evil~ and ~aiern~ require [[https://github.com/justbur/emacs-bind-map][ema
 More aiern, courtesy of [[https://github.com/shadowrylander/aiern-aiernhide-state][this]], [[https://github.com/mohsenil85/evil-evilified-state][this]], and [[https://github.com/syl20bnr/spacemacs][this]]:
 
 #+begin_src emacs-lisp
-    :use-package-postconfig (aiern-aiernhide-state)
+    :upnsd-postconfig (aiern-aiernhide-state)
 #+end_src
 
 The ~:meta-aiern~ keyword, from my very own [[https://github.com/shadowrylander/meta][meta]] package, creates a hydra out of the keymaps passed to it,
@@ -1139,7 +1140,9 @@ From the [[https://github.com/abo-abo/swiper][swiper]] package by [[https://gith
 Set up the base of this config, including the [[https://github.com/emacsmirror/rainbow-mode][rainbow-mode]] package:
 
 #+begin_src emacs-lisp
-(meq/upnsd damascus :use-package-postconfig (rainbow-mode :config (rainbow-mode 1)) (help-fns+ :load-siluam-file-postconfig ("help+"))
+(meq/upnsd damascus
+    :upnsd-postconfig (help-fns+ :load-siluam-file-postconfig ("help+"))
+    :use-package-postconfig (rainbow-mode :config (rainbow-mode 1))
 #+end_src
 
 Define some universal deinos:
@@ -1622,7 +1625,7 @@ As mentioned before, both [[https://github.com/emacs-evil/evil][~evil~]] and [[h
 More evil, courtesy of [[https://github.com/mohsenil85/evil-evilified-state][this]] and [[https://github.com/syl20bnr/spacemacs][this]]:
 
 #+begin_src emacs-lisp
-    :use-package-postconfig (evil-evilified-state)
+    :upnsd-postconfig (evil-evilified-state)
 #+end_src
 
 Disable the ~evil-escape-key-sequence~, and set the ~evil-undo-system~ to [[https://github.com/emacsmirror/undo-fu][~undo-fu~]]
@@ -1727,7 +1730,7 @@ Colorful words with [[https://github.com/Fanael/rainbow-identifiers][rainbow-ide
 View Large Files with [[https://github.com/m00natic/vlfi][vlfi]], by [[https://github.com/m00natic][Andrey Kotlarski]]
 
 #+begin_src emacs-lisp
-(meq/up vlf :gsetq (vlf-application 'always))
+(meq/upnsd vlf :gsetq (vlf-application 'always))
 #+end_src
 
 # TODO
@@ -1751,7 +1754,7 @@ View Large Files with [[https://github.com/m00natic/vlfi][vlfi]], by [[https://g
         (doom-themes-enable-italic t)
         (meq/var/default-theme-override nil)
         (meq/var/default-default-theme 'dracula-purple-dark)
-    ;; :use-package-postconfig
+    ;; :upnsd-postconfig
     ;;     (doom-themes-ext-neotree :config (doom-themes-neotree-config))
     ;;     (doom-themes-ext-org :config (doom-themes-org-config))
     :config
@@ -1880,11 +1883,11 @@ The ~sorrow~ config below is adapted from
                 ("s" helm-smex "helm smex"))
             (deino-window nil ("B" helm-mini "helm-mini")
                 ("f" helm-find-files "helm-find-files"))
+    :upnsd-postconfig (helm-ido-like)
     :use-package-postconfig ;; Adapted From: https://github.com/clemera/helm-ido-like-guide
         (helm-smex)
         (helm-flx)
-        (helm-swoop)
-        (helm-ido-like))
+        (helm-swoop))
 #+end_src
 
 # TODO: This seems to preventing the GUI from starting
@@ -2147,7 +2150,7 @@ Here is the setup for the ~deino~ of ~cosmoem~ maps referred to in the ~cosmoem 
 Set up my super major-mode [[https://github.com/shadowrylander/titan][titan]]:
 
 #+begin_src emacs-lisp
-(meq/up titan-templates :gsetq (meq/var/titan-snippets-dir (meq/ued-lib "titan" "snippets")))
+(meq/upnsd titan-templates :gsetq (meq/var/titan-snippets-dir (meq/ued-lib "titan" "snippets")))
 #+end_src
 
 **** caddyfile-mode
@@ -2174,7 +2177,7 @@ For [[https://github.com/hylang/hy-mode][hy]], plus [[https://github.com/brantou
 (use-package hy-mode
     :commands (org-babel-execute:hy)
     :mode ("\\.hy\\'")
-    :use-package-preconfig (ob-hy :commands (org-babel-execute:hy)))
+    :upnsd-preconfig (ob-hy :commands (org-babel-execute:hy)))
 #+end_src
 
 **** systemd-mode
