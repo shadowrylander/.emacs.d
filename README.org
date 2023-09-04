@@ -174,7 +174,7 @@ Then create a shell tangle function based on the above:
 (defun meq/call-tangle (file) (meq/call "org-tangle" "*literally-configuring*" file))
 #+end_src
 
-Modify [[https://code.orgmode.org/bzg/org-mode/src/master/lisp/org.el#L222][~org-babel-load-file~]] to use the above function instead:
+Modify [[https://git.savannah.gnu.org/cgit/emacs/org-mode.git/tree/lisp/org.el#n248][~org-babel-load-file~]] to use the above function instead:
 
 #+begin_src emacs-lisp
 (defun meq/org-babel-load-file-advice (file &optional compile)
@@ -640,7 +640,17 @@ Set up [[https://github.com/shadowrylander/prime][prime]] by yours truely:
 This sets up my package [[https://github.com/shadowrylander/uru][uru]], which activates ~deinos~ based on the current major-mode, as mentioned in [[https://codeberg.org/dr.ops/medusa/src/branch/main/medusa.org#headline-4][magic medusa hydra]], by [[https://codeberg.org/dr.ops][Andy Drop]]:
 
 #+begin_src emacs-lisp
-(meq/upnsd uru :prime ("u u" uru "uru") ("u m" minoru "minoru"))
+(meq/upnsd uru
+    :prime ("u u" uru "uru") ("u m" minoru "minoru")
+    :primer ("u" "uru")
+    :primed ("u" "
+
+^Uru     ^| ^^Minoru     | Etc
+--------^^+------------^^+-------------^^
+_u_ : uru | _m_ : minoru | _DEL_ : primus
+^^^^                     | _`_   : exit
+
+"))
 #+end_src
 
 *** which-key
@@ -762,6 +772,12 @@ Meet the [[https://gitlab.com/shadowrylander/cosmoem][cosmoem]] named [[https://
 
 #+begin_src emacs-lisp
     :prime (", m" map-of-infinity/body "map-of-infinity")
+    :primer ("," "Deinos / Hydras / Functions")
+    :primed ("," "
+^Map of Infinity
+^^-------------------
+_m_ : Map of Infinity
+")
     :which-key-change-ryo ("," "damascus")
 #+end_src
 
@@ -869,7 +885,7 @@ A ~deino~ for all my modal-mode keymaps:
 Finally, [[https://github.com/shadowrylander/sorrow][sorrow]], forked from [[https://github.com/Kungsgeten/ryo-modal][ryo-modal]] by [[https://github.com/Kungsgeten][Erik Sjöstrand]]:
 
 #+begin_src emacs-lisp
-(meq/upnsd sorrow :primer+ ("t" "toggles")
+(meq/upnsd sorrow :primer ("t" "toggles")
 #+end_src
 
 Here is the setup for the ~deino~ of ~cosmoem~ maps referred to in the ~cosmoem use-package~ definition:
@@ -972,7 +988,7 @@ More aiern, courtesy of [[https://github.com/shadowrylander/aiern-aiernhide-stat
 #+end_src
 
 The ~:meta-aiern~ keyword, from my very own [[https://github.com/shadowrylander/meta][meta]] package, creates a hydra out of the keymaps passed to it,
-in this case being ~aiern-normal-state-map~ and ~aiern-insert-state-map~:
+in this case the keymaps being ~aiern-normal-state-map~ and ~aiern-insert-state-map~:
 
 #+begin_src emacs-lisp
     :meta-aiern (aiern-normal-state-map) (aiern-insert-state-map)
@@ -1255,7 +1271,7 @@ This would set the ~initial-major-mode~, from [[https://emacsredux.com/blog/2014
     :init
 
         ;; TODO: Use the previous implementation of this to create a version which will use command-line arguments
-        ;;       to open specific files, such as this README, protean.aiern.org, meta.aiern.org, settings/README.org, etc. ,
+        ;;       to open specific files, such as this README, protean.aiern.org, meta.aiern.org, bundle/README.org, etc. ,
         ;;       in addition to any files called from the command-line itself.
         (let* ((testing (meq/ued "testing.aiern.org"))
                 (resting (meq/ued "resting.aiern.org")))
@@ -1620,6 +1636,7 @@ As mentioned before, both [[https://github.com/emacs-evil/evil][~evil~]] and [[h
 
 #+begin_src emacs-lisp
 (meq/up evil :use-package-preconfig (bind-map)
+    :meta-evil (evil-normal-state-map) (evil-insert-state-map)
 #+end_src
 
 More evil, courtesy of [[https://github.com/mohsenil85/evil-evilified-state][this]] and [[https://github.com/syl20bnr/spacemacs][this]]:

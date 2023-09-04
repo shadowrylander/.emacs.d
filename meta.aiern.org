@@ -17,7 +17,7 @@
 (load (concat (getenv "HOME") "/.emacs.d/early-init.el"))
 (meq/up markdown-mode :mode ("\\.md\\'")
     :use-package-postconfig (yasnippet)
-    :upnsd-preconfig (titan :custom (meq/var/titan-snippets-dir (meq/ued-lib "titan" "snippets"))))
+    :upnsd-preconfig (valiant :custom (meq/var/valiant-snippets-dir (meq/ued-lib "valiant" "snippets"))))
 #+end_src
 
 ** post
@@ -29,7 +29,7 @@
 
 #+name: 20210821140509092087900
 #+begin_src emacs-lisp
-(meq/insert-snippet "markdown titan template")
+(meq/insert-snippet "markdown valiant template")
 (save-buffer)
 #+end_src
 
@@ -78,13 +78,13 @@
 # Adapted From: https://www.systutorials.com/how-to-get-the-full-path-and-directory-of-a-makefile-itself/
 mkfilePath := $(abspath $(lastword $(MAKEFILE_LIST)))
 mkfileDir := $(dir $(mkfilePath))
-chmodBin := chmod +x $(mkfileDir)/settings/bin/*
+chmodBin := chmod +x $(mkfileDir)/bundle/bin/*
 
 pre-init:
 |-fd . $(mkfileDir) -HIt d -t e -x rm -rf
 
 tangle-setup:
-|cp $(mkfileDir)/settings/bin/org-tangle $(mkfileDir)/settings/bin/backup-tangle
+|cp $(mkfileDir)/bundle/bin/org-tangle $(mkfileDir)/bundle/bin/backup-tangle
 |$(chmodBin)
 
 tangle: tangle-setup
@@ -92,7 +92,7 @@ tangle: tangle-setup
     -HId 1 -e org \
     -E testing.aiern.org \
     -E resting.aiern.org \
-    -x $(mkfileDir)/settings/bin/backup-tangle
+    -x $(mkfileDir)/bundle/bin/backup-tangle
 |$(chmodBin)
 
 subinit: pre-init
@@ -4968,9 +4968,9 @@ Set the borg package directory:
 
 #+begin_src emacs-lisp
 (defun meq/require-and-load (pkg)
-    (add-to-list 'load-path (concat user-emacs-directory "lib" meq/var/slash pkg) t)
-    (require (intern pkg)))
-(mapc 'meq/require-and-load '("compat" "emacsql" "emacsql-sqlite" "closql"))
+    (add-to-list 'load-path (concat user-emacs-directory "lib" meq/var/slash (symbol-name pkg)) t)
+    (require pkg))
+(mapc 'meq/require-and-load '(compat emacsql emacsql-sqlite closql))
 
 (add-to-list 'load-path (concat user-emacs-directory "lib" meq/var/slash "epkg" meq/var/slash "lisp") t)
 (require 'epkg)

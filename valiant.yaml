@@ -1,0 +1,17 @@
+dirs:
+  - lib
+tangle:
+  tangle_files:
+    - protean.aiern.org
+update:
+  ignore:
+    - emacswiki
+format:
+  nix:
+    ignore:
+      - lib/nix-mode/tests/testcases/issue-74.nix
+      - lib/nix-mode/tests/testcases/smie-lambdas.nix
+      - lib/flycheck/test/resources/language/nix/syntax-error.nix
+  py:
+    ignore:
+      - lib/flycheck/test/resources/language/python/syntax-error.py

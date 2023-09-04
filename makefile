@@ -4,13 +4,13 @@
 # Adapted From: https://www.systutorials.com/how-to-get-the-full-path-and-directory-of-a-makefile-itself/
 mkfilePath := $(abspath $(lastword $(MAKEFILE_LIST)))
 mkfileDir := $(dir $(mkfilePath))
-chmodBin := chmod +x $(mkfileDir)/settings/bin/*
+chmodBin := chmod +x $(mkfileDir)/bundle/bin/*
 
 pre-init:
 |-fd . $(mkfileDir) -HIt d -t e -x rm -rf
 
 tangle-setup:
-|cp $(mkfileDir)/settings/bin/org-tangle $(mkfileDir)/settings/bin/backup-tangle
+|cp $(mkfileDir)/bundle/bin/org-tangle $(mkfileDir)/bundle/bin/backup-tangle
 |$(chmodBin)
 
 tangle: tangle-setup
@@ -18,7 +18,7 @@ tangle: tangle-setup
     -HId 1 -e org \
     -E testing.aiern.org \
     -E resting.aiern.org \
-    -x $(mkfileDir)/settings/bin/backup-tangle
+    -x $(mkfileDir)/bundle/bin/backup-tangle
 |$(chmodBin)
 
 subinit: pre-init

@@ -1,67 +1,101 @@
 {
-    nixConfig = {
-        # Adapted From: https://github.com/divnix/digga/blob/main/examples/devos/flake.nix#L4
-        # extra-substituters = "https://cache.nixos.org/ https://nix-community.cachix.org/";
-        trusted-substituters = "https://cache.nixos.org/";
-        # extra-trusted-public-keys = "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=";
-        trusted-public-keys = "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=";
-        # keep-derivations = true;
-        # keep-outputs = true;
-        extra-experimental-features = "nix-command flakes";
-        # accept-flake-config = true;
-        # show-trace = true;
-        # fallback = true;
-        # auto-optimise-store = true;
-        # builders-use-substitutes = true;
-        # cores = 0;
-        # flake-registry = https://raw.githubusercontent.com/sylvorg/settings/main/flake-registry.json;
-        # allow-unsafe-native-code-during-evaluation = true;
-        # min-free = 262144000;
-        # max-free = 1073741824;
+  nixConfig = {
+    # Adapted From: https://github.com/divnix/digga/blob/main/examples/devos/flake.nix#L4
+    accept-flake-config = true;
+    auto-optimise-store = true;
+    builders-use-substitutes = true;
+    cores = 0;
+    extra-experimental-features =
+      "nix-command flakes impure-derivations recursive-nix";
+    fallback = true;
+    flake-registry =
+      "https://raw.githubusercontent.com/syvlorg/flake-registry/master/flake-registry.json";
+    keep-derivations = true;
+    keep-outputs = true;
+    max-free = 1073741824;
+    min-free = 262144000;
+    show-trace = true;
+    trusted-public-keys = [
+      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      "nickel.cachix.org-1:ABoCOGpTJbAum7U6c+04VbjvLxG9f0gJP5kYihRRdQs="
+      "sylvorg.cachix.org-1:xd1jb7cDkzX+D+Wqt6TemzkJH9u9esXEFu1yaR9p8H8="
+    ];
+    trusted-substituters = [
+      "https://cache.nixos.org/"
+      "https://nix-community.cachix.org"
+      "https://nickel.cachix.org"
+      "https://sylvorg.cachix.org"
+    ];
+    warn-dirty = false;
+  };
+  description = "My emacs config!";
+  inputs = rec {
+    bundle = {
+      url = "git+https://github.com/sylvorg/bundle.git";
+      type = "git";
+      submodules = true;
     };
-    description = "My emacs config!";
-    inputs = rec {
-        settings.url = github:sylvorg/settings;
-        titan.follows = "settings/titan";
-        nixpkgs.follows = "settings/nixpkgs";
+    valiant.follows = "bundle/valiant";
+    nixpkgs.follows = "bundle/nixpkgs";
 
-        epkg-aiern.url = github:syvlorg/aiern;
-        epkg-aiern-aiernhide-state.url = github:syvlorg/aiern-aiernhide-state;
-        epkg-aiern-god-state.url = github:syvlorg/aiern-god-state;
-        epkg-cosmoem.url = github:syvlorg/cosmoem;
-        epkg-cosmog.url = github:syvlorg/cosmog;
-        epkg-doc-templates.url = github:syvlorg/doc-templates;
-        epkg-doom-aiern-modeline.url = github:syvlorg/doom-aiern-modeline;
-        epkg-evil-evilified-state.url = github:syvlorg/evil-evilified-state;
-        epkg-fell-templates.url = github:syvlorg/fell-templates;
-        epkg-helm-ido-like.url = github:syvlorg/helm-ido-like;
-        epkg-leaf-keywords.url = github:syvlorg/leaf-keywords;
-        epkg-lode.url = github:syvlorg/lode;
-        epkg-meta.url = github:syvlorg/meta;
-        epkg-prime.url = github:syvlorg/prime;
-        epkg-riot.url = github:syvlorg/riot;
-        epkg-sorrow.url = github:syvlorg/sorrow;
-        epkg-uru.url = github:syvlorg/uru;
-        epkg-use-package-deino.url = github:syvlorg/use-package-deino;
-        epkg-use-package-extras.url = github:syvlorg/use-package-extras;
+    ePkg-aiern-aiernhide-state.url =
+      "git+https://github.com/syvlorg/aiern-aiernhide-state.git";
+    ePkg-aiern-god-state.url =
+      "git+https://github.com/syvlorg/aiern-god-state.git";
+    ePkg-cosmoem.url =
+      "git+https://github.com/syvlorg/cosmoem.git";
+    ePkg-cosmog.url =
+      "git+https://github.com/syvlorg/cosmog.git";
+    ePkg-doc-templates.url =
+      "git+https://github.com/syvlorg/doc-templates.git";
+    ePkg-doom-aiern-modeline.url =
+      "git+https://github.com/syvlorg/doom-aiern-modeline.git";
+    ePkg-evil-evilified-state.url =
+      "git+https://github.com/syvlorg/evil-evilified-state.git";
+    ePkg-fell-templates.url =
+      "git+https://github.com/syvlorg/fell-templates.git";
+    ePkg-helm-ido-like.url =
+      "git+https://github.com/syvlorg/helm-ido-like-guide.git";
+    ePkg-leaf-keywords.url =
+      "git+https://github.com/syvlorg/leaf-keywords.git";
+    ePkg-lode.url =
+      "git+https://github.com/syvlorg/lode.git";
+    ePkg-meta.url =
+      "git+https://github.com/syvlorg/meta.git";
+    ePkg-prime.url =
+      "git+https://github.com/syvlorg/prime.git";
+    ePkg-riot.url =
+      "git+https://github.com/syvlorg/riot.git";
+    ePkg-sorrow.url =
+      "git+https://github.com/syvlorg/sorrow.git";
+    ePkg-uru.url =
+      "git+https://github.com/syvlorg/uru.git";
+    ePkg-use-package-deino.url =
+      "git+https://github.com/syvlorg/use-package-deino.git";
+    ePkg-use-package-extras.url =
+      "git+https://github.com/syvlorg/use-package-extras.git";
 
-        flake-utils.url = github:numtide/flake-utils;
-        flake-compat = {
-            url = "github:edolstra/flake-compat";
-            flake = false;
-        };
+    flake-utils.url = "github:numtide/flake-utils";
+    flake-compat = {
+      url = "github:edolstra/flake-compat";
+      flake = false;
     };
-    outputs = inputs@{ self, flake-utils, settings, ... }: with builtins; with settings.lib; with flake-utils.lib; settings.mkOutputs {
-        inherit inputs;
-        type = "general";
-        pname = "damascus";
-        overlays = let
-            damascan = j.foldToSet (map (pkg: let
-                pname = "damascus" + (removePrefix "emacs" pkg);
-            in genAttrs [
-                pname
-                pkg
-            ] (name: final: prev: { ${pname} = final.${pkg}.withPackages (epkgs: with epkgs; flatten [
+  };
+  outputs = inputs@{ self, flake-utils, bundle, ... }:
+    with builtins;
+    with bundle.lib;
+    with flake-utils.lib;
+    bundle.mkOutputs.general {
+      inherit inputs self;
+      pname = "damascus";
+      overlays = let
+        damascan = iron.fold.set (map (pkg:
+          let pname = "damascus" + (removePrefix "emacs" pkg);
+          in genAttrs [ pname pkg ] (name: final: prev: {
+            ${pname} = final.${pkg}.withPackages (epkgs:
+              with epkgs;
+              flatten [
                 auto-compile
                 command-log-mode
                 company-prescient
@@ -105,13 +139,13 @@
                 undo-fu-session
                 vlfi
                 xah-fly-keys
-                (map (epkg: let epkg' = epkgs.${removePrefix "epkg-" epkg}; in [ epkg' epkg'.propagatedUserEnvPkgs ]) (filter (hasPrefix "epkg-") (attrNames inputs)))
-            ]); })) (let
-                prev = inputs.nixpkgs.legacyPackages.x86_64-linux;
-            in j.emacsenGen prev (settings.inputs.emacs.overlay prev prev)));
-        in j.foldToSet [
-            damascan
-            { default = damascan.emacs-nox; }
-        ];
-    };
+                (map (epkg:
+                  let epkg' = epkgs.${removePrefix "ePkg-" epkg};
+                  in [ epkg' epkg'.propagatedUserEnvPkgs ])
+                  (filter (hasPrefix "ePkg-") (attrNames inputs)))
+              ]);
+          })) (let prev = inputs.nixpkgs.legacyPackages.x86_64-linux;
+          in iron.emacsenGen prev (bundle.inputs.emacs.overlay prev prev)));
+      in iron.fold.set [ damascan { default = damascan.emacs-nox; } ];
+    } { };
 }

@@ -399,7 +399,7 @@
                     win-qemu
                     xclip
                     yubico-pam yubico-piv-tool yubikey-manager yubikey-agent
-                    yubikey-personalization yubioath-desktop)
+                    yubikey-personalization yubioath-flutter)
         :not-in-terminal '(alacritty atom
                             firefox
                             gnome3.gnome-disk-utility gparted

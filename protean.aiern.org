@@ -549,7 +549,7 @@ This is taken from [[https://functor.tokyo/blog/2018-02-20-show-packages-install
                     win-qemu
                     xclip
                     yubico-pam yubico-piv-tool yubikey-manager yubikey-agent
-                    yubikey-personalization yubioath-desktop)
+                    yubikey-personalization yubioath-flutter)
         :not-in-terminal '(alacritty atom
                             firefox
                             gnome3.gnome-disk-utility gparted

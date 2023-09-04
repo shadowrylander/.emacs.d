@@ -1,9 +1,0 @@
-{
-    "dirs": [
-        "lib",
-        "./."
-    ],
-    "tangle": {
-        "tangle_files": [ "protean.aiern.org" ]
-    }
-}

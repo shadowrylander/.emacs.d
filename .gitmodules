@@ -52,8 +52,8 @@
 [submodule "cosmog"]
         path = lib/cosmog
         url = git@github.com:syvlorg/cosmog.git
-        build-step = chmod +x ./settings/org-tangle.sh
-        build-step = ./settings/org-tangle.sh .
+        build-step = chmod +x ./bundle/org-tangle.sh
+        build-step = ./bundle/org-tangle.sh .
         build-step = borg-update-autoloads
         build-step = borg-byte-compile
         build-step = borg-makeinfo
@@ -174,8 +174,8 @@
 [submodule "janus"]
         path = lib/janus
         url = git@github.com:syvlorg/janus.git
-        build-step = chmod +x ./settings/org-tangle.sh
-        build-step = ./settings/org-tangle.sh .
+        build-step = chmod +x ./bundle/org-tangle.sh
+        build-step = ./bundle/org-tangle.sh .
         build-step = borg-update-autoloads
         build-step = borg-byte-compile
         build-step = borg-makeinfo
@@ -206,8 +206,8 @@
 [submodule "lode"]
         path = lib/lode
         url = git@github.com:syvlorg/lode.git
-        build-step = chmod +x ./settings/org-tangle.sh
-        build-step = ./settings/org-tangle.sh .
+        build-step = chmod +x ./bundle/org-tangle.sh
+        build-step = ./bundle/org-tangle.sh .
         build-step = borg-update-autoloads
         build-step = borg-byte-compile
         build-step = borg-makeinfo
@@ -220,16 +220,16 @@
 [submodule "meq"]
         path = lib/meq
         url = git@github.com:syvlorg/meq.git
-        build-step = chmod +x ./settings/org-tangle.sh
-        build-step = ./settings/org-tangle.sh .
+        build-step = chmod +x ./bundle/org-tangle.sh
+        build-step = ./bundle/org-tangle.sh .
         build-step = borg-update-autoloads
         build-step = borg-byte-compile
         build-step = borg-makeinfo
 [submodule "meta"]
         path = lib/meta
         url = git@github.com:syvlorg/meta.git
-        build-step = chmod +x ./settings/org-tangle.sh
-        build-step = ./settings/org-tangle.sh .
+        build-step = chmod +x ./bundle/org-tangle.sh
+        build-step = ./bundle/org-tangle.sh .
         build-step = borg-update-autoloads
         build-step = borg-byte-compile
         build-step = borg-makeinfo
@@ -305,8 +305,8 @@
 [submodule "prime"]
         path = lib/prime
         url = git@github.com:syvlorg/prime.git
-        build-step = chmod +x ./settings/org-tangle.sh
-        build-step = ./settings/org-tangle.sh .
+        build-step = chmod +x ./bundle/org-tangle.sh
+        build-step = ./bundle/org-tangle.sh .
         build-step = borg-update-autoloads
         build-step = borg-byte-compile
         build-step = borg-makeinfo
@@ -349,8 +349,8 @@
 [submodule "riot"]
         path = lib/riot
         url = git@github.com:syvlorg/riot.git
-        build-step = chmod +x ./settings/org-tangle.sh
-        build-step = ./settings/org-tangle.sh .
+        build-step = chmod +x ./bundle/org-tangle.sh
+        build-step = ./bundle/org-tangle.sh .
         build-step = borg-update-autoloads
         build-step = borg-byte-compile
         build-step = borg-makeinfo
@@ -396,8 +396,8 @@
 [submodule "uru"]
         path = lib/uru
         url = git@github.com:syvlorg/uru.git
-        build-step = chmod +x ./settings/org-tangle.sh
-        build-step = ./settings/org-tangle.sh .
+        build-step = chmod +x ./bundle/org-tangle.sh
+        build-step = ./bundle/org-tangle.sh .
         build-step = borg-update-autoloads
         build-step = borg-byte-compile
         build-step = borg-makeinfo
@@ -407,16 +407,16 @@
 [submodule "use-package-deino"]
         path = lib/use-package-deino
         url = git@github.com:syvlorg/use-package-deino.git
-        build-step = chmod +x ./settings/org-tangle.sh
-        build-step = ./settings/org-tangle.sh .
+        build-step = chmod +x ./bundle/org-tangle.sh
+        build-step = ./bundle/org-tangle.sh .
         build-step = borg-update-autoloads
         build-step = borg-byte-compile
         build-step = borg-makeinfo
 [submodule "use-package-extras"]
         path = lib/use-package-extras
         url = git@github.com:syvlorg/use-package-extras.git
-        build-step = chmod +x ./settings/org-tangle.sh
-        build-step = ./settings/org-tangle.sh .
+        build-step = chmod +x ./bundle/org-tangle.sh
+        build-step = ./bundle/org-tangle.sh .
         build-step = borg-update-autoloads
         build-step = borg-byte-compile
         build-step = borg-makeinfo
@@ -483,6 +483,3 @@
 [submodule "doc-templates"]
 	path = lib/doc-templates
 	url = git@github.com:syvlorg/doc-templates.git
-[submodule "settings"]
-	path = settings
-	url = git@github.com:sylvorg/settings.git

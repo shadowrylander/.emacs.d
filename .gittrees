@@ -1,6 +1,6 @@
-[subtree "settings"]
-	url = https://github.com/shadowrylander/settings.git
-	path = settings
+[subtree "bundle"]
+	url = https://github.com/shadowrylander/bundle.git
+	path = bundle
 	branch = main
 [subtree "siluam/emacsql"]
 	url = https://github.com/skeeto/emacsql.git
