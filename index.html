@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2023-09-04 Mon 20:46 -->
+<!-- 2023-09-04 Mon 22:20 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>&lrm;</title>
@@ -31,60 +31,60 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org76574d7">early-init.el</a></li>
-<li><a href="#org379fbb0">Startup</a>
+<li><a href="#org0f1e596">early-init.el</a></li>
+<li><a href="#orgc9703ba">Startup</a>
 <ul>
-<li><a href="#orgf074122">Optimizations</a></li>
-<li><a href="#org9415afa">Libraries</a></li>
-<li><a href="#org1fb71b9">Native Comp</a></li>
-<li><a href="#org6c85131">We are Borg.</a></li>
-<li><a href="#orgc041a9a">Custom</a></li>
-<li><a href="#orgfc090f1">Themes</a></li>
-<li><a href="#org3346e38">Packages</a>
+<li><a href="#org459cf70">Optimizations</a></li>
+<li><a href="#org0b21f05">Libraries</a></li>
+<li><a href="#org45e00e7">Native Comp</a></li>
+<li><a href="#org867fd53">We are Borg.</a></li>
+<li><a href="#orgf6b50d3">Custom</a></li>
+<li><a href="#org64e430c">Themes</a></li>
+<li><a href="#orgf9f7b4d">Packages</a>
 <ul>
-<li><a href="#orgc06cdd0">use-package</a></li>
-<li><a href="#org1377453">hydra</a></li>
-<li><a href="#orgbf56c40">alloy</a></li>
-<li><a href="#orgeb9f6ca">prime</a></li>
-<li><a href="#orgcffb378">uru</a></li>
-<li><a href="#org01d4042">which-key</a></li>
-<li><a href="#org33b8690">cosmoem</a></li>
-<li><a href="#orgc772677">sorrow</a></li>
-<li><a href="#org34a95e5">exec-path-from-shell</a></li>
-<li><a href="#org242c961">undo-fu</a></li>
-<li><a href="#org589d63e">lode</a></li>
-<li><a href="#orgdb18534">meta</a></li>
-<li><a href="#org39d0298">aiern</a></li>
-<li><a href="#org598700f">all-the-icons</a></li>
-<li><a href="#org71b7b17">buffer</a></li>
-<li><a href="#org16ba1a0">ivy</a></li>
-<li><a href="#org3d4da56">counsel</a></li>
-<li><a href="#org3ed9440">damascus</a></li>
-<li><a href="#org2bdc7bb">dired-sidebar</a></li>
-<li><a href="#orgb220fe8">god-mode</a></li>
-<li><a href="#org666d440">doom-aiern-modeline</a></li>
-<li><a href="#org21c5074">evil</a></li>
-<li><a href="#orgcef3b74">olivetti</a></li>
-<li><a href="#org43ac5e8">rainbow-identifiers</a></li>
-<li><a href="#org60c3852">vlf</a></li>
-<li><a href="#org1e365a7">doom-themes</a></li>
-<li><a href="#org023820f">windmove</a></li>
-<li><a href="#orgd2fbe12">ace-window</a></li>
-<li><a href="#org09b0478">cosmog</a></li>
-<li><a href="#org0fac2a2">helm</a></li>
-<li><a href="#org80394d1">magit</a></li>
-<li><a href="#org550a14d">modalka</a></li>
-<li><a href="#org0830204">objed</a></li>
-<li><a href="#orgd918025">projectile</a></li>
-<li><a href="#org50e5d8f">pyvenv</a></li>
-<li><a href="#org8395367">restart-emacs</a></li>
-<li><a href="#orgd9ed4f0">ryo modal</a></li>
-<li><a href="#org31309ab">vterm</a></li>
-<li><a href="#org6f70d84">xah-fly-keys</a></li>
-<li><a href="#org3f5dd3e">show-paren-mode</a></li>
-<li><a href="#orgcaeba44">lispy</a></li>
-<li><a href="#orge8f357e">sly</a></li>
-<li><a href="#orgd05dab9">Major Modes</a></li>
+<li><a href="#orgdbb65ca">use-package</a></li>
+<li><a href="#org2d79889">hydra</a></li>
+<li><a href="#org37eaa08">alloy</a></li>
+<li><a href="#orgfdbdf0b">prime</a></li>
+<li><a href="#orgf84fe61">uru</a></li>
+<li><a href="#orgc947d84">which-key</a></li>
+<li><a href="#org1f7bccd">cosmoem</a></li>
+<li><a href="#orgddc4675">sorrow</a></li>
+<li><a href="#org25a4a99">exec-path-from-shell</a></li>
+<li><a href="#orge988e90">undo-fu</a></li>
+<li><a href="#orga8d3516">lode</a></li>
+<li><a href="#org570038c">meta</a></li>
+<li><a href="#orgda60d69">aiern</a></li>
+<li><a href="#orga1188a7">all-the-icons</a></li>
+<li><a href="#orgecf8a03">buffer</a></li>
+<li><a href="#orgc9eecf4">ivy</a></li>
+<li><a href="#orgd1c0548">counsel</a></li>
+<li><a href="#org11fb038">damascus</a></li>
+<li><a href="#org586ecfd">dired-sidebar</a></li>
+<li><a href="#orgf24d860">god-mode</a></li>
+<li><a href="#org7b244da">doom-aiern-modeline</a></li>
+<li><a href="#orgec4818f">evil</a></li>
+<li><a href="#org73f6211">olivetti</a></li>
+<li><a href="#orgc3d1650">rainbow-identifiers</a></li>
+<li><a href="#orgc518c96">vlf</a></li>
+<li><a href="#org800afe0">doom-themes</a></li>
+<li><a href="#org0ea8947">windmove</a></li>
+<li><a href="#org9cf9f93">ace-window</a></li>
+<li><a href="#orgb20860d">cosmog</a></li>
+<li><a href="#org15b795e">helm</a></li>
+<li><a href="#org4901b2e">magit</a></li>
+<li><a href="#orgf5a8e0b">modalka</a></li>
+<li><a href="#orga2276f5">objed</a></li>
+<li><a href="#org1aa4ec9">projectile</a></li>
+<li><a href="#org3903264">pyvenv</a></li>
+<li><a href="#org1d5983a">restart-emacs</a></li>
+<li><a href="#org767d100">ryo modal</a></li>
+<li><a href="#org971bbad">vterm</a></li>
+<li><a href="#orgad89be2">xah-fly-keys</a></li>
+<li><a href="#org13ecbed">show-paren-mode</a></li>
+<li><a href="#org6ded97a">lispy</a></li>
+<li><a href="#org0c98f85">sly</a></li>
+<li><a href="#org97bd89f">Major Modes</a></li>
 </ul>
 </li>
 </ul>
@@ -93,9 +93,9 @@
 </div>
 </div>
 
-<div id="outline-container-org76574d7" class="outline-2">
-<h2 id="org76574d7">early-init.el</h2>
-<div class="outline-text-2" id="text-org76574d7">
+<div id="outline-container-org0f1e596" class="outline-2">
+<h2 id="org0f1e596">early-init.el</h2>
+<div class="outline-text-2" id="text-org0f1e596">
 <p>
 The <code>noweb-ref</code> headers, such as the one below, are adapted from <a href="https://emacs.stackexchange.com/users/388/melioratus">Melioratus's</a> answer <a href="https://emacs.stackexchange.com/a/38935/31428">here</a>.
 This way, I can maintain some semblance of a literate config.
@@ -311,7 +311,7 @@ Methods of package management, including:
 </ul>
 
 
-<div id="org681eca0" class="figure">
+<div id="org936e542" class="figure">
 <p><img src="./borg.gif" alt="borg.gif" />
 </p>
 </div>
@@ -454,9 +454,9 @@ Then finally create the function to [re]load the primary early-init in this READ
 </div>
 </div>
 
-<div id="outline-container-org379fbb0" class="outline-2">
-<h2 id="org379fbb0">Startup</h2>
-<div class="outline-text-2" id="text-org379fbb0">
+<div id="outline-container-orgc9703ba" class="outline-2">
+<h2 id="orgc9703ba">Startup</h2>
+<div class="outline-text-2" id="text-orgc9703ba">
 <p>
 Remove <code>--</code> from scripts:
 </p>
@@ -467,9 +467,9 @@ Remove <code>--</code> from scripts:
 </div>
 </div>
 
-<div id="outline-container-orgf074122" class="outline-3">
-<h3 id="orgf074122">Optimizations</h3>
-<div class="outline-text-3" id="text-orgf074122">
+<div id="outline-container-org459cf70" class="outline-3">
+<h3 id="org459cf70">Optimizations</h3>
+<div class="outline-text-3" id="text-org459cf70">
 <p>
 Startup optimizations from <a href="https://github.com/hlissner">Henrik Lissner's</a> <a href="https://github.com/hlissner/doom-emacs/blob/develop/early-init.el">Doom Emacs' <code>early-init.el</code></a>:
 </p>
@@ -604,9 +604,9 @@ The default gc-cons-threshold is 400000 bytes, not 800000. &#x2026;
 </div>
 </div>
 
-<div id="outline-container-org9415afa" class="outline-3">
-<h3 id="org9415afa">Libraries</h3>
-<div class="outline-text-3" id="text-org9415afa">
+<div id="outline-container-org0b21f05" class="outline-3">
+<h3 id="org0b21f05">Libraries</h3>
+<div class="outline-text-3" id="text-org0b21f05">
 <p>
 Byte-compile the library directories and add them to the load-path now; the following bits are adapted from <a href="https://emacs.stackexchange.com/users/14825/nickd">NickD's</a> answer <a href="https://emacs.stackexchange.com/a/55415/31428">here</a>,
 and <a href="https://www.emacswiki.org/emacs/LoadPath#h5o-2">from this section of the Emacs Wiki</a>.
@@ -621,9 +621,9 @@ and <a href="https://www.emacswiki.org/emacs/LoadPath#h5o-2">from this section o
 </div>
 </div>
 
-<div id="outline-container-org1fb71b9" class="outline-3">
-<h3 id="org1fb71b9">Native Comp</h3>
-<div class="outline-text-3" id="text-org1fb71b9">
+<div id="outline-container-org45e00e7" class="outline-3">
+<h3 id="org45e00e7">Native Comp</h3>
+<div class="outline-text-3" id="text-org45e00e7">
 <p>
 These are two settings I like for <code>native compilation</code>, adapted from <a href="https://github.com/daviwil/dotfiles/blob/master/Emacs.org#native-compilation">here</a>:
 </p>
@@ -653,9 +653,9 @@ Set the right directory to store the native comp cache
 </div>
 </div>
 
-<div id="outline-container-org6c85131" class="outline-3">
-<h3 id="org6c85131">We are Borg.</h3>
-<div class="outline-text-3" id="text-org6c85131">
+<div id="outline-container-org867fd53" class="outline-3">
+<h3 id="org867fd53">We are Borg.</h3>
+<div class="outline-text-3" id="text-org867fd53">
 <p>
 <i>Finally</i> activate my function library:
 </p>
@@ -667,9 +667,9 @@ Set the right directory to store the native comp cache
 </div>
 </div>
 
-<div id="outline-container-orgc041a9a" class="outline-3">
-<h3 id="orgc041a9a">Custom</h3>
-<div class="outline-text-3" id="text-orgc041a9a">
+<div id="outline-container-orgf6b50d3" class="outline-3">
+<h3 id="orgf6b50d3">Custom</h3>
+<div class="outline-text-3" id="text-orgf6b50d3">
 <p>
 As adapted from <a href="https://emacs.stackexchange.com/users/2731/ebpa">ebpa's</a> answer <a href="https://emacs.stackexchange.com/a/18682/31428">here</a>:
 </p>
@@ -683,9 +683,9 @@ As adapted from <a href="https://emacs.stackexchange.com/users/2731/ebpa">ebpa's
 </div>
 </div>
 
-<div id="outline-container-orgfc090f1" class="outline-3">
-<h3 id="orgfc090f1">Themes</h3>
-<div class="outline-text-3" id="text-orgfc090f1">
+<div id="outline-container-org64e430c" class="outline-3">
+<h3 id="org64e430c">Themes</h3>
+<div class="outline-text-3" id="text-org64e430c">
 <div class="org-src-container">
 <pre><code class="language-lisp match-braces rainbow-braces">(byte-recompile-directory (meq/ued <span style="font-style: italic;">"themes"</span>) nil)
 (add-to-list 'custom-theme-load-path (meq/ued <span style="font-style: italic;">"themes"</span>))
@@ -699,14 +699,14 @@ By the way, I get most of my themes from <a href="https://themer.dev/">themer.de
 </div>
 </div>
 
-<div id="outline-container-org3346e38" class="outline-3">
-<h3 id="org3346e38">Packages</h3>
-<div class="outline-text-3" id="text-org3346e38">
+<div id="outline-container-orgf9f7b4d" class="outline-3">
+<h3 id="orgf9f7b4d">Packages</h3>
+<div class="outline-text-3" id="text-orgf9f7b4d">
 </div>
 
-<div id="outline-container-orgc06cdd0" class="outline-4">
-<h4 id="orgc06cdd0">use-package</h4>
-<div class="outline-text-4" id="text-orgc06cdd0">
+<div id="outline-container-orgdbb65ca" class="outline-4">
+<h4 id="orgdbb65ca">use-package</h4>
+<div class="outline-text-4" id="text-orgdbb65ca">
 <p>
 <a href="https://github.com/jwiegley/use-package">use-package</a> with <a href="https://github.com/jwiegley">John Wiegley</a>:
 </p>
@@ -731,8 +731,8 @@ then delete the argument from the list; also set the variable if Emacs is runnin
 </div>
 
 <ul class="org-ul">
-<li><a id="org7911073"></a>Sometimes defer package loading<br />
-<div class="outline-text-5" id="text-org7911073">
+<li><a id="org9d8ac43"></a>Sometimes defer package loading<br />
+<div class="outline-text-5" id="text-org9d8ac43">
 <p>
 Quoted from <a href="https://github.com/jwiegley/use-package#loading-packages-in-sequence">Use-Package's Loading packages in sequence</a>:
 </p>
@@ -853,8 +853,8 @@ And in my experience&#x2026; Not a good idea; much too confusing. Use <a href="h
 </div>
 </li>
 
-<li><a id="org900b36f"></a>extras<br />
-<div class="outline-text-5" id="text-org900b36f">
+<li><a id="org1f8df54"></a>extras<br />
+<div class="outline-text-5" id="text-org1f8df54">
 <p>
 This sets up <a href="https://github.com/shadowrylander/use-package-extras">use-package-extras</a> by yours truely:
 </p>
@@ -881,9 +881,9 @@ And then <a href="https://github.com/conao3/leaf.el">leaf.el</a> by <a href="htt
 </ul>
 </div>
 
-<div id="outline-container-org1377453" class="outline-4">
-<h4 id="org1377453">hydra</h4>
-<div class="outline-text-4" id="text-org1377453">
+<div id="outline-container-org2d79889" class="outline-4">
+<h4 id="org2d79889">hydra</h4>
+<div class="outline-text-4" id="text-org2d79889">
 <p>
 This sets up <a href="https://github.com/abo-abo/hydra">hydra</a> by <a href="https://github.com/abo-abo">Oleh Krehel</a>, as well as its <code>use-package</code> keywords:
 </p>
@@ -917,9 +917,9 @@ This bit sets up the following:
 </div>
 </div>
 
-<div id="outline-container-orgbf56c40" class="outline-4">
-<h4 id="orgbf56c40">alloy</h4>
-<div class="outline-text-4" id="text-orgbf56c40">
+<div id="outline-container-org37eaa08" class="outline-4">
+<h4 id="org37eaa08">alloy</h4>
+<div class="outline-text-4" id="text-org37eaa08">
 <p>
 Here is the configuration for <a href="https://github.com/shadowrylander/alloy">alloy</a>, forked from <a href="https://github.com/noctuid/general.el">general.el</a> by <a href="https://github.com/noctuid">Fox Kiester</a>:
 </p>
@@ -1002,9 +1002,9 @@ And finally, this allows <code>alloy</code> to assume <code>kbd</code> is being 
 </div>
 </div>
 
-<div id="outline-container-orgeb9f6ca" class="outline-4">
-<h4 id="orgeb9f6ca">prime</h4>
-<div class="outline-text-4" id="text-orgeb9f6ca">
+<div id="outline-container-orgfdbdf0b" class="outline-4">
+<h4 id="orgfdbdf0b">prime</h4>
+<div class="outline-text-4" id="text-orgfdbdf0b">
 <p>
 Set up <a href="https://github.com/shadowrylander/prime">prime</a> by yours truely:
 </p>
@@ -1016,9 +1016,9 @@ Set up <a href="https://github.com/shadowrylander/prime">prime</a> by yours true
 </div>
 </div>
 
-<div id="outline-container-orgcffb378" class="outline-4">
-<h4 id="orgcffb378">uru</h4>
-<div class="outline-text-4" id="text-orgcffb378">
+<div id="outline-container-orgf84fe61" class="outline-4">
+<h4 id="orgf84fe61">uru</h4>
+<div class="outline-text-4" id="text-orgf84fe61">
 <p>
 This sets up my package <a href="https://github.com/shadowrylander/uru">uru</a>, which activates <code>deinos</code> based on the current major-mode, as mentioned in <a href="https://codeberg.org/dr.ops/medusa/src/branch/main/medusa.org#headline-4">magic medusa hydra</a>, by <a href="https://codeberg.org/dr.ops">Andy Drop</a>:
 </p>
@@ -1040,9 +1040,9 @@ This sets up my package <a href="https://github.com/shadowrylander/uru">uru</a>,
 </div>
 </div>
 
-<div id="outline-container-org01d4042" class="outline-4">
-<h4 id="org01d4042">which-key</h4>
-<div class="outline-text-4" id="text-org01d4042">
+<div id="outline-container-orgc947d84" class="outline-4">
+<h4 id="orgc947d84">which-key</h4>
+<div class="outline-text-4" id="text-orgc947d84">
 <p>
 The incredible <a href="https://github.com/justbur/emacs-which-key">emacs-which-key</a> by the incredible <a href="https://github.com/justbur">Justin Burkett</a>:
 </p>
@@ -1083,9 +1083,9 @@ The incredible <a href="https://github.com/justbur/emacs-which-key">emacs-which-
 </div>
 </div>
 
-<div id="outline-container-org33b8690" class="outline-4">
-<h4 id="org33b8690">cosmoem</h4>
-<div class="outline-text-4" id="text-org33b8690">
+<div id="outline-container-org1f7bccd" class="outline-4">
+<h4 id="org1f7bccd">cosmoem</h4>
+<div class="outline-text-4" id="text-org1f7bccd">
 <p>
 <a href="https://bulbapedia.bulbagarden.net/wiki/Nebby">Nebby</a>
 <img src="./nebby.webp" alt="nebby.webp" />
@@ -1225,9 +1225,9 @@ A <code>deino</code> for all my modal-mode keymaps:
 </div>
 </div>
 
-<div id="outline-container-orgc772677" class="outline-4">
-<h4 id="orgc772677">sorrow</h4>
-<div class="outline-text-4" id="text-orgc772677">
+<div id="outline-container-orgddc4675" class="outline-4">
+<h4 id="orgddc4675">sorrow</h4>
+<div class="outline-text-4" id="text-orgddc4675">
 <p>
 Finally, <a href="https://github.com/shadowrylander/sorrow">sorrow</a>, forked from <a href="https://github.com/Kungsgeten/ryo-modal">ryo-modal</a> by <a href="https://github.com/Kungsgeten">Erik Sjöstrand</a>:
 </p>
@@ -1305,9 +1305,9 @@ Here is the setup for the <code>deino</code> of <code>cosmoem</code> maps referr
 </div>
 </div>
 
-<div id="outline-container-org34a95e5" class="outline-4">
-<h4 id="org34a95e5">exec-path-from-shell</h4>
-<div class="outline-text-4" id="text-org34a95e5">
+<div id="outline-container-org25a4a99" class="outline-4">
+<h4 id="org25a4a99">exec-path-from-shell</h4>
+<div class="outline-text-4" id="text-org25a4a99">
 <p>
 Unless I'm on Windows or a DOS-based OS, I'll need to make sure every executable available on my <code>$PATH</code> can be found by Emacs as well, using
 <a href="https://github.com/purcell/exec-path-from-shell">exec-path-from-shell</a> by <a href="https://github.com/purcell">Steve Purcell</a>:
@@ -1327,9 +1327,9 @@ Unless I'm on Windows or a DOS-based OS, I'll need to make sure every executable
 </div>
 </div>
 
-<div id="outline-container-org242c961" class="outline-4">
-<h4 id="org242c961">undo-fu</h4>
-<div class="outline-text-4" id="text-org242c961">
+<div id="outline-container-orge988e90" class="outline-4">
+<h4 id="orge988e90">undo-fu</h4>
+<div class="outline-text-4" id="text-orge988e90">
 <p>
 Set up <a href="https://github.com/emacsmirror/undo-fu">undo-fu</a> and <a href="https://github.com/emacsmirror/undo-fu-session">undo-fu-session</a>:
 </p>
@@ -1350,9 +1350,9 @@ Set up <a href="https://github.com/emacsmirror/undo-fu">undo-fu</a> and <a href=
 </div>
 </div>
 
-<div id="outline-container-org589d63e" class="outline-4">
-<h4 id="org589d63e">lode</h4>
-<div class="outline-text-4" id="text-org589d63e">
+<div id="outline-container-orga8d3516" class="outline-4">
+<h4 id="orga8d3516">lode</h4>
+<div class="outline-text-4" id="text-orga8d3516">
 <p>
 Set up <a href="https://github.com/shadowrylander/lode">lode</a> by yours truely:
 </p>
@@ -1364,9 +1364,9 @@ Set up <a href="https://github.com/shadowrylander/lode">lode</a> by yours truely
 </div>
 </div>
 
-<div id="outline-container-orgdb18534" class="outline-4">
-<h4 id="orgdb18534">meta</h4>
-<div class="outline-text-4" id="text-orgdb18534">
+<div id="outline-container-org570038c" class="outline-4">
+<h4 id="org570038c">meta</h4>
+<div class="outline-text-4" id="text-org570038c">
 <p>
 Set up <a href="https://github.com/shadowrylander/meta">meta</a> by yours truely:
 </p>
@@ -1378,9 +1378,9 @@ Set up <a href="https://github.com/shadowrylander/meta">meta</a> by yours truely
 </div>
 </div>
 
-<div id="outline-container-org39d0298" class="outline-4">
-<h4 id="org39d0298">aiern</h4>
-<div class="outline-text-4" id="text-org39d0298">
+<div id="outline-container-orgda60d69" class="outline-4">
+<h4 id="orgda60d69">aiern</h4>
+<div class="outline-text-4" id="text-orgda60d69">
 <p>
 <a href="https://github.com/shadowrylander/aiern">aiern</a> is my version of <a href="https://github.com/emacs-evil/evil">evil</a>; this first bit of config will enable <code>aiern</code> on initialization and add it to the list of ignored modal-modes,
 such that it isn't disabled by <code>meq/disable-all-modal-modes</code>:
@@ -1545,9 +1545,9 @@ Deprecated; kept for documentation purposes:
 </div>
 </div>
 
-<div id="outline-container-org598700f" class="outline-4">
-<h4 id="org598700f">all-the-icons</h4>
-<div class="outline-text-4" id="text-org598700f">
+<div id="outline-container-orga1188a7" class="outline-4">
+<h4 id="orga1188a7">all-the-icons</h4>
+<div class="outline-text-4" id="text-orga1188a7">
 <p>
 I use <a href="https://connary.com/cartograph.html">Cartograph</a> by <a href="https://connary.com/index.html">Connary Fagen, Inc.</a>, but I got it cheaper <a href="https://www.fontspring.com/fonts/connary-fagen-type-design/cartograph-cf">here</a>; the second site often has sales on fonts.
 </p>
@@ -1563,9 +1563,9 @@ I use <a href="https://connary.com/cartograph.html">Cartograph</a> by <a href="h
 </div>
 </div>
 
-<div id="outline-container-org71b7b17" class="outline-4">
-<h4 id="org71b7b17">buffer</h4>
-<div class="outline-text-4" id="text-org71b7b17">
+<div id="outline-container-orgecf8a03" class="outline-4">
+<h4 id="orgecf8a03">buffer</h4>
+<div class="outline-text-4" id="text-orgecf8a03">
 <p>
 This binds <code>ctrl-tab</code> and <code>ctrl-shift-tab</code> to buffer-cycling motions:
 </p>
@@ -1603,9 +1603,9 @@ And this is mostly adapted from <a href="https://sam217pa.github.io/2016/09/23/k
 </div>
 </div>
 
-<div id="outline-container-org16ba1a0" class="outline-4">
-<h4 id="org16ba1a0">ivy</h4>
-<div class="outline-text-4" id="text-org16ba1a0">
+<div id="outline-container-orgc9eecf4" class="outline-4">
+<h4 id="orgc9eecf4">ivy</h4>
+<div class="outline-text-4" id="text-orgc9eecf4">
 <p>
 From the <a href="https://github.com/abo-abo/swiper">swiper</a> package by <a href="https://github.com/abo-abo">Oleh Krehel</a>:
 </p>
@@ -1621,9 +1621,9 @@ From the <a href="https://github.com/abo-abo/swiper">swiper</a> package by <a hr
 </div>
 </div>
 
-<div id="outline-container-org3d4da56" class="outline-4">
-<h4 id="org3d4da56">counsel</h4>
-<div class="outline-text-4" id="text-org3d4da56">
+<div id="outline-container-orgd1c0548" class="outline-4">
+<h4 id="orgd1c0548">counsel</h4>
+<div class="outline-text-4" id="text-orgd1c0548">
 <p>
 From the <a href="https://github.com/abo-abo/swiper">swiper</a> package by <a href="https://github.com/abo-abo">Oleh Krehel</a>:
 </p>
@@ -1653,9 +1653,9 @@ From the <a href="https://github.com/abo-abo/swiper">swiper</a> package by <a hr
 </div>
 </div>
 
-<div id="outline-container-org3ed9440" class="outline-4">
-<h4 id="org3ed9440">damascus</h4>
-<div class="outline-text-4" id="text-org3ed9440">
+<div id="outline-container-org11fb038" class="outline-4">
+<h4 id="org11fb038">damascus</h4>
+<div class="outline-text-4" id="text-org11fb038">
 <p>
 Set up the base of this config, including the <a href="https://github.com/emacsmirror/rainbow-mode">rainbow-mode</a> package:
 </p>
@@ -1944,9 +1944,9 @@ And finally, make emacs fullscreen, from <a href="https://emacs.stackexchange.co
 </div>
 </div>
 
-<div id="outline-container-org2bdc7bb" class="outline-4">
-<h4 id="org2bdc7bb">dired-sidebar</h4>
-<div class="outline-text-4" id="text-org2bdc7bb">
+<div id="outline-container-org586ecfd" class="outline-4">
+<h4 id="org586ecfd">dired-sidebar</h4>
+<div class="outline-text-4" id="text-org586ecfd">
 <p>
 Set up <a href="https://www.gnu.org/software/emacs/manual/html_node/emacs/Dired.html">dired</a> and its <a href="https://github.com/jojojames/dired-sidebar">sidebar</a>, by <a href="https://github.com/jojojames">James</a>:
 </p>
@@ -2004,9 +2004,9 @@ Zettelkasten files for my novel and documentation:
 </div>
 </div>
 
-<div id="outline-container-orgb220fe8" class="outline-4">
-<h4 id="orgb220fe8">god-mode</h4>
-<div class="outline-text-4" id="text-orgb220fe8">
+<div id="outline-container-orgf24d860" class="outline-4">
+<h4 id="orgf24d860">god-mode</h4>
+<div class="outline-text-4" id="text-orgf24d860">
 <div class="org-src-container">
 <pre><code class="language-lisp match-braces rainbow-braces">(use-package god-mode
     <span style="font-weight: bold;">:config</span> (which-key-enable-god-mode-support)
@@ -2083,9 +2083,9 @@ This sets up <a href="https://github.com/emacsorphanage/god-mode">god-mode</a>, 
 </div>
 </div>
 
-<div id="outline-container-org666d440" class="outline-4">
-<h4 id="org666d440">doom-aiern-modeline</h4>
-<div class="outline-text-4" id="text-org666d440">
+<div id="outline-container-org7b244da" class="outline-4">
+<h4 id="org7b244da">doom-aiern-modeline</h4>
+<div class="outline-text-4" id="text-org7b244da">
 <p>
 This sets up <a href="https://github.com/shadowrylander/doom-aiern-modeline">my fork</a> of <a href="https://github.com/seagle0128/doom-modeline">doom-modeline</a> by <a href="https://github.com/seagle0128">Vincent Zhang</a> upon initialization:
 </p>
@@ -2269,9 +2269,9 @@ Most of the following is adapted from <a href="https://github.com/seagle0128/doo
 </div>
 </div>
 
-<div id="outline-container-org21c5074" class="outline-4">
-<h4 id="org21c5074">evil</h4>
-<div class="outline-text-4" id="text-org21c5074">
+<div id="outline-container-orgec4818f" class="outline-4">
+<h4 id="orgec4818f">evil</h4>
+<div class="outline-text-4" id="text-orgec4818f">
 <p>
 As mentioned before, both <a href="https://github.com/emacs-evil/evil"><code>evil</code></a> and <a href="https://github.com/shadowrylander/aiern"><code>aiern</code></a> require <a href="https://github.com/justbur/emacs-bind-map">emacs-bind-map</a>, by <a href="https://github.com/justbur">Justin Burkett</a>:
 </p>
@@ -2419,9 +2419,9 @@ Here is the setup for the <code>deino</code> of <code>cosmoem</code> maps referr
 </div>
 </div>
 
-<div id="outline-container-orgcef3b74" class="outline-4">
-<h4 id="orgcef3b74">olivetti</h4>
-<div class="outline-text-4" id="text-orgcef3b74">
+<div id="outline-container-org73f6211" class="outline-4">
+<h4 id="org73f6211">olivetti</h4>
+<div class="outline-text-4" id="text-org73f6211">
 <p>
 Zen-mode with <a href="https://github.com/rnkn/olivetti">olivetti</a>, by <a href="https://github.com/rnkn">Paul W. Rankin</a>:
 </p>
@@ -2433,9 +2433,9 @@ Zen-mode with <a href="https://github.com/rnkn/olivetti">olivetti</a>, by <a hre
 </div>
 </div>
 
-<div id="outline-container-org43ac5e8" class="outline-4">
-<h4 id="org43ac5e8">rainbow-identifiers</h4>
-<div class="outline-text-4" id="text-org43ac5e8">
+<div id="outline-container-orgc3d1650" class="outline-4">
+<h4 id="orgc3d1650">rainbow-identifiers</h4>
+<div class="outline-text-4" id="text-orgc3d1650">
 <p>
 Colorful words with <a href="https://github.com/Fanael/rainbow-identifiers">rainbow-identifiers</a>, by <a href="https://github.com/Fanael">Fanael Linithien</a>:
 </p>
@@ -2454,9 +2454,9 @@ Colorful words with <a href="https://github.com/Fanael/rainbow-identifiers">rain
 </div>
 </div>
 
-<div id="outline-container-org60c3852" class="outline-4">
-<h4 id="org60c3852">vlf</h4>
-<div class="outline-text-4" id="text-org60c3852">
+<div id="outline-container-orgc518c96" class="outline-4">
+<h4 id="orgc518c96">vlf</h4>
+<div class="outline-text-4" id="text-orgc518c96">
 <p>
 View Large Files with <a href="https://github.com/m00natic/vlfi">vlfi</a>, by <a href="https://github.com/m00natic">Andrey Kotlarski</a>
 </p>
@@ -2468,9 +2468,9 @@ View Large Files with <a href="https://github.com/m00natic/vlfi">vlfi</a>, by <a
 </div>
 </div>
 
-<div id="outline-container-org1e365a7" class="outline-4">
-<h4 id="org1e365a7">doom-themes</h4>
-<div class="outline-text-4" id="text-org1e365a7">
+<div id="outline-container-org800afe0" class="outline-4">
+<h4 id="org800afe0">doom-themes</h4>
+<div class="outline-text-4" id="text-org800afe0">
 <div class="org-src-container">
 <pre><code class="language-lisp match-braces rainbow-braces">(meq/up doom-themes
     <span style="font-weight: bold;">:deino</span> (deino-themes-light (<span style="font-weight: bold;">:color</span> blue) nil <span style="font-style: italic;">"A deino for light themes!"</span> (<span style="font-style: italic;">"`"</span> nil <span style="font-style: italic;">"cancel"</span>))
@@ -2534,9 +2534,9 @@ View Large Files with <a href="https://github.com/m00natic/vlfi">vlfi</a>, by <a
 </div>
 </div>
 
-<div id="outline-container-org023820f" class="outline-4">
-<h4 id="org023820f">windmove</h4>
-<div class="outline-text-4" id="text-org023820f">
+<div id="outline-container-org0ea8947" class="outline-4">
+<h4 id="org0ea8947">windmove</h4>
+<div class="outline-text-4" id="text-org0ea8947">
 <div class="org-src-container">
 <pre><code class="language-lisp match-braces rainbow-braces">(meq/up windmove
     <span style="font-weight: bold;">:config</span> (winner-mode)
@@ -2581,9 +2581,9 @@ The <code>sorrow</code> config below is adapted from
 </div>
 </div>
 
-<div id="outline-container-orgd2fbe12" class="outline-4">
-<h4 id="orgd2fbe12">ace-window</h4>
-<div class="outline-text-4" id="text-orgd2fbe12">
+<div id="outline-container-org9cf9f93" class="outline-4">
+<h4 id="org9cf9f93">ace-window</h4>
+<div class="outline-text-4" id="text-org9cf9f93">
 <div class="org-src-container">
 <pre><code class="language-lisp match-braces rainbow-braces">(meq/up ace-window
     <span style="font-weight: bold;">:deino+</span> (deino-window (<span style="font-weight: bold;">:color</span> red)
@@ -2600,9 +2600,9 @@ The <code>sorrow</code> config below is adapted from
 </div>
 </div>
 
-<div id="outline-container-org09b0478" class="outline-4">
-<h4 id="org09b0478">cosmog</h4>
-<div class="outline-text-4" id="text-org09b0478">
+<div id="outline-container-orgb20860d" class="outline-4">
+<h4 id="orgb20860d">cosmog</h4>
+<div class="outline-text-4" id="text-orgb20860d">
 <div class="org-src-container">
 <pre><code class="language-lisp match-braces rainbow-braces">(meq/upnsd cosmog <span style="font-weight: bold;">:prime</span> (<span style="font-style: italic;">"c"</span> deino-cosmog/body <span style="font-style: italic;">"cosmog"</span>))
 </code></pre>
@@ -2610,9 +2610,9 @@ The <code>sorrow</code> config below is adapted from
 </div>
 </div>
 
-<div id="outline-container-org0fac2a2" class="outline-4">
-<h4 id="org0fac2a2">helm</h4>
-<div class="outline-text-4" id="text-org0fac2a2">
+<div id="outline-container-org15b795e" class="outline-4">
+<h4 id="org15b795e">helm</h4>
+<div class="outline-text-4" id="text-org15b795e">
 <div class="org-src-container">
 <pre><code class="language-lisp match-braces rainbow-braces">(meq/up helm
     <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">:commands (helm-M-x helm-mini helm-mode)</span>
@@ -2631,9 +2631,9 @@ The <code>sorrow</code> config below is adapted from
 </div>
 </div>
 
-<div id="outline-container-org80394d1" class="outline-4">
-<h4 id="org80394d1">magit</h4>
-<div class="outline-text-4" id="text-org80394d1">
+<div id="outline-container-org4901b2e" class="outline-4">
+<h4 id="org4901b2e">magit</h4>
+<div class="outline-text-4" id="text-org4901b2e">
 <p>
 Adapted From: <a href="https://github.com/asok/.emacs.d/blob/master/inits/init-hydra.el#L62">https://github.com/asok/.emacs.d/blob/master/inits/init-hydra.el#L62</a>
 </p>
@@ -2654,9 +2654,9 @@ Adapted From: <a href="https://github.com/asok/.emacs.d/blob/master/inits/init-h
 </div>
 </div>
 
-<div id="outline-container-org550a14d" class="outline-4">
-<h4 id="org550a14d">modalka</h4>
-<div class="outline-text-4" id="text-org550a14d">
+<div id="outline-container-orgf5a8e0b" class="outline-4">
+<h4 id="orgf5a8e0b">modalka</h4>
+<div class="outline-text-4" id="text-orgf5a8e0b">
 <div class="org-src-container">
 <pre><code class="language-lisp match-braces rainbow-braces">(meq/up modalka <span style="font-weight: bold;">:config</span>
 </code></pre>
@@ -2728,9 +2728,9 @@ Here is the setup for the <code>deino</code> of <code>cosmoem</code> maps referr
 </div>
 </div>
 
-<div id="outline-container-org0830204" class="outline-4">
-<h4 id="org0830204">objed</h4>
-<div class="outline-text-4" id="text-org0830204">
+<div id="outline-container-orga2276f5" class="outline-4">
+<h4 id="orga2276f5">objed</h4>
+<div class="outline-text-4" id="text-orga2276f5">
 <div class="org-src-container">
 <pre><code class="language-lisp match-braces rainbow-braces">(meq/up objed <span style="font-weight: bold;">:config</span>
 </code></pre>
@@ -2802,9 +2802,9 @@ Here is the setup for the <code>deino</code> of <code>cosmoem</code> maps referr
 </div>
 </div>
 
-<div id="outline-container-orgd918025" class="outline-4">
-<h4 id="orgd918025">projectile</h4>
-<div class="outline-text-4" id="text-orgd918025">
+<div id="outline-container-org1aa4ec9" class="outline-4">
+<h4 id="org1aa4ec9">projectile</h4>
+<div class="outline-text-4" id="text-org1aa4ec9">
 <p>
 Adapted From: <a href="https://sam217pa.github.io/2016/09/23/keybindings-strategies-in-emacs/">https://sam217pa.github.io/2016/09/23/keybindings-strategies-in-emacs/</a>
 </p>
@@ -2861,9 +2861,9 @@ Adapted From: <a href="https://sam217pa.github.io/2016/09/23/keybindings-strateg
 </div>
 </div>
 
-<div id="outline-container-org50e5d8f" class="outline-4">
-<h4 id="org50e5d8f">pyvenv</h4>
-<div class="outline-text-4" id="text-org50e5d8f">
+<div id="outline-container-org3903264" class="outline-4">
+<h4 id="org3903264">pyvenv</h4>
+<div class="outline-text-4" id="text-org3903264">
 <p>
 Adapted from <a href="https://blog.fredrikmeyer.net//2020/08/26/emacs-python-venv.html">here</a>, <a href="https://emacs.stackexchange.com/users/22272/user5293">user5293's</a> answer <a href="https://emacs.stackexchange.com/a/52673/31428">here</a>, <a href="https://emacs.stackexchange.com/users/5187/pandikunta-anand-reddy">Pandikunta Anand Reddy's</a> answer <a href="https://emacs.stackexchange.com/a/18086/31428">here</a>:
 </p>
@@ -2882,9 +2882,9 @@ Adapted from <a href="https://blog.fredrikmeyer.net//2020/08/26/emacs-python-ven
 </div>
 </div>
 
-<div id="outline-container-org8395367" class="outline-4">
-<h4 id="org8395367">restart-emacs</h4>
-<div class="outline-text-4" id="text-org8395367">
+<div id="outline-container-org1d5983a" class="outline-4">
+<h4 id="org1d5983a">restart-emacs</h4>
+<div class="outline-text-4" id="text-org1d5983a">
 <p>
 Cool <a href="https://github.com/iqbalansari/restart-emacs">package</a> by <a href="https://github.com/iqbalansari">Iqbal Ansari</a>!
 </p>
@@ -2900,9 +2900,9 @@ Cool <a href="https://github.com/iqbalansari/restart-emacs">package</a> by <a hr
 </div>
 </div>
 
-<div id="outline-container-orgd9ed4f0" class="outline-4">
-<h4 id="orgd9ed4f0">ryo modal</h4>
-<div class="outline-text-4" id="text-orgd9ed4f0">
+<div id="outline-container-org767d100" class="outline-4">
+<h4 id="org767d100">ryo modal</h4>
+<div class="outline-text-4" id="text-org767d100">
 <div class="org-src-container">
 <pre><code class="language-lisp match-braces rainbow-braces">(meq/up ryo-modal
     <span style="font-weight: bold;">:config</span> <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">From: https://github.com/Kungsgeten/ryo-modal#which-key-integration</span>
@@ -2976,9 +2976,9 @@ Here is the setup for the <code>deino</code> of <code>cosmoem</code> maps referr
 </div>
 </div>
 
-<div id="outline-container-org31309ab" class="outline-4">
-<h4 id="org31309ab">vterm</h4>
-<div class="outline-text-4" id="text-org31309ab">
+<div id="outline-container-org971bbad" class="outline-4">
+<h4 id="org971bbad">vterm</h4>
+<div class="outline-text-4" id="text-org971bbad">
 <div class="org-src-container">
 <pre><code class="language-lisp match-braces rainbow-braces">(meq/up vterm <span style="font-weight: bold;">:use-package-postconfig</span> (multi-vterm)
     <span style="font-weight: bold;">:if</span> (not (member system-type '(windows-nt ms-dos)))
@@ -2994,9 +2994,9 @@ Here is the setup for the <code>deino</code> of <code>cosmoem</code> maps referr
 </div>
 </div>
 
-<div id="outline-container-org6f70d84" class="outline-4">
-<h4 id="org6f70d84">xah-fly-keys</h4>
-<div class="outline-text-4" id="text-org6f70d84">
+<div id="outline-container-orgad89be2" class="outline-4">
+<h4 id="orgad89be2">xah-fly-keys</h4>
+<div class="outline-text-4" id="text-orgad89be2">
 <div class="org-src-container">
 <pre><code class="language-lisp match-braces rainbow-braces">(meq/up xah-fly-keys
     <span style="font-weight: bold;">:commands</span> xah-fly-keys
@@ -3074,9 +3074,9 @@ Here is the setup for the <code>deino</code> of <code>cosmoem</code> maps referr
 </div>
 </div>
 
-<div id="outline-container-org3f5dd3e" class="outline-4">
-<h4 id="org3f5dd3e">show-paren-mode</h4>
-<div class="outline-text-4" id="text-org3f5dd3e">
+<div id="outline-container-org13ecbed" class="outline-4">
+<h4 id="org13ecbed">show-paren-mode</h4>
+<div class="outline-text-4" id="text-org13ecbed">
 <div class="org-src-container">
 <pre><code class="language-lisp match-braces rainbow-braces">(<span style="font-weight: bold;">setq</span> show-paren-delay 0)
 (add-hook 'after-init-hook #'show-paren-mode)
@@ -3085,9 +3085,9 @@ Here is the setup for the <code>deino</code> of <code>cosmoem</code> maps referr
 </div>
 </div>
 
-<div id="outline-container-orgcaeba44" class="outline-4">
-<h4 id="orgcaeba44">lispy</h4>
-<div class="outline-text-4" id="text-orgcaeba44">
+<div id="outline-container-org6ded97a" class="outline-4">
+<h4 id="org6ded97a">lispy</h4>
+<div class="outline-text-4" id="text-org6ded97a">
 <div class="org-src-container">
 <pre><code class="language-lisp match-braces rainbow-braces">(meq/up lispy <span style="font-weight: bold;">:config</span>
 </code></pre>
@@ -3159,9 +3159,9 @@ Here is the setup for the <code>deino</code> of <code>cosmoem</code> maps referr
 </div>
 </div>
 
-<div id="outline-container-orge8f357e" class="outline-4">
-<h4 id="orge8f357e">sly</h4>
-<div class="outline-text-4" id="text-orge8f357e">
+<div id="outline-container-org0c98f85" class="outline-4">
+<h4 id="org0c98f85">sly</h4>
+<div class="outline-text-4" id="text-org0c98f85">
 <div class="org-src-container">
 <pre><code class="language-lisp match-braces rainbow-braces">(meq/up sly)
 </code></pre>
@@ -3169,14 +3169,14 @@ Here is the setup for the <code>deino</code> of <code>cosmoem</code> maps referr
 </div>
 </div>
 
-<div id="outline-container-orgd05dab9" class="outline-4">
-<h4 id="orgd05dab9">Major Modes</h4>
-<div class="outline-text-4" id="text-orgd05dab9">
+<div id="outline-container-org97bd89f" class="outline-4">
+<h4 id="org97bd89f">Major Modes</h4>
+<div class="outline-text-4" id="text-org97bd89f">
 </div>
 
 <ul class="org-ul">
-<li><a id="org88715ee"></a>titan<br />
-<div class="outline-text-5" id="text-org88715ee">
+<li><a id="orgf776c8f"></a>titan<br />
+<div class="outline-text-5" id="text-orgf776c8f">
 <p>
 Set up my super major-mode <a href="https://github.com/shadowrylander/titan">titan</a>:
 </p>
@@ -3188,8 +3188,8 @@ Set up my super major-mode <a href="https://github.com/shadowrylander/titan">tit
 </div>
 </li>
 
-<li><a id="orgf05c358"></a>caddyfile-mode<br />
-<div class="outline-text-5" id="text-orgf05c358">
+<li><a id="org8dcbf92"></a>caddyfile-mode<br />
+<div class="outline-text-5" id="text-org8dcbf92">
 <p>
 For <a href="https://github.com/Schnouki/caddyfile-mode">caddyfiles</a>:
 </p>
@@ -3201,8 +3201,8 @@ For <a href="https://github.com/Schnouki/caddyfile-mode">caddyfiles</a>:
 </div>
 </li>
 
-<li><a id="org940afef"></a>dockerfile-mode<br />
-<div class="outline-text-5" id="text-org940afef">
+<li><a id="org8b7b743"></a>dockerfile-mode<br />
+<div class="outline-text-5" id="text-org8b7b743">
 <p>
 For <a href="https://github.com/spotify/dockerfile-mode">dockerfiles</a>:
 </p>
@@ -3214,8 +3214,8 @@ For <a href="https://github.com/spotify/dockerfile-mode">dockerfiles</a>:
 </div>
 </li>
 
-<li><a id="org9f90eb7"></a>hy-mode<br />
-<div class="outline-text-5" id="text-org9f90eb7">
+<li><a id="orgaaed703"></a>hy-mode<br />
+<div class="outline-text-5" id="text-orgaaed703">
 <p>
 For <a href="https://github.com/hylang/hy-mode">hy</a>, plus <a href="https://github.com/brantou/ob-hy">ob-hy</a>:
 </p>
@@ -3230,8 +3230,8 @@ For <a href="https://github.com/hylang/hy-mode">hy</a>, plus <a href="https://gi
 </div>
 </li>
 
-<li><a id="org1571042"></a>systemd-mode<br />
-<div class="outline-text-5" id="text-org1571042">
+<li><a id="org17d03b6"></a>systemd-mode<br />
+<div class="outline-text-5" id="text-org17d03b6">
 <p>
 For <code>systemd</code>:
 </p>
@@ -3243,8 +3243,8 @@ For <code>systemd</code>:
 </div>
 </li>
 
-<li><a id="org1668df3"></a>markdown-mode<br />
-<div class="outline-text-5" id="text-org1668df3">
+<li><a id="org22b4eb9"></a>markdown-mode<br />
+<div class="outline-text-5" id="text-org22b4eb9">
 <p>
 For <a href="https://jblevins.org/projects/markdown-mode/">markdown</a>:
 </p>
@@ -3256,8 +3256,8 @@ For <a href="https://jblevins.org/projects/markdown-mode/">markdown</a>:
 </div>
 </li>
 
-<li><a id="org7003fc6"></a>nix-mode<br />
-<div class="outline-text-5" id="text-org7003fc6">
+<li><a id="org3888d0b"></a>nix-mode<br />
+<div class="outline-text-5" id="text-org3888d0b">
 <p>
 For <a href="https://github.com/NixOS/nix-mode">nix</a>, with <code>org-babel-execute:nix</code> coming from <a href="https://emacs.stackexchange.com/users/20061/zeta">Zeta's</a> answer <a href="https://emacs.stackexchange.com/a/61442">here</a>:
 </p>
@@ -3288,8 +3288,8 @@ For <a href="https://github.com/NixOS/nix-mode">nix</a>, with <code>org-babel-ex
 </div>
 </li>
 
-<li><a id="orga72f1f4"></a>python<br />
-<div class="outline-text-5" id="text-orga72f1f4">
+<li><a id="org29d1396"></a>python<br />
+<div class="outline-text-5" id="text-org29d1396">
 <div class="org-src-container">
 <pre><code class="language-lisp match-braces rainbow-braces">(use-package ob-python <span style="font-weight: bold;">:commands</span> (org-babel-execute:python))
 </code></pre>
@@ -3297,8 +3297,8 @@ For <a href="https://github.com/NixOS/nix-mode">nix</a>, with <code>org-babel-ex
 </div>
 </li>
 
-<li><a id="org3b9bbce"></a>shell<br />
-<div class="outline-text-5" id="text-org3b9bbce">
+<li><a id="org89adf01"></a>shell<br />
+<div class="outline-text-5" id="text-org89adf01">
 <div class="org-src-container">
 <pre><code class="language-lisp match-braces rainbow-braces">(use-package ob-shell <span style="font-weight: bold;">:commands</span> (org-babel-execute:shell))
 </code></pre>
@@ -3306,8 +3306,8 @@ For <a href="https://github.com/NixOS/nix-mode">nix</a>, with <code>org-babel-ex
 </div>
 </li>
 
-<li><a id="orgbe73f3f"></a>vimrc-mode<br />
-<div class="outline-text-5" id="text-orgbe73f3f">
+<li><a id="orgd34a3ae"></a>vimrc-mode<br />
+<div class="outline-text-5" id="text-orgd34a3ae">
 <p>
 For <a href="https://github.com/mcandre/vimrc-mode">vimrc</a>:
 </p>
@@ -3321,8 +3321,8 @@ For <a href="https://github.com/mcandre/vimrc-mode">vimrc</a>:
 </div>
 </li>
 
-<li><a id="orge400e59"></a>xonsh-mode<br />
-<div class="outline-text-5" id="text-orge400e59">
+<li><a id="orgce49790"></a>xonsh-mode<br />
+<div class="outline-text-5" id="text-orgce49790">
 <p>
 For <a href="https://github.com/seanfarley/xonsh-mode">xonsh</a>, again with <code>org-babel-execute:xonsh</code> coming from <a href="https://emacs.stackexchange.com/users/20061/zeta">Zeta's</a> answer <a href="https://emacs.stackexchange.com/a/61442">here</a>:
 </p>
@@ -3351,8 +3351,8 @@ For <a href="https://github.com/seanfarley/xonsh-mode">xonsh</a>, again with <co
 </div>
 </li>
 
-<li><a id="org2ecd0bc"></a>text-mode<br />
-<div class="outline-text-5" id="text-org2ecd0bc">
+<li><a id="org0af59cd"></a>text-mode<br />
+<div class="outline-text-5" id="text-org0af59cd">
 <p>
 For <code>text</code>, again with <code>org-babel-execute:text</code> coming from <a href="https://emacs.stackexchange.com/users/20061/zeta">Zeta's</a> answer <a href="https://emacs.stackexchange.com/a/61442">here</a>:
 </p>
@@ -3375,8 +3375,8 @@ For <code>text</code>, again with <code>org-babel-execute:text</code> coming fro
 </div>
 </li>
 
-<li><a id="org9ca8830"></a>org-mode<br />
-<div class="outline-text-5" id="text-org9ca8830">
+<li><a id="org3e9d3dd"></a>org-mode<br />
+<div class="outline-text-5" id="text-org3e9d3dd">
 <p>
 The one and only <a href="https://orgmode.org/">org-mode</a>, with <a href="https://orgmode.org/worg/org-contrib/">org-contrib</a>:
 </p>
@@ -3593,8 +3593,8 @@ Upon exiting <code>org-src-mode</code> I don't want any indentation added to my 
 </div>
 </li>
 
-<li><a id="orgfa0a648"></a>doc<br />
-<div class="outline-text-5" id="text-orgfa0a648">
+<li><a id="org352f2b1"></a>doc<br />
+<div class="outline-text-5" id="text-org352f2b1">
 <p>
 Set up documentation super major-mode <a href="https://github.com/shadowrylander/doc">doc</a>:
 </p>
@@ -3610,8 +3610,8 @@ Set up documentation super major-mode <a href="https://github.com/shadowrylander
 </div>
 </li>
 
-<li><a id="org7038e1b"></a>fell<br />
-<div class="outline-text-5" id="text-org7038e1b">
+<li><a id="org207cc2b"></a>fell<br />
+<div class="outline-text-5" id="text-org207cc2b">
 <p>
 Set up novel's super major-mode <a href="https://github.com/shadowrylander/fell">fell</a>:
 </p>
@@ -3633,7 +3633,7 @@ Set up novel's super major-mode <a href="https://github.com/shadowrylander/fell"
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Jeet Ray</p>
-<p class="date">Created: 2023-09-04 Mon 20:46</p>
+<p class="date">Created: 2023-09-04 Mon 22:20</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
